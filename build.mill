@@ -1,7 +1,9 @@
 package build
 import mill._, scalalib._, scalajslib._
+import mill.scalalib.JlinkModule
 
-trait AppScalaModule extends ScalaModule {
+
+trait AppScalaModule extends ScalaModule  {
   def scalaVersion = "3.6.2"
 }
 
@@ -9,7 +11,7 @@ trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
   def scalaJSVersion = "1.18.1"
 }
 
-object `package` extends RootModule with AppScalaModule {
+object `package` extends RootModule with AppScalaModule with JlinkModule {
   def moduleDeps = Seq(shared.jvm)
   def ivyDeps = Agg(ivy"com.lihaoyi::cask:0.9.1")
 
