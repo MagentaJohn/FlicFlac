@@ -1,0 +1,14 @@
+node_modules
+.bloop
+.metals
+.vscode
+out
+*.semanticdb
+.smithy.lsp.log
+/frontend/ui/dist
+.DS_Store
+mill.bat
+.ammonite
+.bsp
+.env
+frontend_ts
