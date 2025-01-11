@@ -1,9 +1,9 @@
 package webapp
-import scalatags.Text.all._
+import scalatags.Text.all.*
 import scalatags.Text.tags2
 import shared.{Shared, Todo}
 
-object WebApp extends cask.MainRoutes {
+object WebApp extends cask.MainRoutes:
   override def port = 8083
   var todos = Seq(
     Todo(true, "Get started with Cask"),
@@ -14,38 +14,39 @@ object WebApp extends cask.MainRoutes {
   def list(state: String) = upickle.default.write(todos)
 
   @cask.post("/add/:state")
-  def add(state: String, request: cask.Request) = {
+  def add(state: String, request: cask.Request) =
     todos = Seq(Todo(false, request.text())) ++ todos
     upickle.default.write(todos)
-  }
+  end add
 
   @cask.post("/delete/:state/:index")
-  def delete(state: String, index: Int) = {
+  def delete(state: String, index: Int) =
     todos = todos.patch(index, Nil, 1)
     upickle.default.write(todos)
-  }
+  end delete
 
   @cask.post("/toggle/:state/:index")
-  def toggle(state: String, index: Int) = {
+  def toggle(state: String, index: Int) =
     todos = todos.updated(index, todos(index).copy(checked = !todos(index).checked))
     upickle.default.write(todos)
-  }
+  end toggle
 
   @cask.post("/clear-completed/:state")
-  def clearCompleted(state: String) = {
+  def clearCompleted(state: String) =
     todos = todos.filter(!_.checked)
     upickle.default.write(todos)
-  }
+  end clearCompleted
 
   @cask.post("/toggle-all/:state")
-  def toggleAll(state: String) = {
+  def toggleAll(state: String) =
     val next = todos.filter(_.checked).size != 0
     todos = todos.map(_.copy(checked = next))
     upickle.default.write(todos)
-  }
+  end toggleAll
 
   @cask.get("/")
-  def index() = {
+  def index() =
+    println("called here")
     doctype("html")(
       html(lang := "en")(
         head(
@@ -69,10 +70,10 @@ object WebApp extends cask.MainRoutes {
         )
       )
     )
-  }
+  end index
 
   @cask.staticResources("/static")
   def static() = "webapp"
 
   initialize()
-}
+end WebApp
