@@ -14,10 +14,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: coursier/setup-action@main
         with:
-          jvm: temurin@17
+          jvm: temurin@21
           apps: mill
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Build application
-        run: mill show backend.assembly
+        run: mill show assembly
       - name: Deploy to fly.io
         run: flyctl deploy --remote-only
