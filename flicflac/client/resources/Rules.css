@@ -1,0 +1,169 @@
+.myBoldGreen {
+ font-weight: bold;
+ color: #008000;
+}
+.myButton {
+  width : 5em;
+  height : 2em;
+  padding : 0.5em, 2em;
+  border-radius: 2em;
+  font-size: 1em;
+  font-family: Arial;
+  color: black;
+  background-color: yellow;
+  border: 0.2em solid black;
+}
+.myButton:hover {
+  width : 5em;
+  height : 2em;
+  padding : 0.5em, 2em;
+  border-radius: 2em;
+  font-size: 1em;
+  font-family: Arial;
+  color: black;
+  background-color: yellow;
+  border: 0.2em solid magenta;
+  text-decoration: none;
+}
+
+.myRulesButton {
+  width : 100px;
+  height : 50px;
+  padding : 100px,10px;
+  border-radius: 50px;
+  font-size: 1em;
+  font-family: Arial;
+  color: black;
+  background-color: yellow;
+  border: 6px solid black;
+  text-decoration: none;
+}
+.myRulesButton:hover {
+  width : 100px;
+  height : 50px;
+  padding : 100px,10px;
+  border-radius: 50px;
+  font-size: 30px;
+  font-family: Arial;
+  color: black;
+  background-color: yellow;
+  border: 6px solid magenta;
+  text-decoration: none;
+}
+
+.myPanel {
+  img {
+    height: 8em;
+    object-fit : contain;
+  }
+}
+
+.rowM1 {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  display:grid;
+  grid-template-columns: 30% 70%;
+}
+
+.columnM1 {
+  float: left;
+}
+
+.columnM2 {
+  float:right;
+}
+
+.columnM2 img {
+  height: 100%;
+  object-fit:contain;
+}
+
+table, th, tr, td {
+  padding:4px;
+  border-spacing: 0px;
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+.configParams {
+  font-size: 24px;
+  font-family: Arial;
+  color:blue;
+  padding: 10px;
+  width:max-content;
+  border-radius: 10px;
+  border: 4px solid blue;
+  background-color: white;
+}
+
+.configLabel {
+  width: 12em;
+  height:1em;
+  display:inline-block;
+  text-align: right;
+  color:black;
+}
+
+.configNameValue {
+  font-size: 1em;
+  font-family: Arial;
+  width: 12em;
+  height:1.6em;
+  display:inline-block;
+  text-align: left;
+  background-color:lavender;
+  color:black;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+
+.configNumberValue {
+  font-size: 1em;
+  font-family: Arial;
+  width: 2em;
+  height:1.6em;
+  display:inline-block;
+  text-align: left;
+  background-color:lavender;
+  color:black;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.configUnit {
+  width: auto;
+  height:1em;
+  display:inline-block;
+  text-align: left;
+  color:black;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.configErrorMsg {
+  font-style: italic;
+  color:red;
+  display:none;
+}
+
+.borderless {
+  border: 3px solid white !important;
+}
+
+.configRadio {
+  margin-left: 0;
+  accent-color:black;
+}
+
+.configRadioLabel {
+  margin-right: 0;
+  border-right: 0;
+  padding-right: 0;
+  color:black;
+}
+
+  
+
+
+

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Flic Flac Rules and Scenarios Page 4</title>
+<link rel="stylesheet" href="./Rules.css" />
+</head>
+<body style="font-family:arial">
+
+<a href="./Rules3.html">
+  <button class="myRulesButton"> << </button></a>
+<a href="./Rules5.html">
+  <button class="myRulesButton"> >> </button></a>
+
+<p style="color:red"><i>
+  Please skip this page (ie sections 9, 10 & 11) and goto the next (last) page for section 12, if the combat algorithm
+  does not interest you. Sections 9, 10 & 11 are provided as a reference.
+  <br>
+</i></p>
+
+<h2><b>
+9) Health Calculation
+</b></h2>
+<p>
+  When two (or more) opposing pieces are side by side a melee is formed, regardless of which player moved. The health of all pieces is recalculated on every move during
+  a turn. Any piece with a negative health is due to be captured at the end of the turn. Such a piece changes color to grey.
+  As further pieces are added to a melee, a grey piece due to be captured, may recover it&apos;s health and have it&apos;s color 
+  restored. Just as a reminder:
+  <ul>
+    <li>A piece is said to be &quot;flying&quot; a colour if that colour is one of the two colours shown on the current top face.</li>
+    <li>A piece is said to be &quot;empowered&quot; if it stands on a hexagon of it&apos;s own body colour.</li>
+  </ul>
+</p>
+<p>This section shows how the health algorithm works and the following sections give a few example melees.
+<br>
+Consider two pieces side by side.
+<ul>
+  <li>Either the two pieces are the same shape so the "Supporter Table" is used</li>
+  <li>Or the two pieces are different shapes so both the "Defender Table" and the "Attacker Table" are used</li>
+</ul>
+</p>
+
+<div class="rowM1">
+  <div class="columnM1">
+    <p>
+      Each friendly piece adjacent to this piece can potentially increase our health. However, the friendly neighbour 
+      must be flying our body colour to give us +1, or even +2 if also empowered.
+    </p>
+  </div>
+  <div class="columnM2" style="padding-top: 20px; padding-left: 20px;">
+    <table>
+      <tr>
+        <th colspan="4" style="background-color: lightgreen;">Supporting Friend</th>
+      </tr>
+      <tr>
+        <td colspan="2" style="background-color: lightgreen;">Flying <br>My Colour</td>
+        <td colspan="2" rowspan="2">Not Flying <br>My Color</td>
+      </tr>
+      <tr>
+        <td style="background-color: lightgreen;">Empowered</td>
+        <td style="background-color: lightgreen;">Not<br>Empowered</td>
+      </tr>
+      <tr>
+        <td style="background-color: lightgreen;">+2</td>
+        <td style="background-color: lightgreen;">+1</td>
+        <td colspan="2">0</td>
+      </tr>
+     </table>    
+  </div>
+</div>
+
+<div class="rowM1">
+  <div class="columnM1">
+    <p>
+      Whenever a piece is attacked, as well support from neighbours, it's own status is taken into account to determine
+      any additional health points that can be added in defense. The defenders table shows the order of priority for ...
+      <ul>
+        <li>Flying the colours of the attacker. (ie does one of your top colours match the body colour of the attacker)</li>
+        <li>Empowerment. (ie does the hexagon you stand match your own body colour)</li>
+      </ul>
+    </p>
+  </div>
+
+  <div class="columnM2" style="padding-top: 20px; padding-left: 20px;">
+    <table>
+      <tr>
+        <th colspan="4" style="background-color: lightgreen;">Mounting the Defense</th>
+      </tr>
+      <tr>
+        <td colspan="2" style="background-color: lightgreen;">I am Flying Attackers Colour</td>
+        <td colspan="2" rowspan="2">I am not Flying <br>Attackers Color</td>
+      </tr>
+      <tr>
+        <td style="background-color: lightgreen;">I am<br>Empowered</td>
+        <td style="background-color: lightgreen;">I am not<br>Empowered</td>
+      </tr>
+      <tr>
+        <td style="background-color: lightgreen;">+2</td>
+        <td style="background-color: lightgreen;">+1</td>
+        <td colspan="2">0</td>
+      </tr>
+     </table>    
+  </div>
+</div>
+
+
+
+<div class="rowM1">
+  <div class="columnM1">
+    <p>
+      During an attack, the status of the attacker is taken into account to determine the damage to the defending piece. The crucial factor
+      determining the health of the defender is whether, or not, one of it's flying colours matches the body colour of the attacker. No match 
+      means no defense leading to a damage of -20. The attackers table shows the order of priority for ...
+      <ul>
+        <li>Attacker's colours match my body colour</li>
+        <li>Flying the colours of the attacker</li>
+        <li>Empowerment</li>
+     </ul>
+    </p>
+  </div>
+
+  <div class="columnM2" style="padding-top: 20px; padding-left: 20px;">
+    <table>
+      <tr>
+        <th colspan="5" style="background-color:lightcoral;">Under Attack</th>
+      </tr>
+      <tr>
+        <td colspan="4" rowspan="1" style="background-color:lightcoral;">Attacker flies My Body Color</td>
+        <td colspan="1" rowspan="3">Attacker<br>does not fly<br>My Body Color</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="background-color:lightcoral;">Defenseless<br>I am not flying the colours <br>that match the Attacker&apos;s Body Color</td>
+        <td colspan="2" style="background-color:lightcoral;">I am flying the Attacker&apos;s <br>Body Colour</td>
+      </tr>
+      <tr>
+        <td style="background-color:lightcoral;">Attacker is <br> Empowered</td>
+        <td style="background-color:lightcoral;">Attacker is not <br>Empowered</td>
+        <td style="background-color:lightcoral;">Attacker is <br> Empowered</td>
+        <td style="background-color:lightcoral;">Attacker is not<br>Empowered</td>
+      </tr>
+      <tr>
+        <td>-22</td>
+        <td>-21</td>
+        <td>-2</td>
+        <td>-1</td>
+        <td>0</td>
+      </tr>
+     
+</table>    
+  </div>
+</div>
+
+<pr>
+  <i>
+    (The health of a piece is governed by all of the other adjacent pieces, as well as it&apos;s own flying colours 
+    and possible position of empowerment. The results from the three tables above may apply for each piece)
+  </i>    
+</pr>
+
+<h2><b>
+  10) Combat Example 1
+</b></h2>
+  
+<div class="rowM1">
+  <div class="columnM1">
+    <ul>
+      <li>Purple Block = 0 ... orange cylinder flying the wrong colours</li>
+      <li>Orange Cylinder = 0 ... purple cylinder flying the wrong colours </li>
+    </ul>
+    <ul>
+      <li>Yellow Cylinder = +1 ... flying the red colour to attack</li>
+      <li>Red Block  = -21 ... flying the wrong colours, <b>-20 for defenseless</b> and -1 for attack by yellow cylinder</li>
+    </ul>
+    <ul>
+      <li>Blue Block = 0 ... +2 for flying and empowered, but -2 for attack from purple cylinder</li>
+      <li>Purple Cylinder = 0 ... +2 for flying and empowered, but -2 for attack from blue block</li></li>
+    </ul>
+    <ul>
+      <li>Yellow Block = -1 ... +1 for flying the correct colours, but -2 for empowered attack from red cylinder</li>
+      <li>Red Cylinder = +1 ... + 2 for flying and empowered, but -1 for attack from yellow block</li>
+    </ul>
+    <ul>
+      <li>Orange Block = +2 ... supported by flying and empowered green block</li>
+      <li>Green Block = +1 ... supported by flying orange block</li>
+    </ul>
+    <ul>
+      <li>Green Cylinder = +2 ... supported by flying and empowered blue cylinder</li>
+      <li>Blue Cylinder = +2 ... supported by flying and empowered green cylinder</li>
+    </ul>
+  </div>
+  <div class="columnM2" style="padding-left:40px;">
+    <img src="rules/Combat1.png">
+  </div>
+</div>
+<p>
+  Assuming this scenario was the result of the cylinders turn, the health algorithm would have been repeatedly executed.
+  The red block and the yellow block would have become grey, indicating that they have been captured. Once the turn ends, 
+  the captors, namely the yellow and red cylinders would gain an extra move. Meanwhile, the captives return to their home
+  positions and the game count of captures is updated accordingly.
+</p>
+
+<h2><b>
+  10) Combat Example 2
+</b></h2>
+
+<div class="rowM1">
+  <div class="columnM1">
+    <ul>
+      <li>Blue Cylinder = 0 ... blue cylinder flying the wrong colours</li>
+      <li>Yellow Block = +2 ... +2 for empowered attack on orange cylinder, +1 from green block support, -1 from orange cylinder</li>
+      <li>Green Block = 0 ... +1 for attack on orange cylinder, -1 from orange cylinder</li>
+      <li>Orange Cylinder = -1 ...+1 for attacking green block, +1 for attacking yellow block, -2 from yellow block, -1 from green block</li>
+    </ul>
+    <ul>
+      <li>Blue Block = +2 ... +2 for empowered attack on green cylinder</li>
+      <li>Green Cylinder = -1 ... +1 for attacking blue block, but -2 from empowered blue block</li>
+      <li>Purple Cylinder = +1 ... +1 from green cylinder</li>
+      <li>Red Cylinder = 0 ... +1 from supporting purple cylinder, but -1 from purple block</li>
+      <li>Purple Block = 1 ... +1 for attacking red cylinder</li>
+    </ul>
+  </div>
+  <div class="columnM2">
+    <img src="rules/Combat2.png" style="padding-left:40px;"">
+  </div>
+</div>
+<p>
+  Assuming this scenario was the result of the blocks turn, the health algorithm would have been repeatedly executed.
+  The orange cylinder and the green cylinder would have become grey, indicating that they have been captured. Once the turn ends, 
+  the captors, namely the green, yellow and blue blocks would gain an extra move. Meanwhile, the captives return to their home
+  positions and the game count of captures is updated accordingly.
+</p>
+
+<h2><b>
+  11) Captors and Captives
+</b></h2>
+
+
+<div class="rowM1">
+  <div class="columnM1">
+    As before, the algorithm computes the health of each piece. With this scenario at the end of a turn, there are two captives 
+    and three captors. Both the blue block and the yellow cylinder are captured, they would become grey during the turn. At the 
+    end of the turn both would return to their home positions. However, only one side gets to claim the extra move(s) assoicated 
+    with being a captor. In this example, if this scenario was created by the ...
+    <ul>
+      <li>Cylinder Player ... then the yellow cylinder may make an extra move from it&apos;s home position.</li>
+      <li>Block Player ... then the blue block may make an extra move from it&apos;s home position <b>and</b> the orange block may 
+        may make an extra move from it's current position.
+      </li>
+    </u>
+  </div>
+  <div class="columnM2">
+    <img src="rules/Combat3.png" style="padding-left:40px;"">
+  </div>
+</div>
+
+
+<a href="./Rules3.html">
+<button class="myRulesButton"> << </button></a>
+<a href="./Rules5.html">
+<button class="myRulesButton"> >> </button></a>
+
+</body>
+</html>
