@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Rules Page 1</title>
+<link rel="stylesheet" href="./Rules.css" />
+</head>
+<body style="font-family:arial">
+
+<a href="./index1.html">
+  <button class="myRulesButton"> << </button></a>
+<a href="./Rules2.html">
+  <button class="myRulesButton"> >> </button></a>
+    
+
+<h2><b>
+1) Object of the Game
+</b></h2>
+<p>
+  Flic Flac is a timed <span class="myBoldGreen">(N seconds)</span> turn based game. The first player <span class="myBoldGreen">
+  to score 11</span> or more captures, with a lead of 2 captures, is the winner. This page summarises the rules. The following
+  pages give more explanations and example game scenarios.
+</p>
+
+<h2><b>
+2) Movement
+</b></h2>
+
+<p>
+  Each player has 6 pieces which may optionally move once during each timed turn. Successful capture(s) lead to an additional
+  turn <span class="myBoldGreen">of shorter duration.</span> A piece may not directly pass through, or land on another piece. 
+  There are two ways a piece can move:
+</p>
+<ul>
+  <li>Up to 3 coloured hexagons</li>
+  <li>Onto an adjacent black hexagon, which causes the piece to flip over so that the centre colours change.</li>
+</ul>
+<p>A piece returns to its home position when it is captured. Additional shorter turns are for the captor(s) only. More captures
+   leads to more additional turns.
+  <br>
+<i>
+  (There is a maneuver called &quot;indirect pass through&quot; which helps pieces shuffle their positions. Please see example scenarios on later pages)
+</i>
+</p>
+
+<h2><b>
+3) Capture
+</b></h2>
+
+<p>The game is played from a 2D top down view point. Each piece has a body colour (in 2D this is the outer rim) and two colours visible
+   in the centre area. This is the top of the piece. There are two different colours hidden on the bottom of the piece.<br>
+<ul>
+<li>A piece is said to be &quot;flying&quot; a colour if that colour is one of the two colours shown on the current top face.</li>
+<li>A piece is said to be &quot;empowered&quot; if it stands on a hexagon of it&apos;s own body colour.</li>
+</ul>
+  Pieces may only attack (and support) across adjoining borders when the flying colours match the body colour of the target piece. 
+  If one of the attacking flying colours does not match the defenders body colour the challenge is ignored for that particular border.
+  A defending piece, under attack, flying the wrong colours, is captured as detailed below. (This is the penalty of -20)
+  At the start of a turn each piece has a score of zero and this is adjusted, <b>for all pieces.</b> The following calculation
+  occurs across <b>each border:</b><br>
+<ul>
+<li>+1 for each attacking piece flying the body colour of an adjacent piece.</li>
+<li>+2 for each attacking empowered piece <b>which is also flying</b> the body colour of an adjacent piece.</li>
+<li>-1 for a defending piece if attacker has scored +1 as above.</li>
+<li>-2 for a defending piece if attacker has scored +2 as above.</li>
+<li>-20 for a defending piece, not flying the correct colours so unable to defend. This heavy penalty ensures capture.</li>
+
+</ul>
+At the end of the turn, pieces with a negative score are captured and restart from their home positions. The game count of
+captures for both sides is updated. As usual, the piece score is reset to zero at the beginning of the next turn.<br>
+<i>(The same scoring system applies <b>for all pieces</b> at the end of each turn, so losses on both sides are possible.)</i>
+</p>
+
+<h2><b>
+4) Random Events
+</b></h2>
+<p> <span class="myBoldGreen">If configured,</span> random events may occur at the end of any turn with a 
+  <span class="myBoldGreen">probability of 1 in 100.</span> Such events are listed on the last page of these guidelines.
+</p>
+
+
+<p><i>(Parameters in <span class="myBoldGreen">Green</span> are configurable from the configuration screen)</i></p>
+
+<a href="./index1.html">
+<button class="myRulesButton"> << </button></a>
+<a href="./Rules2.html">
+<button class="myRulesButton"> >> </button></a>
+
+</body>
+</html>

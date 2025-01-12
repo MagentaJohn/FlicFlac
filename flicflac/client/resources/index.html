@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FlicFlac 2</title>
+    <style>
+      body {
+        padding: 0px;
+        margin: 20px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        background-image: url("rules/FlicFlacV4.png");
+        background-size: 100vw 100vh;
+        background-color: black;
+        background-repeat: no-repeat;
+        font-family: arial;
+        font-size: 30px;
+      }
+    </style>
+
+    <link rel="stylesheet" href="./Rules.css" />
+  </head>
+  <body onload="LocalStorageRead()">
+    <div id="readResults" class="configParams">
+      <div>
+        <i>1) Enter your name</i><br />
+        <span
+          title="This name is needed by your opponent to establish the game link. This unique name must be different from your opponents name and will be used to establish the game link."
+        >
+          <div id="errorMsg1" class="configErrorMsg">
+            <b>Invalid Name</b><br />
+            Your name should be at least 3 characters long<br />
+          </div>
+          <div>
+            <label for="myName" class="configLabel">Your Name:</label>
+            <input
+              id="myName"
+              class="configNameValue"
+              type="text"
+              name="myName"
+            />
+          </div>
+        </span>
+      </div>
+
+      <div>
+        <i>2) Enter your opponent&apos;s name</i><br />
+        <span
+          title="This unique name, provided by your opponent, is needed to establish the game link. It must be different from your name."
+        >
+          <div id="errorMsg2" class="configErrorMsg">
+            <b>Invalid Name</b><br />
+            Your opponent&apos;s name should be at least 3 characters long and
+            different from your name<br />
+          </div>
+          <div>
+            <label for="oppoName" class="configLabel"
+              >Opponent&apos;s Name:</label
+            >
+            <input
+              id="oppoName"
+              class="configNameValue"
+              type="text"
+              name="oppoName"
+            />
+          </div>
+        </span>
+      </div>
+
+      <div>
+        <i>3) Select your pieces</i><br />
+        <fieldset>
+          <div>
+            <span
+              title="Select the shape of your pieces. This may be adjusted if both players choose the same shape."
+            >
+              <div id="errorMsg3" class="configErrorMsg">
+                <b>Invalid Piece Shape</b><br />
+                Select either Cylinders or Blocks. <br />
+              </div>
+              <label class="configRadioLabel">
+                Cylinders:
+                <input
+                  type="radio"
+                  id="cylinders"
+                  name="pieceShape"
+                  value="0"
+                  class="configRadio"
+                />
+              </label>
+              <label class="configRadioLabel">
+                &nbsp;&nbsp;&nbsp;&nbsp;Blocks:
+                <input
+                  type="radio"
+                  id="blocks"
+                  name="pieceShape"
+                  value="1"
+                  class="configRadio"
+                />
+              </label>
+            </span>
+          </div>
+        </fieldset>
+      </div>
+
+      <div>
+        <i>4) Select board size</i><br />
+        <fieldset>
+          <div>
+            <span
+              title="Select the best size that suits your screen. The final, negotiated, board size is the smallest of your board size and your opponent's board size."
+            >
+              <div id="errorMsg4" class="configErrorMsg">
+                <b>Invalid Board Size</b><br />
+                Select one of Small, Medium, Large or Extra Large to specify
+                your preferred board size.<br />
+              </div>
+              <label class="configRadioLabel">
+                Small:
+                <input
+                  type="radio"
+                  id="size5"
+                  name="boardSize"
+                  value="5"
+                  class="configRadio"
+                />
+              </label>
+              <label class="configRadioLabel">
+                &nbsp;&nbsp;&nbsp;&nbsp;Medium:
+                <input
+                  type="radio"
+                  id="size6"
+                  name="boardSize"
+                  value="6"
+                  class="configRadio"
+                />
+              </label>
+              <label class="configRadioLabel">
+                &nbsp;&nbsp;&nbsp;&nbsp;Large:
+                <input
+                  type="radio"
+                  id="size7"
+                  name="boardSize"
+                  value="7"
+                  class="configRadio"
+                />
+              </label>
+              <label class="configRadioLabel">
+                &nbsp;&nbsp;&nbsp;&nbsp;Extra Large:
+                <input
+                  type="radio"
+                  id="size8"
+                  name="boardSize"
+                  value="8"
+                  class="configRadio"
+                />
+              </label>
+            </span>
+          </div>
+        </fieldset>
+      </div>
+
+      <i>5) Propose the game parameters</i><br />
+      <div>
+        <table class="borderless">
+          <td class="borderless">
+            <span
+              title="This is the number of captures you need to win. The negotiated version of this parameter is the average between your entry and your opponent's entry. Remember you must win by at least two clear captures."
+            >
+              <div id="errorMsg5A" class="configErrorMsg">
+                <b>Invalid target set as Final Score</b><br />
+                The score to win needs to be set as a non-zero positive
+                integer.<br />
+              </div>
+              <label for="scoreToWin" class="configLabel">Score to Win:</label>
+              <input
+                id="scoreToWin"
+                class="configNumberValue"
+                type="number"
+                name="scoreToWin"
+              />
+            </span>
+          </td>
+          <td class="borderless">
+            <img src="./Flag.png" style="height: 2em; width: auto" />
+          </td>
+          <td class="borderless">
+            <p class="configUnit">(Captures)</p>
+          </td>
+        </table>
+      </div>
+      <div>
+        <table class="borderless">
+          <td class="borderless">
+            <span
+              title="This is the number of seconds allowed for each turn. The negotiated version of this parameter is the average between your entry and your opponent's entry. A resulting value of zero disables this timer"
+            >
+              <div id="errorMsg5B" class="configErrorMsg">
+                <b>Invalid Turn Time</b><br />
+                The turn time must be greater than or equal to zero, <br />
+                representing the maximum time allowed in seconds for each
+                turn.<br />
+                A value of zero disables this timer<br />
+              </div>
+              <label for="turnTime" class="configLabel">Turn Time:</label>
+              <input
+                id="turnTime"
+                class="configNumberValue"
+                type="number"
+                name="turnTime"
+              />
+            </span>
+          </td>
+          <td class="borderless">
+            <img src="./TallTimer.png" style="height: 2em; width: auto" />
+          </td>
+          <td class="borderless">
+            <p class="configUnit">(Seconds)</p>
+          </td>
+        </table>
+      </div>
+      <div>
+        <table class="borderless">
+          <td class="borderless">
+            <span
+              title="This is the number of seconds allowed for an extended turn after a successful capture. The negotiated version of this parameter is the average between your entry and your opponent's entry. A resulting value of zero disables this timer."
+            >
+              <div id="errorMsg5C" class="configErrorMsg">
+                <b>Invalid Captor&apos;s Turn Time</b><br />
+                This captor&apos;s timer must be greater than or equal to
+                zero.<br />
+                It represents the time allowed in seconds for extra turns.<br />
+                A value of zero disables this timer.<br />
+              </div>
+              <label for="captorsTime" class="configLabel"
+                >Captor&apos;s Time:</label
+              >
+              <input
+                id="captorsTime"
+                class="configNumberValue"
+                type="number"
+                name="captorsTime"
+              />
+            </span>
+          </td>
+
+          <td class="borderless">
+            <img src="./PortCullis.png" style="height: 2em; width: auto" />
+          </td>
+          <td class="borderless">
+            <p class="configUnit">(Seconds)</p>
+          </td>
+        </table>
+      </div>
+      <div>
+        <table class="borderless">
+          <td class="borderless">
+            <div id="errorMsg5D" class="configErrorMsg">
+              <b>Invalid Random Event Probability</b><br />
+              This is an integer representing the percentage probability,<br />
+              where 0 <= probability <= 100 <br />
+            </div>
+            <span
+              title="This is the percentage probabilty that a random event will occur. The negotiated version of this parameter is the average between your entry and your opponent's entry. A value of zero prohibits these occurences."
+            >
+              <label for="randEventProb" class="configLabel"
+                >Random Event Probability:</label
+              >
+              <input
+                id="randEventProb"
+                class="configNumberValue"
+                type="number"
+                name="randEventProb"
+              />
+            </span>
+          </td>
+
+          <td class="borderless">
+            <img src="./Bolt.png" style="height: 2em; width: auto" />
+          </td>
+          <td class="borderless">
+            <p class="configUnit">(% Probability)</p>
+          </td>
+        </table>
+      </div>
+      <div id="Index">
+        <button
+          id="playButton"
+          class="myButton"
+          style="margin-right: 2em"
+          onclick="LocalStorageWrite()"
+        >
+          Play
+        </button>
+
+        <a href="./Rules1.html">
+          <button class="myButton" style="margin-right: 2em; width: 8em">
+            Instructions
+          </button>
+        </a>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("size5").addEventListener("click", function () {
+        document.body.style.background = "url('./FlicFlacSize5R.png')";
+        document.body.style.setProperty("background-repeat", "no-repeat");
+      });
+
+      document.getElementById("size6").addEventListener("click", function () {
+        document.body.style.background = "url('./FlicFlacSize6R.png')";
+        document.body.style.setProperty("background-repeat", "no-repeat");
+      });
+
+      document.getElementById("size7").addEventListener("click", function () {
+        document.body.style.background = "url('./FlicFlacSize7R.png')";
+        document.body.style.setProperty("background-repeat", "no-repeat");
+      });
+
+      document.getElementById("size8").addEventListener("click", function () {
+        document.body.style.background = "url('./FlicFlacSize8R.png')";
+        document.body.style.setProperty("background-repeat", "no-repeat");
+      });
+
+      function LocalStorageRead() {
+        var sFlicFlacPlayParams =
+          window.localStorage.getItem("FlicFlac-Params");
+        var sFlicFlacGame2 = window.localStorage.getItem("FlicFlac-Game2");
+
+        var bPlayer2 = true;
+        if (sFlicFlacGame2 == null) {
+          bPlayer2 = false;
+        }
+
+        if (sFlicFlacPlayParams != null) {
+          // We have the object decoded so display on parameters panel,
+          // but if FlicFlac-Game2 exists switch names
+          const oFlicFlac = JSON.parse(sFlicFlacPlayParams);
+          document.getElementById("readResults").style.border =
+            "4px solid blue";
+          if (bPlayer2 == true) {
+            document.getElementById("myName").defaultValue =
+              oFlicFlac.playPams2_Name2;
+            document.getElementById("oppoName").defaultValue =
+              oFlicFlac.playPams1_Name1;
+          } else {
+            document.getElementById("myName").defaultValue =
+              oFlicFlac.playPams1_Name1;
+            document.getElementById("oppoName").defaultValue =
+              oFlicFlac.playPams2_Name2;
+          }
+
+          if (oFlicFlac.playPams3_PieceShape == 0)
+            document.getElementById("cylinders").checked = true;
+          else document.getElementById("blocks").checked = true;
+
+          if (oFlicFlac.playPams4_BoardSize == 5)
+            document.getElementById("size5").checked = true;
+          else if (oFlicFlac.playPams4_BoardSize == 6)
+            document.getElementById("size6").checked = true;
+          else if (oFlicFlac.playPams4_BoardSize == 7)
+            document.getElementById("size7").checked = true;
+          else if (oFlicFlac.playPams4_BoardSize == 8)
+            document.getElementById("size8").checked = true;
+          else;
+          document.getElementById("scoreToWin").defaultValue =
+            oFlicFlac.playPams5_ScoreToWin;
+          document.getElementById("turnTime").defaultValue =
+            oFlicFlac.playPams6_TurnTime;
+          document.getElementById("captorsTime").defaultValue =
+            oFlicFlac.playPams7_CaptorsTime;
+          document.getElementById("randEventProb").defaultValue =
+            oFlicFlac.playPams8_RandEventProb;
+        } else {
+          /* no json object found so suggest some default parameters */
+          console.log(
+            "@@@ Cache for PlayParams not found - suggesting defaults"
+          );
+          document.getElementById("myName").defaultValue = "Player1";
+          document.getElementById("oppoName").defaultValue = "Player2";
+          document.getElementById("cylinders").checked = true;
+          document.getElementById("size8").checked = true;
+          document.getElementById("scoreToWin").defaultValue = 11;
+          document.getElementById("turnTime").defaultValue = 20;
+          document.getElementById("captorsTime").defaultValue = 10;
+          document.getElementById("randEventProb").defaultValue = 1;
+        }
+      }
+
+      function LocalStorageWrite() {
+        console.log("@@@ LocalStorageWrite");
+
+        // validate the new parameters
+
+        var myName = document.getElementById("myName").value;
+        var oppoName = document.getElementById("oppoName").value;
+
+        var checkPieceShapeRadio = document.querySelector(
+          'input[name="pieceShape"]:checked'
+        );
+        var pieceShape = -1;
+        if (checkPieceShapeRadio != null) {
+          pieceShape = checkPieceShapeRadio.value;
+        }
+
+        var checkBoardSizeRadio = document.querySelector(
+          'input[name="boardSize"]:checked'
+        );
+        var boardSize = 0;
+        if (checkBoardSizeRadio != null) {
+          boardSize = checkBoardSizeRadio.value;
+        }
+        var scoreToWin = document.getElementById("scoreToWin").value;
+        var turnTime = document.getElementById("turnTime").value;
+        var captorsTime = document.getElementById("captorsTime").value;
+        var randEventProb = document.getElementById("randEventProb").value;
+
+        var invalidParams = false;
+
+        if (myName.length < 3) {
+          document.getElementById("errorMsg1").style.display = "block";
+          invalidParams = true;
+        }
+
+        if (oppoName.length < 3) {
+          document.getElementById("errorMsg2").style.display = "block";
+          invalidParams = true;
+        }
+
+        if (myName == oppoName) {
+          document.getElementById("errorMsg2").style.display = "block";
+          invalidParams = true;
+        }
+
+        if (pieceShape != 0 && pieceShape != 1) {
+          document.getElementById("errorMsg3").style.display = "block";
+          invalidParams = true;
+        }
+
+        if (
+          boardSize != 5 &&
+          boardSize != 6 &&
+          boardSize != 7 &&
+          boardSize != 8
+        ) {
+          document.getElementById("errorMsg4").style.display = "block";
+          invalidParams = true;
+        }
+
+        if (scoreToWin < 1) {
+          document.getElementById("errorMsg5A").style.display = "block";
+          invalidParams = true;
+        }
+
+        if (turnTime < 0) {
+          document.getElementById("errorMsg5B").style.display = "block";
+          invalidParams = true;
+        }
+
+        if (captorsTime < 0) {
+          document.getElementById("errorMsg5C").style.display = "block";
+          invalidParams = true;
+        }
+
+        if (randEventProb < 0 || randEventProb > 100) {
+          document.getElementById("errorMsg5D").style.display = "block";
+          invalidParams = true;
+        }
+
+        if (invalidParams == true) {
+          // leave error message(s) showing if one or more paramters invalid
+          document.getElementById("readResults").style.border = "4px solid red";
+          console.log("@@@ Invalid PlayParams detected");
+          return;
+        } else {
+          // infuse new settings into a new PlayParams object
+
+          var oPlayParams = {
+            playPams1_Name1: myName,
+            playPams2_Name2: oppoName,
+            playPams3_PieceShape: pieceShape,
+            playPams4_BoardSize: boardSize,
+            playPams5_ScoreToWin: scoreToWin,
+            playPams6_TurnTime: turnTime,
+            playPams7_CaptorsTime: captorsTime,
+            playPams8_RandEventProb: randEventProb,
+          };
+
+          window.localStorage.removeItem("FlicFlac-Game1"); // remove any previous game for INITIATOR
+          window.localStorage.removeItem("FlicFlac-Game2"); // remove any previous game for RESPONDER
+          if (myName > oppoName) {
+            // we swap oPlayParams here
+            // On same machine and same browser, both indigo sessions will share the ordered PlayerParams
+            // The indigo sessions use FlicFlac-Game1 or FlicFlac-Game2 according to N1 and N2 passed as cookies
+            var tempOurName = oPlayParams.playPams1_Name1;
+            var tempOppoName = oPlayParams.playPams2_Name2;
+            oPlayParams.playPams1_Name1 = tempOppoName;
+            oPlayParams.playPams2_Name2 = tempOurName;
+          }
+
+          // create new string to write as new cache
+          const sOrderedFlicFlacPlayParams = JSON.stringify(oPlayParams);
+
+          window.localStorage.setItem(
+            "FlicFlac-Params",
+            sOrderedFlicFlacPlayParams
+          );
+
+          // relocate to indigo environment ... N1 and N2 are crucial to indigo code
+          window.location.href =
+            "./index2.html?N1=" + myName + "&N2=" + oppoName;
+        }
+      }
+    </script>
+  </body>
+</html>

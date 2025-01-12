@@ -3,6 +3,8 @@ name: Deploy to fly.io
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
@@ -15,9 +17,8 @@ jobs:
       - uses: coursier/setup-action@main
         with:
           jvm: temurin@21
-          apps: mill
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Build application
-        run: mill show assembly
+        run: ./mill show flicflac.assembly
       - name: Deploy to fly.io
         run: flyctl deploy --remote-only
