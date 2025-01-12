@@ -83,7 +83,7 @@ class HexBoard4():
     fillBoard(arrayWidth, arrayHeight, mix(CK))
 
     // this is the pattern of the board
-    colorBoardHexes(2, arrayWidth, arrayHeight ) 
+    colorBoardHexes(2, arrayWidth, arrayHeight )
 
     // trim off the four corners (uses q,r,s coords)
     trimBoard( boardSize, arrayWidth, arrayHeight, CX )
@@ -205,13 +205,13 @@ class HexBoard4():
     return (hexArray(x)(y).q, hexArray(x)(y).r, hexArray(x)(y).s)
   end getQRSofTopCentreHex
 
-  def getQRSofTopLeftHex(boardSize :Int, width: Int, height: Int): (Int, Int, Int) = 
+  def getQRSofTopLeftHex(boardSize :Int, width: Int, height: Int): (Int, Int, Int) =
     val topQRS = getQRSofTopCentreHex(boardSize, width, height)
     val topLeft = (topQRS._1-boardSize, topQRS._2+boardSize, topQRS._3)
     topLeft
   end getQRSofTopLeftHex
 
-  def getQRSofTopRightHex(boardSize :Int, width: Int, height: Int): (Int, Int, Int) = 
+  def getQRSofTopRightHex(boardSize :Int, width: Int, height: Int): (Int, Int, Int) =
     val topQRS = getQRSofTopCentreHex(boardSize, width, height)
     val topRight = (topQRS._1+boardSize, topQRS._2, topQRS._3-boardSize)
     topRight
@@ -232,13 +232,13 @@ class HexBoard4():
     return (hexArray(x)(y).q, hexArray(x)(y).r, hexArray(x)(y).s)
   end getQRSofBottomCentreHex
 
-  def getQRSofBottomLeftHex(boardSize :Int, width: Int, height: Int): (Int, Int, Int) = 
+  def getQRSofBottomLeftHex(boardSize :Int, width: Int, height: Int): (Int, Int, Int) =
     val bottomQRS = getQRSofBottomCentreHex(boardSize, width, height)
     val bottomLeft= (bottomQRS._1-boardSize, bottomQRS._2, bottomQRS._3+boardSize)
     bottomLeft
   end getQRSofBottomLeftHex
 
-  def getQRSofBottomRightHex(boardSize :Int, width: Int, height: Int): (Int, Int, Int) = 
+  def getQRSofBottomRightHex(boardSize :Int, width: Int, height: Int): (Int, Int, Int) =
     val bottomQRS = getQRSofBottomCentreHex(boardSize, width, height)
     val bottomRight = (bottomQRS._1+boardSize, bottomQRS._2-boardSize, bottomQRS._3)
     bottomRight
@@ -291,7 +291,7 @@ class HexBoard4():
   sethexColor sets the color of a hex
    */
 
-  def setHexColor(pos: Point, col : Int) : Unit = 
+  def setHexColor(pos: Point, col : Int) : Unit =
     val hh = hexArray(pos.x)(pos.y)
     hexArray(pos.x)(pos.y) = HH3(hh.x, hh.y, col, hh.q, hh.r, hh.s, hh.xR, hh.yR, hh.xS, hh.yS)
   end setHexColor
@@ -316,7 +316,7 @@ class HexBoard4():
     scalingFactor = fS
   end calculateXsYs
 
-  def calculateGridPaintLayer() : Unit = 
+  def calculateGridPaintLayer() : Unit =
     hexGridLayer = Layer.empty // start this combination with an empty layer
     var y = 0
     while y < arrayHeight do
@@ -345,7 +345,7 @@ class HexBoard4():
   end getXsYs
 
   // detected a valid hex (ie is it part of the board) using Array Coordinates (as a point)
-  def isThisHexValid(pAxAy: Point) : Boolean = 
+  def isThisHexValid(pAxAy: Point) : Boolean =
     (hexArray(pAxAy.x)(pAxAy.y).c != CX)
   end isThisHexValid
 
@@ -369,21 +369,21 @@ class HexBoard4():
   end isThisHexBlack
 
   // detect an occupied hex using Array Coordinates (as a point)
-  def isThisHexFree(pAxAy: Point, vPieces: Vector[Piece]) : Boolean = 
+  def isThisHexFree(pAxAy: Point, vPieces: Vector[Piece]) : Boolean =
     vPieces.find(p=>p.pCurPos == pAxAy) match
       case Some(piece) => false
       case None => true
   end isThisHexFree
 
 // detect an occupied hex using Cubic Coordinates (q,r,s)
-  def isThisHexFree(q: Int, r: Int, s: Int, vPieces: Vector[Piece]) : Boolean = 
+  def isThisHexFree(q: Int, r: Int, s: Int, vPieces: Vector[Piece]) : Boolean =
     val aXaY = getAxAyfromQRS(q,r,s)
     val pAxAy = Point(aXaY._1, aXaY._2)
     isThisHexFree(pAxAy, vPieces)
   end isThisHexFree
 
 // obtain color of this hex
-  def getHexColor(pos: Point) : Int = 
+  def getHexColor(pos: Point) : Int =
     hexArray(pos.x)(pos.y).c
   end getHexColor
 
@@ -437,7 +437,7 @@ class HexBoard4():
         val pAxAy = Point(x / 2, y) // .......... x/2 because hexArray has even/odd columns
         // scribe.debug("hexXYFromDisplayXY FINISH:" + hexXYCoords)
         Some(pAxAy)
-      else 
+      else
         // scribe.debug("hexXYFromDisplayXY FINISHES with NONE (non-displayable hex)")    
         None
       end if
@@ -450,14 +450,14 @@ class HexBoard4():
 
   def getCylinderHomePos(id: Int): Point =
     val p1 = boardSize match
-      case 5 => 
+      case 5 =>
         if (id == CR) then Point(2,2) else Point(1,2)
       case 6 => Point(1,1)
       case 7 => Point(1,1)
       case _ => Point(0,1)
     
     val p4 = boardSize match
-      case 5 => 
+      case 5 =>
         if (id == CG) then Point(arrayWidth-2, arrayHeight-10) else Point(arrayWidth-3, arrayHeight-10)
       case 6 => Point(arrayWidth-3, arrayHeight-7)
       case 7 => Point(arrayWidth-2, arrayHeight-5)
@@ -475,18 +475,18 @@ class HexBoard4():
 
   def getBlockHomePos(id: Int): Point =
     val p2 = boardSize match
-      case 5 => 
+      case 5 =>
         if (id==CG) then Point(arrayWidth-2,2) else Point(arrayWidth-3,2)
       case 6 => Point(arrayWidth-3,1)
       case 7 => Point(arrayWidth-2,1)
-      case _ => Point(arrayWidth-2,1)      
+      case _ => Point(arrayWidth-2,1)
     
     val p3 = boardSize match
-      case 5 => 
+      case 5 =>
         if (id==CR) then Point(2, arrayHeight-10) else Point(1, arrayHeight-10)
       case 6 => Point(1, arrayHeight-7)
       case 7 => Point(1, arrayHeight-5)
-      case _ => Point(0, arrayHeight-3)      
+      case _ => Point(0, arrayHeight-3)
 
     id match
         case CB => p3 + Point(1,-3) // .....Blue
@@ -506,7 +506,7 @@ class HexBoard4():
   end getXYfromQRS
 
   // convert from embedded xy to embedded qrs
-  def getQRSfromXY(x: Int, y: Int) : (Int, Int, Int) = 
+  def getQRSfromXY(x: Int, y: Int) : (Int, Int, Int) =
     val q = x
     val r = (y-x)/2
     val s = -q -r
@@ -514,21 +514,21 @@ class HexBoard4():
   end getQRSfromXY
 
   // convert from array xy to embedded xy
-  def getXYfromAxAy(aX: Int, aY: Int) : (Int, Int) = 
+  def getXYfromAxAy(aX: Int, aY: Int) : (Int, Int) =
     val x = (2*aX) + (aY&1)
     val y = aY
     (x,y)
   end getXYfromAxAy
 
   // convert from embedded xy to array xy
-  def getAxAyfromXY(x: Int, y: Int) : (Int, Int) = 
+  def getAxAyfromXY(x: Int, y: Int) : (Int, Int) =
     val aX = (x - (x&1))/2
     val aY = y
     (aX,aY)
   end getAxAyfromXY
 
   // convert from array xy to embedded qrs
-  def getQRSfromAxAy(aX: Int, aY: Int) : (Int, Int, Int) = 
+  def getQRSfromAxAy(aX: Int, aY: Int) : (Int, Int, Int) =
     val q = (2 * aX) + (aY & 1)
     val r = ((aY - (aY&1))/2) - aX
     val s = -q -r

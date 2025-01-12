@@ -184,8 +184,7 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
 
               case None =>
                 scribe.fatal("@@@-39 Connect None ... Attempting to connect without a peer")
-                peerJsPanel =
-                  (PanelType.P_ERROR, ("Error", "Connecting without a local peer in place")) // signalling ERROR
+                peerJsPanel = (PanelType.P_ERROR, ("Error", "Connecting without a local peer in place")) // signalling ERROR
                 val nullDataConnection = new DataConnection()
                 nullDataConnection // likely to cause exception
 

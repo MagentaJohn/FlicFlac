@@ -2,7 +2,6 @@ import mill.scalajslib.api.ModuleSplitStyle
 import mill.scalajslib.api.ModuleKind
 import mill.scalajslib.api.ESModuleImportMapping
 import mill._, scalalib._, scalajslib._
-import mill.scalalib.JlinkModule
 
 val http4sVersion = "0.23.30"
 
@@ -15,7 +14,7 @@ trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
   def scalaJSVersion = "1.18.1"
 }
 
-object flicflac extends AppScalaModule with JlinkModule {
+object flicflac extends AppScalaModule {
   def moduleDeps = Seq(shared.jvm)
   def ivyDeps = Agg(
     ivy"org.http4s::http4s-ember-server::${http4sVersion}",

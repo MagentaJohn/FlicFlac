@@ -148,8 +148,7 @@ object FlicFlacGameModel:
       case Some(newPiece) =>
         var resultingVector: Vector[Piece] = Vector.empty
         for oldPiece <- previousModel.pieces.modelPieces do
-          if (oldPiece.pieceShape == newPiece.pieceShape) && (oldPiece.pieceIdentity == newPiece.pieceIdentity) then
-            resultingVector = resultingVector :+ newPiece
+          if (oldPiece.pieceShape == newPiece.pieceShape) && (oldPiece.pieceIdentity == newPiece.pieceIdentity) then resultingVector = resultingVector :+ newPiece
           else resultingVector = resultingVector :+ oldPiece
           end if
         end for

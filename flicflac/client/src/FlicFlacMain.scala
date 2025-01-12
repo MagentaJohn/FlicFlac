@@ -81,8 +81,8 @@ case class FlicFlacGame(
     val name2: String = flags("name2")
     Outcome {
       val flicFlacBootData: FlicFlacBootData =
-        FlicFlacBootData.create(width, height, name1, name2)
-        // ViewConfig.default
+      FlicFlacBootData.create(width, height, name1, name2)
+      // ViewConfig.default
 
       val config =
         FlicFlacConfig.config
