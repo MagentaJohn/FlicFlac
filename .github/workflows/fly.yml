@@ -19,6 +19,6 @@ jobs:
           jvm: temurin@21
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Build application
-        run: ./mill show assembly
+        run: ./mill show flicflac.assembly
       - name: Deploy to fly.io
         run: flyctl deploy --remote-only

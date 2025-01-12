@@ -1,7 +1,7 @@
 FROM azul/zulu-openjdk-alpine:17
 
 # See the GHA for building the assembly
-COPY "./out/assembly.dest/out.jar" "/app/app.jar"
+COPY "./out/flicflac/assembly.dest/out.jar" "/app/app.jar"
 
 EXPOSE 8080
 

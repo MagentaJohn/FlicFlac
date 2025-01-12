@@ -11,7 +11,7 @@ trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
   def scalaJSVersion = "1.18.1"
 }
 
-object `package` extends RootModule with AppScalaModule with JlinkModule {
+object flicflac extends AppScalaModule with JlinkModule {
   def moduleDeps = Seq(shared.jvm)
   def ivyDeps = Agg(ivy"com.lihaoyi::cask:0.9.1")
 
