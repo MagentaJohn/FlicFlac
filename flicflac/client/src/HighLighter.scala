@@ -4,13 +4,13 @@ import indigo.*
 
 final case class HighLighter(
     val displayOn: Boolean,
-    val currentPos: Point
+    val currentPos: ffPoint
 ):
 
   /*
   setPos repositions the highlighter hex as appropriate
    */
-  def setPosAndShine(newPos: Point): HighLighter =
+  def setPosAndShine(newPos: ffPoint): HighLighter =
     copy(displayOn = true, currentPos = newPos)
   end setPosAndShine
 
@@ -25,7 +25,7 @@ final case class HighLighter(
   paint generates a "SceneUpdateFragment" containing the new position of the Highligter Hex
    */
 
-  def paint(hexBoard4: HexBoard4, fS: Double, pB: Point): Layer =
+  def paint(hexBoard4: HexBoard4, fS: Double, pB: ffPoint): Layer =
     if displayOn then
       val layer = GameAssets.gHex(fS).modifyMaterial(_.withTint(mix(CM)))
       val paintPos = hexBoard4.getXsYs(currentPos)

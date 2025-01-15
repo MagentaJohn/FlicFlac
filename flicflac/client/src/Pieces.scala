@@ -114,8 +114,11 @@ final case class Pieces(
       end bShow
 
       if Piece.selected(p) == false && bShow == true then
-        val pPos = hexBoard4.getXsYs(pSrc)
-        val newLayer = Layer(layer.moveTo(pB + pPos).scaleBy(fS, fS))
+        val ffPos = hexBoard4.getXsYs(pSrc)
+        val pPos = Point(ffPos.x, ffPos.y) // ..... converting FlicFlacPoint to IndigoPoint
+        val pB1 = Point(pB.x, pB.y) // ............ converting FlicFlacPoint to IndigoPoint
+
+        val newLayer = Layer(layer.moveTo(pB1 + pPos).scaleBy(fS, fS))
         layerPieces = layerPieces |+| newLayer
       end if
     end for
@@ -133,8 +136,10 @@ final case class Pieces(
             val newLayer = Layer(layer.scaleBy(fS, fS).moveTo(pPos))
             layerPieces = layerPieces |+| newLayer
           case None =>
-            val pPos = hexBoard4.getXsYs(pSrc)
-            val newLayer = Layer(layer.moveTo(pB + pPos).scaleBy(fS, fS))
+            val ffPos = hexBoard4.getXsYs(pSrc)
+            val pPos = Point(ffPos.x, ffPos.y) // ..... converting FlicFlacPoint to IndigoPoint
+            val pB1 = Point(pB.x, pB.y) // ............ converting FlicFlacPoint to IndigoPoint
+            val newLayer = Layer(layer.moveTo(pB1 + pPos).scaleBy(fS, fS))
             layerPieces = layerPieces |+| newLayer
         end match
     end for

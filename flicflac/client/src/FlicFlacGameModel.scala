@@ -67,7 +67,7 @@ object FlicFlacGameModel:
     // pieces
     val startingSpots: Spots = Spots(Set.empty)
     val turnTimer = TurnTimer(playerParams.playPams6_TurnTime, playerParams.playPams7_CaptorsTime)
-    val highLighter = new HighLighter(false, Point(0, 0))
+    val highLighter = new HighLighter(false, ffPoint(0, 0))
 
     // create the hexboard
     hexBoard4.create(boardSize)
@@ -121,7 +121,7 @@ object FlicFlacGameModel:
     Pieces(startingModelPieces)
   end summonPieces
 
-  def findPieceByPos(model: FlicFlacGameModel, pos: Point): Option[Piece] =
+  def findPieceByPos(model: FlicFlacGameModel, pos: ffPoint): Option[Piece] =
     model.pieces.modelPieces.find(Piece.position(_) == pos)
   end findPieceByPos
 
@@ -190,7 +190,7 @@ object FlicFlacGameModel:
     val iWinningScore = previousModel.winningScore
     val iRandEventFreq = previousModel.randEventFreq
     val score = (0, 0)
-    val highLighter = new HighLighter(false, Point(0, 0))
+    val highLighter = new HighLighter(false, ffPoint(0, 0))
     val emptySpots: Spots = Spots(Set.empty)
     val turnTime = previousModel.turnTimer.iTotalTurnTime
     val captorsTime = previousModel.turnTimer.iCaptorsTurnTime

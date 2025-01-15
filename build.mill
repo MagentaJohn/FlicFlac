@@ -14,6 +14,7 @@ trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
   def scalaJSVersion = "1.18.1"
 }
 
+// relates to directory flicflac
 object flicflac extends AppScalaModule {
   def moduleDeps = Seq(shared.jvm)
   def ivyDeps = Agg(
@@ -84,3 +85,19 @@ def runAssembly = Task {
   println(path)
   os.proc("java", "-jar", path).call()
 }
+
+/* Some mill commands ...
+mill __.compile
+mill show flicflac.shared.jvm.sources
+mill show flicflac.frontEnd.jvm.sources
+mill resolve flicflac._
+mill show flicflac.sources
+mill show flicflac.client.sources
+mill show flicflac.client.resources
+mill show flicflac.shared.sources
+mill resolve flicflac.shared._
+mill show flicflac.shared.jvm.sources
+mill show flicflac.shared.__.compile
+mill show flicflac.client.compile
+mill flicflac.client.fastLinkJS
+*/

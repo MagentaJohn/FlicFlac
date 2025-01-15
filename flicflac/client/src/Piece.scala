@@ -5,12 +5,13 @@ import indigoextras.ui.*
 import io.circe.Encoder
 import io.circe.Decoder
 
+
 final case class Piece(
     pieceShape: Int, // .................... 0=cylinder, 1=block
     pieceIdentity: Int, // ................. 0,1,2,3,4,5 for Blue/Green/Yellow/Orange/Red/Purple
-    pCurPos: Point, // ..................... current position (in hexArrayCoords)
-    pHomePos: Point, // .................... starting/home position (in hexArrayCoords)
-    pTurnStartPos: Point, // ............... piece position at start of turn
+    pCurPos: ffPoint, // ................... current position (in hexArrayCoords)
+    pHomePos: ffPoint, // .................. starting/home position (in hexArrayCoords)
+    pTurnStartPos: ffPoint, // ............. piece position at start of turn
     bTurnStartFlipState: Boolean, // ....... false if normal orientation at start of turn, true if flipped
 
     // parameters below required for model, but not for creation
@@ -47,7 +48,7 @@ object Piece:
     p.bMoved
   end moved
 
-  def position(p: Piece): Point =
+  def position(p: Piece): ffPoint =
     p.pCurPos
   end position
 
@@ -78,11 +79,11 @@ object Piece:
     p.copy(bMoved = b)
   end setMoved
 
-  def setTurnStartPos(p: Piece, pPos: Point): Piece =
+  def setTurnStartPos(p: Piece, pPos: ffPoint): Piece =
     p.copy(pTurnStartPos = pPos, bTurnStartFlipState = p.bFlipped)
   end setTurnStartPos
 
-  def setPosition(p: Piece, pPos: Point): Piece =
+  def setPosition(p: Piece, pPos: ffPoint): Piece =
     if p.pCurPos == pPos then
       // no change
       p
@@ -99,13 +100,13 @@ object Piece:
     p.copy(pCurPos = p.pHomePos)
   end moveToHome
 
-  def setPosDeselect(p: Piece, pPos: Point): Piece =
+  def setPosDeselect(p: Piece, pPos: ffPoint): Piece =
     val p1 = setPosition(p, pPos)
     val p2 = setSelected(p1, false)
     p2
   end setPosDeselect
 
-  def setPosFlipDeselect(p: Piece, pPos: Point): Piece =
+  def setPosFlipDeselect(p: Piece, pPos: ffPoint): Piece =
     val p1 = setPosition(p, pPos)
     val p2 = setToggleFlip(p1)
     val p3 = setSelected(p2, false)

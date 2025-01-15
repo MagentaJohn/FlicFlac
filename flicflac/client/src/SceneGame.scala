@@ -58,7 +58,8 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
           case e: PointerEvent.PointerDown =>
             val clickPoint = e.position
-            val hexPosn = hexBoard4.getAxAyFromDisplayXY(clickPoint, hexBoard4.scalingFactor)
+            val ffClickPoint = ffPoint(clickPoint.x, clickPoint.y)
+            val hexPosn = hexBoard4.getAxAyFromDisplayXY(ffClickPoint, hexBoard4.scalingFactor)
             hexPosn match
               case Some(pos) =>
                 // Pointer Down, Pos on Grid
@@ -142,7 +143,8 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
           case e: PointerEvent.PointerUp =>
             val clickPoint = e.position
-            val hexPosn = hexBoard4.getAxAyFromDisplayXY(clickPoint, hexBoard4.scalingFactor)
+            val ffClickPoint = ffPoint(clickPoint.x, clickPoint.y)
+            val hexPosn = hexBoard4.getAxAyFromDisplayXY(ffClickPoint, hexBoard4.scalingFactor)
             hexPosn match
               case Some(pos) =>
                 // Pointer Up, Pos on Grid
@@ -553,7 +555,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(GameAssets.cornerLayers(rCorners, 1.0, RGBA.Magenta)))
 
 // The diag fragment shows the diagnostic dMsg pointer handler events in the top LH corner
-//      |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(diag))
+//        |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(diag))
 
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(viewModel.turnButton.draw))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(youAre))

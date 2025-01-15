@@ -1,6 +1,6 @@
 
 
-devFront:
+devClient:
   cs launch io.github.quafadas:sjsls_3:0.2.5 -- \
     --path-to-index-html {{justfile_directory()}}/flicflac/client/resources \
     --build-tool mill \
@@ -17,5 +17,11 @@ update:
 fmt:
   mill mill.scalalib.scalafmt.ScalafmtModule/
 
-cleanFront:
+cleanClient:
   mill clean flicflac.client.__
+
+compileAll:
+  mill __.compile
+
+
+
