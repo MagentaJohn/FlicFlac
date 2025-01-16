@@ -1,11 +1,7 @@
 package game
 
-//import indigo.*
-//import indigoextras.ui.*
 import io.circe.Encoder
 import io.circe.Decoder
-import io.circe.syntax.*
-//import io.circe.parser.decode
 
 final case class Piece(
     pieceShape: Int, // .................... 0=cylinder, 1=block

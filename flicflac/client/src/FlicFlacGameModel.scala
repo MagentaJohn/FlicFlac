@@ -5,7 +5,6 @@ import io.circe.Encoder
 import io.circe.Decoder
 import io.circe.syntax.*
 import io.circe.parser.decode
-import game.Piece.pieceShape
 
 final case class FlicFlacGameModel(
     ourName: String, // ................. Negotiated at startup - rx packets SWAP
