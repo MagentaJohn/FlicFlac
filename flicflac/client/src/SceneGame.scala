@@ -58,7 +58,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
           case e: PointerEvent.PointerDown =>
             val clickPoint = e.position
-            val ffClickPoint = ffPoint(clickPoint.x, clickPoint.y)
+            val ffClickPoint = PointXY(clickPoint.x, clickPoint.y)
             val hexPosn = hexBoard4.getAxAyFromDisplayXY(ffClickPoint, hexBoard4.scalingFactor)
             hexPosn match
               case Some(pos) =>
@@ -143,7 +143,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
           case e: PointerEvent.PointerUp =>
             val clickPoint = e.position
-            val ffClickPoint = ffPoint(clickPoint.x, clickPoint.y)
+            val ffClickPoint = PointXY(clickPoint.x, clickPoint.y)
             val hexPosn = hexBoard4.getAxAyFromDisplayXY(ffClickPoint, hexBoard4.scalingFactor)
             hexPosn match
               case Some(pos) =>

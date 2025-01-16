@@ -63,7 +63,7 @@ class HexBoard4():
   val arrayHeight = 34 // ............................ forcing arrayHeight=34 (calculated from sZ=3)
   val graphicWidth = 90 // ........................... the width of the graphic crop for each hex
   val graphicHeight = 80 // .......................... the width of the graphic crop for each hex
-  var pBase = ffPoint(200,0) // ...................... coords of invisible left hand corner
+  var pBase = PointXY(200,0) // ...................... coords of invisible left hand corner
   val xWidth = 70 // ................................. amount to add to a hex centre x coord to reach the vertical line of the next column
   val yHeight = 40 // ................................ half the amount to add to a hex centre y coord to reach the next hexagon below
   val xHalfway = 10 // ............................... xcoord of halfway along the top left diagonal line of first hex
@@ -74,10 +74,10 @@ class HexBoard4():
   def create(size: Int) : Unit =
     boardSize = size
     pBase = size match
-      case 5 => ffPoint(0, 0)
-      case 6 => ffPoint(50, 0)
-      case 7 => ffPoint(50, 0)
-      case _ => ffPoint(200, 0)
+      case 5 => PointXY(0, 0)
+      case 6 => PointXY(50, 0)
+      case 7 => PointXY(50, 0)
+      case _ => PointXY(200, 0)
 
     // start with black board, populates q,r,s (for debugging the helper routine printBoard can follow this line)
     fillBoard(arrayWidth, arrayHeight, mix(CK))
@@ -183,7 +183,7 @@ class HexBoard4():
       // we use -2 here to allow for top border
       while n < arrayWidth - 1 do
         val hexColor = rowTemplateX((thisRow - 2) % rowTemplateX.length)(n % 3)
-        setHexColor(ffPoint(n,thisRow),hexColor)
+        setHexColor(PointXY(n,thisRow),hexColor)
         col += 2
         n += 1
       end while
@@ -260,7 +260,7 @@ class HexBoard4():
       while x < width do
         val hh = hexArray(x)(y)
         if (hh.s >= topQRS._3) || (hh.r <= topQRS._2) || (hh.s <= bottomQRS._3) || (hh.r >= bottomQRS._2) || (hh.q <= leftQRS._1) || (hh.q >= rightQRS._1)then
-          setHexColor(ffPoint(x,y),color)
+          setHexColor(PointXY(x,y),color)
         end if
         x += 1
       end while
@@ -291,7 +291,7 @@ class HexBoard4():
   sethexColor sets the color of a hex
    */
 
-  def setHexColor(pos: ffPoint, col : Int) : Unit =
+  def setHexColor(pos: PointXY, col : Int) : Unit =
     val hh = hexArray(pos.x)(pos.y)
     hexArray(pos.x)(pos.y) = HH3(hh.x, hh.y, col, hh.q, hh.r, hh.s, hh.xR, hh.yR, hh.xS, hh.yS)
   end setHexColor
@@ -336,40 +336,40 @@ class HexBoard4():
     end while
   end calculateGridPaintLayer
 
-  def getXsYs(pSrc: ffPoint) : ffPoint =
-    var pValidated = ffPoint(0,0)
+  def getXsYs(pSrc: PointXY) : PointXY =
+    var pValidated = PointXY(0,0)
     val x = pSrc.x
     val y = pSrc.y
-    val pResult = ffPoint(hexArray(x)(y).xS, hexArray(x)(y).yS)
+    val pResult = PointXY(hexArray(x)(y).xS, hexArray(x)(y).yS)
     pResult
   end getXsYs
 
   // detected a valid hex (ie is it part of the board) using Array Coordinates (as a point)
-  def isThisHexValid(pAxAy: ffPoint) : Boolean =
+  def isThisHexValid(pAxAy: PointXY) : Boolean =
     (hexArray(pAxAy.x)(pAxAy.y).c != CX)
   end isThisHexValid
 
   // detected a valid hex (ie is it part of the board) using Cubic Coordinates
   def isThisHexValid(q: Int, r: Int, s: Int) : Boolean =
     val aXaY = getAxAyfromQRS(q,r,s)
-    val pAxAy = ffPoint(aXaY._1, aXaY._2)
+    val pAxAy = PointXY(aXaY._1, aXaY._2)
     isThisHexValid(pAxAy)
   end isThisHexValid
 
   // detecting a black hex using Array Coordinates (as a point)
-  def isThisHexBlack(pAxAy: ffPoint) : Boolean =
+  def isThisHexBlack(pAxAy: PointXY) : Boolean =
     (hexArray(pAxAy.x)(pAxAy.y).c == CK)
   end isThisHexBlack
 
   // detecting a black hex using Cubic Coordinates (q,r,s)
   def isThisHexBlack(q: Int, r: Int, s: Int) : Boolean =
     val aXaY = getAxAyfromQRS(q,r,s)
-    val pAxAy = ffPoint(aXaY._1, aXaY._2)
+    val pAxAy = PointXY(aXaY._1, aXaY._2)
     isThisHexBlack(pAxAy)
   end isThisHexBlack
 
   // detect an occupied hex using Array Coordinates (as a point)
-  def isThisHexFree(pAxAy: ffPoint, vPieces: Vector[Piece]) : Boolean =
+  def isThisHexFree(pAxAy: PointXY, vPieces: Vector[Piece]) : Boolean =
     vPieces.find(p=>p.pCurPos == pAxAy) match
       case Some(piece) => false
       case None => true
@@ -378,12 +378,12 @@ class HexBoard4():
 // detect an occupied hex using Cubic Coordinates (q,r,s)
   def isThisHexFree(q: Int, r: Int, s: Int, vPieces: Vector[Piece]) : Boolean =
     val aXaY = getAxAyfromQRS(q,r,s)
-    val pAxAy = ffPoint(aXaY._1, aXaY._2)
+    val pAxAy = PointXY(aXaY._1, aXaY._2)
     isThisHexFree(pAxAy, vPieces)
   end isThisHexFree
 
 // obtain color of this hex
-  def getHexColor(pos: ffPoint) : Int =
+  def getHexColor(pos: PointXY) : Int =
     hexArray(pos.x)(pos.y).c
   end getHexColor
 
@@ -403,7 +403,7 @@ class HexBoard4():
   There is either Some(Point) or None
    */
 
-  def getAxAyFromDisplayXY(pDs: ffPoint, fS: Double): Option[ffPoint] =
+  def getAxAyFromDisplayXY(pDs: PointXY, fS: Double): Option[PointXY] =
     //scribe.debug("hexXYFromDisplayXY START:" + pDs)
     val GWIDTH = graphicWidth // ..................................... The Hex graphic width without overlap of one pixel
     val GHEIGHT = graphicHeight // ................................... The Hex graphic height without overlap of one pixel
@@ -414,8 +414,8 @@ class HexBoard4():
     val heightScaled = math.round((height * fS)).toInt // ............ scaling board dimensions
     val gWidthScaled = math.round(((GWIDTH / 2) * fS)).toInt // ...... scaling the dimensions of the original hex
     val gHeightScaled = math.round(((GHEIGHT / 2) * fS)).toInt // .... scaling the dimensions of the original hex
-    val pC1 = ffPoint(pB.x + gWidthScaled, pB.y + gHeightScaled) // .. PC1 is top LH corner of the detection rectangle
-    val pC2 = ffPoint(pC1.x + widthScaled, pC1.y + heightScaled) // .. pC2 is bottom RH corner of the detection rectangle
+    val pC1 = PointXY(pB.x + gWidthScaled, pB.y + gHeightScaled) // .. PC1 is top LH corner of the detection rectangle
+    val pC2 = PointXY(pC1.x + widthScaled, pC1.y + heightScaled) // .. pC2 is bottom RH corner of the detection rectangle
     val xH = (xHalfway * fS).toInt // ................................ scaling the tiny offset required for detection grid alignment
 
     //scribe.debug("hexXYFromDisplayXY BOUNDARIES:: " + pC1 + " :: " + pC2)
@@ -434,7 +434,7 @@ class HexBoard4():
 
       val c = hexArray(x / 2)(y).c
       if (c != CX) then // ...................... exclude hexes from display if color is CX
-        val pAxAy = ffPoint(x / 2, y) // ........ x/2 because hexArray has even/odd columns
+        val pAxAy = PointXY(x / 2, y) // ........ x/2 because hexArray has even/odd columns
         // scribe.debug("hexXYFromDisplayXY FINISH:" + hexXYCoords)
         Some(pAxAy)
       else
@@ -448,53 +448,53 @@ class HexBoard4():
   end getAxAyFromDisplayXY
 
 
-  def getCylinderHomePos(id: Int): ffPoint =
+  def getCylinderHomePos(id: Int): PointXY =
     val p1 = boardSize match
       case 5 =>
-        if (id == CR) then ffPoint(2,2) else ffPoint(1,2)
-      case 6 => ffPoint(1,1)
-      case 7 => ffPoint(1,1)
-      case _ => ffPoint(0,1)
+        if (id == CR) then PointXY(2,2) else PointXY(1,2)
+      case 6 => PointXY(1,1)
+      case 7 => PointXY(1,1)
+      case _ => PointXY(0,1)
     
     val p4 = boardSize match
       case 5 =>
-        if (id == CG) then ffPoint(arrayWidth-2, arrayHeight-10) else ffPoint(arrayWidth-3, arrayHeight-10)
-      case 6 => ffPoint(arrayWidth-3, arrayHeight-7)
-      case 7 => ffPoint(arrayWidth-2, arrayHeight-5)
-      case _ => ffPoint(arrayWidth-2, arrayHeight-3)
+        if (id == CG) then PointXY(arrayWidth-2, arrayHeight-10) else PointXY(arrayWidth-3, arrayHeight-10)
+      case 6 => PointXY(arrayWidth-3, arrayHeight-7)
+      case 7 => PointXY(arrayWidth-2, arrayHeight-5)
+      case _ => PointXY(arrayWidth-2, arrayHeight-3)
 
     id match
-        case CB => p1 + ffPoint(1,3) // .......Blue
-        case CR => p1 + ffPoint(1,2) // .......Red
-        case CY => p1 + ffPoint(2,1) // .......Yellow
-        case CO => p4 + ffPoint(-1,-1) // .....Orange
-        case CG => p4 + ffPoint(-1,-2) // .....Green
-        case CP => p4 + ffPoint(0,-3) // ......Purple
+        case CB => p1 + PointXY(1,3) // .......Blue
+        case CR => p1 + PointXY(1,2) // .......Red
+        case CY => p1 + PointXY(2,1) // .......Yellow
+        case CO => p4 + PointXY(-1,-1) // .....Orange
+        case CG => p4 + PointXY(-1,-2) // .....Green
+        case CP => p4 + PointXY(0,-3) // ......Purple
     end match
   end getCylinderHomePos
 
-  def getBlockHomePos(id: Int): ffPoint =
+  def getBlockHomePos(id: Int): PointXY =
     val p2 = boardSize match
       case 5 =>
-        if (id==CG) then ffPoint(arrayWidth-2,2) else ffPoint(arrayWidth-3,2)
-      case 6 => ffPoint(arrayWidth-3,1)
-      case 7 => ffPoint(arrayWidth-2,1)
-      case _ => ffPoint(arrayWidth-2,1)
+        if (id==CG) then PointXY(arrayWidth-2,2) else PointXY(arrayWidth-3,2)
+      case 6 => PointXY(arrayWidth-3,1)
+      case 7 => PointXY(arrayWidth-2,1)
+      case _ => PointXY(arrayWidth-2,1)
     
     val p3 = boardSize match
       case 5 =>
-        if (id==CR) then ffPoint(2, arrayHeight-10) else ffPoint(1, arrayHeight-10)
-      case 6 => ffPoint(1, arrayHeight-7)
-      case 7 => ffPoint(1, arrayHeight-5)
-      case _ => ffPoint(0, arrayHeight-3)
+        if (id==CR) then PointXY(2, arrayHeight-10) else PointXY(1, arrayHeight-10)
+      case 6 => PointXY(1, arrayHeight-7)
+      case 7 => PointXY(1, arrayHeight-5)
+      case _ => PointXY(0, arrayHeight-3)
 
     id match
-        case CB => p3 + ffPoint(1,-3) // .....Blue
-        case CR => p3 + ffPoint(1,-2) // .....Red
-        case CY => p3 + ffPoint(2,-1) // .....Yellow
-        case CO => p2 + ffPoint(-1,1) // .....Orange
-        case CG => p2 + ffPoint(-1,2) // .....Green
-        case CP => p2 + ffPoint(0,3) // ......Purple
+        case CB => p3 + PointXY(1,-3) // .....Blue
+        case CR => p3 + PointXY(1,-2) // .....Red
+        case CY => p3 + PointXY(2,-1) // .....Yellow
+        case CO => p2 + PointXY(-1,1) // .....Orange
+        case CG => p2 + PointXY(-1,2) // .....Green
+        case CP => p2 + PointXY(0,3) // ......Purple
     end match
   end getBlockHomePos
 

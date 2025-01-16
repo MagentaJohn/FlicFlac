@@ -101,7 +101,7 @@ final case class Spots(
           end if
       end match
 
-      val ss2 = ss1.filter { case (aX, aY) => hexBoard4.isThisHexFree(ffPoint(aX, aY), vPieces) }
+      val ss2 = ss1.filter { case (aX, aY) => hexBoard4.isThisHexFree(PointXY(aX, aY), vPieces) }
       val ss3 = ss2 + ((piece.pHomePos.x, piece.pHomePos.y))
       Spots(ss3)
     else if piece.bMoved then
@@ -196,7 +196,7 @@ final case class Spots(
     var multiSpot = Layer.empty
 
     for pos <- model.possibleMoveSpots.indices do
-      val pPos = hexBoard4.getXsYs(ffPoint(pos._1, pos._2))
+      val pPos = hexBoard4.getXsYs(PointXY(pos._1, pos._2))
       val spotLayer = Layer(layer.moveTo(hexBoard4.pBase.x + pPos.x, hexBoard4.pBase.y + pPos.y))
       multiSpot = multiSpot |+| spotLayer
     end for
