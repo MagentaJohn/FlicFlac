@@ -107,3 +107,10 @@ extension (p: Pointers)
       case _                           => false
     }
 end extension
+
+//-------------------------------------------------------------------------------------------------------------
+// Below this point we have additional extensions that allow FlicFlac classes to be shared by isolating any 
+// dependence on Indigo here
+//-------------------------------------------------------------------------------------------------------------
+
+
