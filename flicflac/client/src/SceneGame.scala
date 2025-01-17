@@ -546,6 +546,9 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         .withFontSize(Pixels(20))
         .moveTo(0, 0)
 
+    val clientTurnTimer =
+      ClientTurnTimer(model.turnTimer)
+
 // format: off
 
     Outcome(
@@ -566,7 +569,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(zoomPercentage))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(viewModel.minusButton.draw))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(viewModel.newGameButton.draw))
-        |+| SceneUpdateFragment(LayerKeys.Middleground -> TurnTimer.show(model))
+        |+| SceneUpdateFragment(LayerKeys.Middleground -> clientTurnTimer.show(model))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> hexBoard4.paint(model, dSF))
         |+| SceneUpdateFragment(LayerKeys.ForegroundHighL -> model.highLighter.paint(hexBoard4, dSF, pB))
         |+| SceneUpdateFragment(LayerKeys.ForegroundSpots -> model.possibleMoveSpots.paint(model))

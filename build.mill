@@ -48,7 +48,8 @@ object flicflac extends AppScalaModule {
   object shared extends Module {
     trait SharedModule extends AppScalaModule with PlatformScalaModule {
       def ivyDeps = Agg(
-        ivy"org.http4s::http4s-circe:${http4sVersion}"
+        ivy"org.http4s::http4s-circe:${http4sVersion}",
+        ivy"com.outr::scribe::3.16.0",
       )
     }
 
@@ -71,7 +72,6 @@ object flicflac extends AppScalaModule {
       ivy"io.indigoengine::tyrian-indigo-bridge::0.17.0",
       ivy"io.indigoengine::tyrian::0.11.0",
       ivy"io.github.quafadas::peer-scalajs::0.0.3",
-      ivy"com.outr::scribe::3.16.0",
     )
     override def scalaJSImportMap: T[Seq[ESModuleImportMapping]] = Seq(
       ESModuleImportMapping.Prefix("snabdom", "https://cdn.jsdelivr.net/npm/snabbdom@3.6"),

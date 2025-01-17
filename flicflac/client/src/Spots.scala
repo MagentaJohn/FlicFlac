@@ -1,12 +1,9 @@
 package game
 
-import indigo.*
-
 // 28/07/24 Tried to use Point instead of(Int,Int) but encoder/decoder throws compiler errors
 final case class Spots(
     indices: Set[(Int, Int)]
 ):
-  // scribe.debug("@@@ case class Spots Start")
 
   def calculatePossibleMoves(model: FlicFlacGameModel): Spots =
     scribe.debug("@@@ Spots calculatePossibleMoves")
@@ -189,19 +186,4 @@ final case class Spots(
     ring1
   end spotRingQRS
 
-  def paint(model: FlicFlacGameModel): Layer =
-    val dSF = hexBoard4.scalingFactor
-    val pB = hexBoard4.pBase
-    val layer = GameAssets.gSpot(dSF)
-    var multiSpot = Layer.empty
-
-    for pos <- model.possibleMoveSpots.indices do
-      val pPos = hexBoard4.getXsYs(PointXY(pos._1, pos._2))
-      val spotLayer = Layer(layer.moveTo(hexBoard4.pBase.x + pPos.x, hexBoard4.pBase.y + pPos.y))
-      multiSpot = multiSpot |+| spotLayer
-    end for
-    multiSpot
-  end paint
-
-  // scribe.debug("@@@ case class Spots Finish")
 end Spots

@@ -65,7 +65,7 @@ object FlicFlacGameModel:
     val score = (0, 0)
     // pieces
     val startingSpots: Spots = Spots(Set.empty)
-    val turnTimer = TurnTimer(playerParams.playPams6_TurnTime, playerParams.playPams7_CaptorsTime)
+    val turnTimer = TurnTimer(playerParams.playPams6_TurnTime, playerParams.playPams7_CaptorsTime, false, false, 0, 0)
     val highLighter = new HighLighter(false, PointXY(0, 0))
 
     // create the hexboard
@@ -193,7 +193,7 @@ object FlicFlacGameModel:
     val emptySpots: Spots = Spots(Set.empty)
     val turnTime = previousModel.turnTimer.iTotalTurnTime
     val captorsTime = previousModel.turnTimer.iCaptorsTurnTime
-    val turnTimer1 = TurnTimer(turnTime, captorsTime)
+    val turnTimer1 = TurnTimer(turnTime, captorsTime, false, false, 0, 0)
     val turnTimer2 = TurnTimer.restartForTurn(turnTimer1)
 
     // create the hexboard

@@ -340,10 +340,10 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
 
         val newModel = initiatorModel.copy(
           responderGameState = GameState.START_CON4,
-          boardSize = newBoardSize, // ................................###
-          winningScore = newScoreToWin, // ............................###
-          turnTimer = TurnTimer(newTurnTimer, newCaptorsTimer), // ....###
-          randEventFreq = newRandEventFreq // .........................###
+          boardSize = newBoardSize, // ....................................................###
+          winningScore = newScoreToWin, // ................................................###
+          turnTimer = TurnTimer(newTurnTimer, newCaptorsTimer, false, false, 0, 0), // ....###
+          randEventFreq = newRandEventFreq // .............................................###
         )
         lastTxGameModel = Some(newModel)
         FlicFlacGameModel.modify(newModel, None, None)

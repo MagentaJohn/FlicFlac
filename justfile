@@ -19,6 +19,7 @@ fmt:
 
 cleanClient:
   mill clean flicflac.client.__
+  mill clean flicflac.shared.__
 
 compileAll:
   mill __.compile
