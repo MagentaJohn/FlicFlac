@@ -1,5 +1,7 @@
 package game
 
+import io.circe.Encoder
+import io.circe.Decoder
 final case class TurnTimer(
     val iTotalTurnTime: Int, // .............. the turn time in seconds as configured by Params
     val iCaptorsTurnTime: Int, // ............ the captors turn time in seconds as configured by Params
@@ -7,8 +9,7 @@ final case class TurnTimer(
     val bCaptorsTurn: Boolean = false, // .... indicates false for turn time and true for captors tome
     val iCurrentTime: Int = 0, // ............ the current time in 10ths of a second
     val iThisTurnExpires: Int = 0 // ......... the future time in 10ths of a second when turn expires
-)
-
+) derives Encoder.AsObject, Decoder
 object TurnTimer:
   def restartForTurn(tt: TurnTimer): TurnTimer =
     val a1 = (tt.iTotalTurnTime > 0)
