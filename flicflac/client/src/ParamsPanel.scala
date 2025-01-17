@@ -9,7 +9,7 @@ final case class ParamsPanel():
   val p3 = Point(140, 840) // ....... coords of captors turn time
   val p4 = Point(140, 925) // ....... coords of random event probability
 
-  def show(model: FlicFlacGameModel, dSF: Double): Layer =
+  def paint(model: FlicFlacGameModel, dSF: Double): Layer =
 
     val p0Scaled = p0 * dSF
     val p1Scaled = p1 * dSF
@@ -54,6 +54,6 @@ final case class ParamsPanel():
 
     (layer0 |+| layer1 |+| layer2 |+| layer3 |+| layer4)
 
-  end show
+  end paint
 
 end ParamsPanel

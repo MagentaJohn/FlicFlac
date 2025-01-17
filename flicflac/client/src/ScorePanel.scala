@@ -13,7 +13,7 @@ final case class ScorePanel():
   val p5 = Point(20, 230) // ...... coords of cylinder icon
   val p6 = Point(20, 410) // ...... coords of block icon
 
-  def show(model: FlicFlacGameModel, bBlinkOn: Boolean, dSF: Double): Layer =
+  def paint(model: FlicFlacGameModel, bBlinkOn: Boolean, dSF: Double): Layer =
 
     val p0Scaled = p0 * dSF
     val p1Scaled = p1 * dSF
@@ -125,7 +125,7 @@ final case class ScorePanel():
     val content7 = Layer(blockScore)
 
     (content1 |+| content2 |+| content3 |+| content4 |+| content5 |+| content6 |+| content7)
-  end show
+  end paint
 
   def coordsFromScore(score: Int, coordsForOneDigit: Point, coordsForTwoDigits: Point): Point =
     if score < 10 then coordsForOneDigit

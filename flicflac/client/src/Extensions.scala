@@ -108,27 +108,4 @@ extension (p: Pointers)
     }
 end extension
 
-//-------------------------------------------------------------------------------------------------------------
-// Below this point we have additional extensions that allow FlicFlac classes to be shared by isolating any 
-// dependence on Indigo here
-//-------------------------------------------------------------------------------------------------------------
-
-extension (s: Spots)
-
-  def paint(model: FlicFlacGameModel): Layer =
-    val dSF = hexBoard4.scalingFactor
-    val pB = hexBoard4.pBase
-    val layer = GameAssets.gSpot(dSF)
-    var multiSpot = Layer.empty
-
-    for pos <- model.possibleMoveSpots.indices do
-      val pPos = hexBoard4.getXsYs(PointXY(pos._1, pos._2))
-      val spotLayer = Layer(layer.moveTo(hexBoard4.pBase.x + pPos.x, hexBoard4.pBase.y + pPos.y))
-      multiSpot = multiSpot |+| spotLayer
-    end for
-    multiSpot
-  end paint
-
-end extension
-
 

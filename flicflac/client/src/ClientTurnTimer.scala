@@ -4,7 +4,7 @@ import indigo.*
 
 class ClientTurnTimer( turnTimer: TurnTimer ) : 
 
-  def show(model: FlicFlacGameModel): Layer =
+  def paint(model: FlicFlacGameModel): Layer =
     // all measurements before scaling ...
     // for 0% ...
     // cap part is 25 high ...... and starts-ends at (70-95)
@@ -99,6 +99,6 @@ class ClientTurnTimer( turnTimer: TurnTimer ) :
     val content4 = content1 |+| content2 |+| content3
 
     content4
-  end show
+  end paint
 
 end ClientTurnTimer
