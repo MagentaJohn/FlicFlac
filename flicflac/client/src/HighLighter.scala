@@ -1,6 +1,5 @@
 package game
 
-import indigo.*
 import io.circe.Encoder
 import io.circe.Decoder
 
@@ -23,20 +22,5 @@ final case class HighLighter(
   def shine(onOff: Boolean): HighLighter =
     copy(displayOn = onOff)
   end shine
-
-  /*
-  paint generates a "SceneUpdateFragment" containing the new position of the Highligter Hex
-   */
-
-  def paint(hexBoard4: HexBoard4, fS: Double, pB: PointXY): Layer =
-    if displayOn then
-      val layer = GameAssets.gHex(fS).modifyMaterial(_.withTint(mix(CM)))
-      val paintPos = hexBoard4.getXsYs(currentPos)
-      Layer(layer.moveTo(pB.x + paintPos.x, pB.y + paintPos.y))
-    else
-      // Blink effect
-      Layer.empty
-    end if
-  end paint
 
 end HighLighter
