@@ -25,7 +25,7 @@ final case class FlicFlacGameModel(
 ) derives Encoder.AsObject,
       Decoder
 
-enum GameState:
+enum GameState derives Encoder.AsObject, Decoder:
   case START_CON1 // a state included in the set return by getStartUpStates
   case START_CON2 // a state included in the set return by getStartUpStates
   case START_CON3 // a state included in the set return by getStartUpStates

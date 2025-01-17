@@ -47,9 +47,11 @@ object flicflac extends AppScalaModule {
 
   object shared extends Module {
     trait SharedModule extends AppScalaModule with PlatformScalaModule {
-      def ivyDeps = Agg(
+      def ivyDeps = super.ivyDeps() ++ Agg(
         ivy"org.http4s::http4s-circe:${http4sVersion}",
         ivy"com.outr::scribe::3.16.0",
+        ivy"io.circe::circe-core::0.14.10",
+        ivy"io.circe::circe-generic::0.14.10",
       )
     }
 

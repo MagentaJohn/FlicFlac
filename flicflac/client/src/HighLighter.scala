@@ -1,11 +1,14 @@
 package game
 
 import indigo.*
+import io.circe.Encoder
+import io.circe.Decoder
 
 final case class HighLighter(
     val displayOn: Boolean,
     val currentPos: PointXY
-):
+) derives Encoder.AsObject,
+      Decoder:
 
   /*
   setPos repositions the highlighter hex as appropriate
