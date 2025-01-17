@@ -572,9 +572,10 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         .withFontSize(Pixels(20))
         .moveTo(0, 0)
 
-    val clientSpots = ClientSpots(model.possibleMoveSpots)
     val clientTurnTimer = ClientTurnTimer(model.turnTimer)
     val clientHighLighter = ClientHighLighter(model.highLighter)
+    val clientSpots = ClientSpots(model.possibleMoveSpots)
+    val clientPieces = ClientPieces(model.pieces)
 
 // format: off
 
@@ -600,7 +601,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         |+| SceneUpdateFragment(LayerKeys.Middleground -> hexBoard4.paint(model, dSF))
         |+| SceneUpdateFragment(LayerKeys.ForegroundHighL -> clientHighLighter.paint(model, hexBoard4, dSF, pB))
         |+| SceneUpdateFragment(LayerKeys.ForegroundSpots -> clientSpots.paint(model))
-        |+| SceneUpdateFragment(LayerKeys.ForegroundPieces -> model.pieces.paint(model, dSF, bBlinkOn, viewModel.optDragPos)
+        |+| SceneUpdateFragment(LayerKeys.ForegroundPieces -> clientPieces.paint(model, dSF, bBlinkOn, viewModel.optDragPos)
         )
     )
 // format: on
