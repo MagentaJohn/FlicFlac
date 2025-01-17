@@ -1,6 +1,8 @@
 package game
 
 import indigo.*
+import io.circe.Encoder
+import io.circe.Decoder
 
 val CYLINDER = 0
 val BLOCK = 1
@@ -36,7 +38,8 @@ def mix(i: Int): RGBA =
 
 final case class Pieces(
     modelPieces: Vector[Piece]
-):
+) derives Encoder.AsObject,
+      Decoder:
   def newTurn(model: FlicFlacGameModel): Pieces =
     var newModelPieces = Vector.empty[Piece]
     for p1 <- model.pieces.modelPieces do
