@@ -6,7 +6,7 @@ import io.circe.Decoder
 import io.circe.syntax.*
 import io.circe.parser.decode
 
-class ClientFlicFlacGameModel ( ffgm: FlicFlacGameModel ):
+class ClientFlicFlacGameModel(ffgm: FlicFlacGameModel):
 
   def modify(
       previousModel: FlicFlacGameModel,
@@ -17,7 +17,7 @@ class ClientFlicFlacGameModel ( ffgm: FlicFlacGameModel ):
     val m2 = modifyHighLighter(m1, possibleHighLighter)
     val m3 = modifyPossibleMoves(m2)
     val asJson = m3.asJson.noSpaces
-    val gameCache = FlicFlacGameModel.getGameName(previousModel.ourName, previousModel.oppoName)
+    val gameCache = getGameName(previousModel.ourName, previousModel.oppoName)
     org.scalajs.dom.window.localStorage.setItem(gameCache, asJson)
     Outcome(m3).addGlobalEvents(WebRtcEvent.SendData(m3))
   end modify
@@ -41,7 +41,7 @@ class ClientFlicFlacGameModel ( ffgm: FlicFlacGameModel ):
   def modifyPieces(previousModel: FlicFlacGameModel, newPieces: Pieces): Outcome[FlicFlacGameModel] =
     val m1 = previousModel.copy(pieces = newPieces)
     val asJson = m1.asJson.noSpaces
-    val gameCache = FlicFlacGameModel.getGameName(previousModel.ourName, previousModel.oppoName)
+    val gameCache = getGameName(previousModel.ourName, previousModel.oppoName)
     org.scalajs.dom.window.localStorage.setItem(gameCache, asJson)
     Outcome(m1).addGlobalEvents(WebRtcEvent.SendData(m1))
   end modifyPieces

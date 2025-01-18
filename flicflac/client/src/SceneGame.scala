@@ -42,7 +42,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
           case StartLiveGame =>
             scribe.debug("@@@ StartLiveGame with BoardSize:" + model.boardSize)
             hexBoard4.create(model.boardSize) // ................................ establish new hexboard
-            val startingPieces = FlicFlacGameModel.summonPieces(hexBoard4) // ... establish new starting positions
+            val startingPieces = summonPieces(hexBoard4) // ... establish new starting positions
             val clientModel = ClientFlicFlacGameModel(model) // ................. establish clientModel for indigo interface
             clientModel.modifyPieces(model, startingPieces) // .................. update model
 
@@ -66,7 +66,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               case Some(pos) =>
                 // Pointer Down, Pos on Grid
                 checkTurnValidAndThrow(model, "Pointer DOWN event") // throws exception if out of turn
-                FlicFlacGameModel.findPieceSelected(model) match
+                findPieceSelected(model) match
                   case Some(piece) =>
                     // Pointer Down, Pos on Grid, Piece Selected
                     if piece.pCurPos == pos then
@@ -88,7 +88,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
                   case None =>
                     // Pointer Down, Pos on Grid, No Piece Selected
-                    FlicFlacGameModel.findPieceByPos(model, pos) match
+                    findPieceByPos(model, pos) match
                       case Some(piece) =>
                         if ((piece.pieceShape == CYLINDER) && (model.gameState == GameState.CYLINDER_TURN))
                           || ((piece.pieceShape == BLOCK) && (model.gameState == GameState.BLOCK_TURN))
@@ -120,7 +120,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               case None =>
                 // Pointer Down, Pos off Grid
                 if checkTurnValid(model) then
-                  FlicFlacGameModel.findPieceSelected(model) match
+                  findPieceSelected(model) match
                     case Some(piece) =>
                       // Pointer Down, Pos off Grid, Piece Selected <<##F##>>
                       dMsg = "##F##"
@@ -156,7 +156,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               case Some(pos) =>
                 // Pointer Up, Pos on Grid
                 checkTurnValidAndThrow(model, "Pointer UP event") // throws exception if out of turn
-                FlicFlacGameModel.findPieceSelected(model) match
+                findPieceSelected(model) match
                   case Some(piece) =>
                     // Pointer Up, Pos on Grid, Piece Selected
                     if model.possibleMoveSpots.indices((pos.x, pos.y)) then
@@ -179,7 +179,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                         scribe.debug("@@@ PointerEvent " + dMsg)
                         val updatedPiece = Piece.setPosDeselect(piece, pos)
 
-                        val clientModel1 = ClientFlicFlacGameModel(model)                        
+                        val clientModel1 = ClientFlicFlacGameModel(model)
                         clientModel1.modify(model, Some(updatedPiece), Some(newHL)).flatMap { updatedModel =>
                           val newPieces = Melee(updatedModel).combat(updatedModel)
                           val clientModel2 = ClientFlicFlacGameModel(updatedModel)
@@ -233,7 +233,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                       "@@@ Magenta hexboard4: (ax,ay) x,y,q,r,s = (" + w + "," + h + ") : "
                         + x + "," + y + " : " + q + "," + r + "," + s
                     )
-                    val clientModel = ClientFlicFlacGameModel(model)                    
+                    val clientModel = ClientFlicFlacGameModel(model)
                     clientModel.modify(model, None, None)
 
                 end match // findPieceSelected
@@ -241,7 +241,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               case None =>
                 if checkTurnValid(model) then
                   // Pointer Up, Pos off Grid
-                  FlicFlacGameModel.findPieceSelected(model) match
+                  findPieceSelected(model) match
                     case Some(piece) =>
                       // Pointer Up, Pos off Grid, Piece Selected
                       dMsg = "##M##"
@@ -271,7 +271,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
           case ButtonNewGameEvent =>
             checkTurnValidAndThrow(model, "Button NEW GAME Event") // throws exception if out of turn
-            val newModel = FlicFlacGameModel.reset(model)
+            val newModel = reset(model)
             val clientModel = ClientFlicFlacGameModel(newModel)
             clientModel.modify(newModel, None, None)
 
@@ -293,7 +293,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
           case ViewportResize(gameViewPort) =>
             var dSF = 1.0
-            if FlicFlacGameModel.getStartUpStates().contains(model.gameState) then
+            if getStartUpStates().contains(model.gameState) then
               scribe.debug("@@@ ViewPortResize from scratch")
               val w = gameViewPort.width - hexBoard4.pBase.x
               val h = gameViewPort.height - hexBoard4.pBase.y
@@ -489,7 +489,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
       viewModel.update(context.mouse, context.frameContext.inputState.pointers)
 
     case e: PointerEvent.PointerMove =>
-      FlicFlacGameModel.findPieceSelected(model) match
+      findPieceSelected(model) match
         case Some(p) =>
           scribe.trace("@@@ PointerEventMove @ " + e.position)
           viewModel.optDragPos = Some(e.position)
