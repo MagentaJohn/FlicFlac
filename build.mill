@@ -14,6 +14,8 @@ trait AppScalaJSModule extends AppScalaModule with ScalaJSModule {
   def scalaJSVersion = "1.18.1"
 }
 
+val circeV = "0.14.10"
+
 // relates to directory flicflac
 object flicflac extends AppScalaModule {
   def moduleDeps = Seq(shared.jvm)
@@ -50,7 +52,9 @@ object flicflac extends AppScalaModule {
       def ivyDeps = super.ivyDeps() ++ Agg(
         ivy"org.http4s::http4s-circe:${http4sVersion}",
         ivy"com.outr::scribe::3.16.0",
-        ivy"com.outr::scribe::3.16.0",
+        ivy"io.circe::circe-core::$circeV",
+        ivy"io.circe::circe-parser::$circeV",
+        ivy"io.circe::circe-generic::$circeV",
       )
     }
 
