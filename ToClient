@@ -1,0 +1,8 @@
+#!/bin/bash
+mv ~/GIT/FlicFlac/flicflac/shared/src/FlicFlacGameModel.scala ~/GIT/FlicFlac/flicflac/client/src/FlicFlacGameModel.scala
+mv ~/GIT/FlicFlac/flicflac/shared/src/HighLighter.scala       ~/GIT/FlicFlac/flicflac/client/src/HighLighter.scala
+mv ~/GIT/FlicFlac/flicflac/shared/src/Spots.scala             ~/GIT/FlicFlac/flicflac/client/src/Spots.scala
+mv ~/GIT/FlicFlac/flicflac/shared/src/Pieces.scala             ~/GIT/FlicFlac/flicflac/client/src/Pieces.scala
+
+
+
