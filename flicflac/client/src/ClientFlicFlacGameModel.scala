@@ -59,4 +59,25 @@ class ClientFlicFlacGameModel ( ffgm: FlicFlacGameModel ):
     previousModel.copy(possibleMoveSpots = newSpots)
   end modifyPossibleMoves
 
+  def printPieces(model: FlicFlacGameModel): Unit =
+    for p <- model.pieces.modelPieces do
+
+      val sSelected = if Piece.selected(p) then "S" else "-"
+      val sFlipped = if Piece.flipped(p) then "F" else "-"
+      val sCaptured = if Piece.captured(p) then "C" else "-"
+      val sMoved = if Piece.moved(p) then "M" else "-"
+
+      val s = "@@@ " + PieceAssets.pieceTypes(p.pieceShape)
+        + " " + PieceAssets.pieceNames(p.pieceIdentity % 6)
+        + ": "
+        + "CurPos(" + p.pCurPos.x + "," + p.pCurPos.y + ") "
+        + "HomePos(" + p.pHomePos.x + "," + p.pHomePos.y + ") "
+        + sSelected
+        + sFlipped
+        + sCaptured
+        + sMoved
+      scribe.trace(s)
+    end for
+  end printPieces
+
 end ClientFlicFlacGameModel

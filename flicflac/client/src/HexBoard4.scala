@@ -80,7 +80,7 @@ class HexBoard4():
       case _ => PointXY(200, 0)
 
     // start with black board, populates q,r,s (for debugging the helper routine printBoard can follow this line)
-    fillBoard(arrayWidth, arrayHeight, mix(CK))
+    fillBoard(arrayWidth, arrayHeight, RGBA.Black) // This is also index CK but here we must interface to indigo
 
     // this is the pattern of the board
     colorBoardHexes(2, arrayWidth, arrayHeight )
@@ -325,7 +325,7 @@ class HexBoard4():
         val hh = hexArray(x)(y)
         if hh.c != CX then
           // this hex is visible so paint it
-          val layer = GameAssets.gHex(scalingFactor).modifyMaterial(_.withTint(mix(hh.c)))
+          val layer = GameAssets.gHex(scalingFactor).modifyMaterial(_.withTint(indigoMix(hh.c)))
           val scaledX = hh.xS + pBase.x
           val scaledY = hh.yS + pBase.y
           hexGridLayer = hexGridLayer |+| Layer(layer.moveTo(scaledX, scaledY))
@@ -335,6 +335,22 @@ class HexBoard4():
       y += 1
     end while
   end calculateGridPaintLayer
+
+  def indigoMix(i: Int): RGBA =
+  i match
+    case CX => RGBA.fromHexString("#00000000") // Zero
+    case CB => RGBA.fromHexString("#80C0FFFF") // Blue
+    case CG => RGBA.fromHexString("#C0FFC0FF") // Green
+    case CY => RGBA.fromHexString("#FFFFC0FF") // Yellow
+    case CO => RGBA.fromHexString("#FFD070FF") // Orange
+    case CR => RGBA.fromHexString("#FFC0C0FF") // Red
+    case CP => RGBA.fromHexString("#CCCCFFFF") // Purple
+    case CK => RGBA.fromHexString("#808080FF") // Black
+    case CW => RGBA.fromHexString("#FFFFFFFF") // White
+    case CC => RGBA.fromHexString("#00FFFFFF") // Cyan
+    case CM => RGBA.fromHexString("#FF00FFFF") // Magenta
+    case _  => RGBA.fromHexString("#FF00FFFF") // Magenta
+  end indigoMix
 
   def getXsYs(pSrc: PointXY) : PointXY =
     var pValidated = PointXY(0,0)

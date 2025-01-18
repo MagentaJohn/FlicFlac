@@ -1,6 +1,5 @@
 package game
 
-import indigo.*
 import io.circe.Encoder
 import io.circe.Decoder
 
@@ -21,20 +20,20 @@ val CC = 8 // CC for Cyan is a test color
 val CM = 9 // CM for Magenta is a test color
 val CX = 10 // CX indicates hex does not so not visible (indicated by transparency field = 0)
 
-def mix(i: Int): RGBA =
+def mix(i: Int): SRGBA =
   i match
-    case CX => RGBA.fromHexString("#00000000") // Zero
-    case CB => RGBA.fromHexString("#80C0FFFF") // Blue
-    case CG => RGBA.fromHexString("#C0FFC0FF") // Green
-    case CY => RGBA.fromHexString("#FFFFC0FF") // Yellow
-    case CO => RGBA.fromHexString("#FFD070FF") // Orange
-    case CR => RGBA.fromHexString("#FFC0C0FF") // Red
-    case CP => RGBA.fromHexString("#CCCCFFFF") // Purple
-    case CK => RGBA.fromHexString("#808080FF") // Black
-    case CW => RGBA.fromHexString("#FFFFFFFF") // White
-    case CC => RGBA.fromHexString("#00FFFFFF") // Cyan
-    case CM => RGBA.fromHexString("#FF00FFFF") // Magenta
-    case _  => RGBA.fromHexString("#FF00FFFF") // Magenta
+    case CX => SRGBA.fromHexString("#00000000") // Zero
+    case CB => SRGBA.fromHexString("#80C0FFFF") // Blue
+    case CG => SRGBA.fromHexString("#C0FFC0FF") // Green
+    case CY => SRGBA.fromHexString("#FFFFC0FF") // Yellow
+    case CO => SRGBA.fromHexString("#FFD070FF") // Orange
+    case CR => SRGBA.fromHexString("#FFC0C0FF") // Red
+    case CP => SRGBA.fromHexString("#CCCCFFFF") // Purple
+    case CK => SRGBA.fromHexString("#808080FF") // Black
+    case CW => SRGBA.fromHexString("#FFFFFFFF") // White
+    case CC => SRGBA.fromHexString("#00FFFFFF") // Cyan
+    case CM => SRGBA.fromHexString("#FF00FFFF") // Magenta
+    case _  => SRGBA.fromHexString("#FF00FFFF") // Magenta
 
 final case class Pieces(
     modelPieces: Vector[Piece]
