@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import indigo.*
 import cats.instances.double
 import game.PieceAssets.pieceNames

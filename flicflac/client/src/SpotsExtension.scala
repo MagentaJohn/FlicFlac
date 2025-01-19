@@ -1,13 +1,10 @@
 package game
 
-import io.circe.Encoder
-import io.circe.Decoder
+import shared.*
 
-// 28/07/24 Tried to use Point instead of(Int,Int) but encoder/decoder throws compiler errors
-final case class Spots(
-    indices: Set[(Int, Int)]
-) derives Encoder.AsObject,
-      Decoder:
+import indigo.*
+
+extension(spots: Spots)
 
   def calculatePossibleMoves(model: FlicFlacGameModel): Spots =
     scribe.debug("@@@ Spots calculatePossibleMoves")
@@ -190,4 +187,18 @@ final case class Spots(
     ring1
   end spotRingQRS
 
-end Spots
+  def spPaint(model: FlicFlacGameModel): Layer =
+    val dSF = hexBoard4.scalingFactor
+    val pB = hexBoard4.pBase
+    val layer = GameAssets.gSpot(dSF)
+    var multiSpot = Layer.empty
+
+    for pos <- model.possibleMoveSpots.indices do
+      val pPos = hexBoard4.getXsYs(PointXY(pos._1, pos._2))
+      val spotLayer = Layer(layer.moveTo(hexBoard4.pBase.x + pPos.x, hexBoard4.pBase.y + pPos.y))
+      multiSpot = multiSpot |+| spotLayer
+    end for
+    multiSpot
+  end spPaint
+
+end extension

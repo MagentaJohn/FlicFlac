@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import indigo.*
 import io.circe.Encoder
 import io.circe.Decoder

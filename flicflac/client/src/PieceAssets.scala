@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import indigo.*
 
 // Common Assets needed to build each piece

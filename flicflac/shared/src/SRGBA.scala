@@ -1,4 +1,4 @@
-package game
+package shared
 
 final case class SRGBA(r: Double, g: Double, b: Double, a: Double) derives CanEqual
 

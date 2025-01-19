@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import indigo.*
 import indigo.scenes.*
 import scala.scalajs.js.annotation.JSExportTopLevel
@@ -27,13 +29,6 @@ object LayerKeys:
   val Overlay: BindingKey = BindingKey("Overlay")
 end LayerKeys
 
-// types of panel that can overlay the game
-enum PanelType:
-  case P_INVISIBLE
-  case P_HINT
-  case P_ERROR
-  case P_RESULTS
-end PanelType
 
 val hexBoard4 = new HexBoard4()
 val scorePanel = new ScorePanel()

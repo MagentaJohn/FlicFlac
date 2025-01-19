@@ -1,7 +1,29 @@
-package game
+package shared
 
 import io.circe.Encoder
 import io.circe.Decoder
+
+trait PieceMethods {
+  def flipped(p: Piece): Boolean
+  def selected(p: Piece): Boolean
+  def captured(p: Piece): Boolean
+  def captor(p: Piece): Boolean
+  def moved(p: Piece): Boolean
+  def position(p: Piece): PointXY
+  def setFlip(p: Piece, b: Boolean): Piece
+  def setSelected(p: Piece, b: Boolean): Piece
+  def setToggleFlip(p: Piece): Piece
+  def setCaptured(p: Piece, b: Boolean): Piece
+  def setCaptor(p: Piece, b: Boolean): Piece
+  def setMoved(p: Piece, b: Boolean): Piece
+  def setTurnStartPos(p: Piece, pPos: PointXY): Piece
+  def setPosition(p: Piece, pPos: PointXY): Piece
+  def moveToHome(p: Piece): Piece
+  def setPosDeselect(p: Piece, pPos: PointXY): Piece
+  def setPosFlipDeselect(p: Piece, pPos: PointXY): Piece
+  def pieceShape(p: Piece): Int
+  def pieceId(p: Piece): Int
+}
 
 final case class Piece(
     pieceShape: Int, // .................... 0=cylinder, 1=block

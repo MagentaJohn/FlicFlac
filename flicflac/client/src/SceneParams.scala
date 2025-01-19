@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import indigo.*
 import indigo.scenes.*
 import indigoextras.ui.*
@@ -236,22 +238,19 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
         scribe.trace("@@@ SceneParams INITIATOR transitions to START_CON4")
         val newModel = responderModel.copy(initiatorGameState = GameState.START_CON4)
         lastTxGameModel = Some(newModel)
-        val clientModel = ClientFlicFlacGameModel(newModel)
-        clientModel.modify(newModel, None, None)
+        FlicFlacGameModel.modify(newModel, None, None)
 
       case GameState.START_CON5 =>
         if currentState == GameState.START_CON4 then
           scribe.trace("@@@ SceneParams INITIATOR transitions to START_CON5")
           val newModel = responderModel.copy(initiatorGameState = GameState.START_CON5)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         else
           scribe.trace("@@@ SceneParams INITIATOR stuck at " + currentState.toString())
           val newModel = responderModel.copy(initiatorGameState = currentState)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         end if
 
       case GameState.START_CON6 =>
@@ -259,14 +258,12 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           scribe.trace("@@@ SceneParams INITIATOR transitions to START_CON6")
           val newModel = responderModel.copy(initiatorGameState = GameState.START_CON6)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         else
           scribe.trace("@@@ SceneParams INITIATOR stuck at " + currentState.toString())
           val newModel = responderModel.copy(initiatorGameState = currentState)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         end if
 
       case GameState.START_CON7 =>
@@ -274,14 +271,12 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           scribe.trace("@@@ SceneParams INITIATOR transitions to START_CON7")
           val newModel = responderModel.copy(initiatorGameState = GameState.START_CON7)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         else
           scribe.trace("@@@ SceneParams INITIATOR stuck at " + currentState.toString())
           val newModel = responderModel.copy(initiatorGameState = currentState)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         end if
 
       case GameState.START_CON8 =>
@@ -289,13 +284,11 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           scribe.trace("@@@ SceneParams INITIATOR transitions to START_CON8")
           val newModel = responderModel.copy(initiatorGameState = GameState.START_CON8)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         else
           scribe.trace("@@@ SceneParams INITIATOR stuck at " + currentState.toString())
           val newModel = responderModel.copy(initiatorGameState = currentState)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         end if
 
       case GameState.CYLINDER_TURN =>
@@ -310,8 +303,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
 
         lastTxGameModel = Some(newModel)
         timerP1 = TickTimer.stop()
-        val clientModel = ClientFlicFlacGameModel(newModel)
-        clientModel
+        FlicFlacGameModel
           .modify(newModel, None, None)
           .addGlobalEvents(SceneEvent.Next)
           .addGlobalEvents(StartLiveGame)
@@ -322,8 +314,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
         scribe.trace("@@@ " + sError)
         val newModel = responderModel
         lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-        clientModel
+        FlicFlacGameModel
           .modify(newModel, None, None)
           .addGlobalEvents(Freeze.PanelContent(PanelType.P_ERROR, ("Error", sError)))
   end initiatorStateMachine
@@ -357,22 +348,19 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           randEventFreq = newRandEventFreq // .............................................###
         )
         lastTxGameModel = Some(newModel)
-        val clientModel = ClientFlicFlacGameModel(newModel)
-        clientModel.modify(newModel, None, None)
+        FlicFlacGameModel.modify(newModel, None, None)
 
       case GameState.START_CON4 =>
         if currentState == GameState.START_CON4 then
           scribe.trace("@@@ SceneParams RESPONDER transitions to START_CON5")
           val newModel = initiatorModel.copy(responderGameState = GameState.START_CON5)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         else
           scribe.trace("@@@ SceneParams RESPONDER stuck at " + currentState.toString())
           val newModel = initiatorModel.copy(responderGameState = currentState)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         end if
 
       case GameState.START_CON5 =>
@@ -380,14 +368,12 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           scribe.trace("@@@ SceneParams RESPONDER transitions to START_CON6")
           val newModel = initiatorModel.copy(responderGameState = GameState.START_CON6)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         else
           scribe.trace("@@@ SceneParams RESPONDER stuck at " + currentState.toString())
           val newModel = initiatorModel.copy(responderGameState = currentState)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         end if
 
       case GameState.START_CON6 =>
@@ -395,14 +381,12 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           scribe.trace("@@@ SceneParams RESPONDER transitions to START_CON7")
           val newModel = initiatorModel.copy(responderGameState = GameState.START_CON7)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         else
           scribe.trace("@@@ SceneParams RESPONDER stuck at " + currentState.toString())
           val newModel = initiatorModel.copy(responderGameState = currentState)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         end if
 
       case GameState.START_CON7 =>
@@ -410,14 +394,12 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           scribe.trace("@@@ SceneParams RESPONDER transitions to START_CON8")
           val newModel = initiatorModel.copy(responderGameState = GameState.START_CON8)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         else
           scribe.trace("@@@ SceneParams RESPONDER stuck at " + currentState.toString())
           val newModel = initiatorModel.copy(responderGameState = currentState)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         end if
 
       case GameState.START_CON8 =>
@@ -434,8 +416,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
 
           lastTxGameModel = Some(newModel)
           timerP1 = TickTimer.stop()
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel
+          FlicFlacGameModel
             .modify(newModel, None, None)
             .addGlobalEvents(SceneEvent.Next)
             .addGlobalEvents(StartLiveGame)
@@ -443,8 +424,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           scribe.trace("@@@ SceneParams RESPONDER stuck at " + currentState.toString())
           val newModel = initiatorModel.copy(responderGameState = currentState)
           lastTxGameModel = Some(newModel)
-          val clientModel = ClientFlicFlacGameModel(newModel)
-          clientModel.modify(newModel, None, None)
+          FlicFlacGameModel.modify(newModel, None, None)
         end if
 
       case GameState.CYLINDER_TURN =>
@@ -460,8 +440,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
         scribe.trace("@@@ " + sError)
         val newModel = initiatorModel
         lastTxGameModel = Some(newModel)
-        val clientModel = ClientFlicFlacGameModel(newModel)
-        clientModel
+        FlicFlacGameModel
           .modify(newModel, None, None)
           .addGlobalEvents(Freeze.PanelContent(PanelType.P_ERROR, ("Error", sError)))
 

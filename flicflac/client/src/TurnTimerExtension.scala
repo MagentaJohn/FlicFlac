@@ -1,10 +1,12 @@
 package game
 
+import shared.*
+
 import indigo.*
 
-class ClientTurnTimer( turnTimer: TurnTimer ) : 
+extension ( turnTimer: TurnTimer )
 
-  def paint(model: FlicFlacGameModel): Layer =
+  def ttPaint(model: FlicFlacGameModel): Layer =
     // all measurements before scaling ...
     // for 0% ...
     // cap part is 25 high ...... and starts-ends at (70-95)
@@ -99,6 +101,6 @@ class ClientTurnTimer( turnTimer: TurnTimer ) :
     val content4 = content1 |+| content2 |+| content3
 
     content4
-  end paint
+  end ttPaint
 
-end ClientTurnTimer
+end extension

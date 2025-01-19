@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import indigo.*
 
 final case class ScorePanel():

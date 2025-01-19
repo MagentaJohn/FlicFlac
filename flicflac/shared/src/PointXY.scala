@@ -1,4 +1,4 @@
-package game
+package shared
 
 import io.circe.Encoder
 import io.circe.Decoder
