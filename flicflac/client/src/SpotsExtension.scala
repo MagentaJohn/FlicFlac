@@ -26,7 +26,7 @@ extension(spots: Spots)
     val bBlocks = ((piece.pieceShape == BLOCK) && (model.gameState == GameState.BLOCK_TURN))
     val bCylinders = ((piece.pieceShape == CYLINDER) && (model.gameState == GameState.CYLINDER_TURN))
     if bBlocks || bCylinders then
-      if Piece.moved(piece) then
+      if piece.moved(piece) then
         scribe.debug("@@@ calculateSpots piece moved")
         // we know the piece has moved and want to provide the opportunity for it to return back to it's
         // turn starting position (PosA). However, after this piece moved another piece may also have moved and

@@ -67,7 +67,10 @@ object FlicFlacGameModel:
     val score = (0, 0)
     // pieces
     val startingSpots: Spots = Spots(Set.empty)
-    val turnTimer = TurnTimer(playerParams.playPams6_TurnTime, playerParams.playPams7_CaptorsTime)
+    val turnTimer = sharedTurnTimer.copy(
+      iTotalTurnTime = playerParams.playPams6_TurnTime, 
+      iCaptorsTurnTime = playerParams.playPams7_CaptorsTime
+      )
     val highLighter = new HighLighter(false, PointXY(0, 0))
 
     // create the hexboard
@@ -123,11 +126,11 @@ object FlicFlacGameModel:
   end summonPieces
 
   def findPieceByPos(model: FlicFlacGameModel, pos: PointXY): Option[Piece] =
-    model.pieces.modelPieces.find(Piece.position(_) == pos)
+    model.pieces.modelPieces.find(p => p.position(p) == pos)
   end findPieceByPos
 
   def findPieceSelected(model: FlicFlacGameModel): Option[Piece] =
-    model.pieces.modelPieces.find(Piece.selected(_) == true)
+    model.pieces.modelPieces.find(p => p.selected(p) == true)
   end findPieceSelected
 
   def modify(
@@ -196,7 +199,7 @@ object FlicFlacGameModel:
     val turnTime = previousModel.turnTimer.iTotalTurnTime
     val captorsTime = previousModel.turnTimer.iCaptorsTurnTime
     val turnTimer1 = TurnTimer(turnTime, captorsTime)
-    val turnTimer2 = TurnTimer.restartForTurn(turnTimer1)
+    val turnTimer2 = sharedTurnTimer.restartForTurn(turnTimer1)
 
     // create the hexboard
     hexBoard4.create(iBoardSize)
@@ -267,10 +270,10 @@ object FlicFlacGameModel:
   def printPieces(model: FlicFlacGameModel): Unit =
     for p <- model.pieces.modelPieces do
 
-      val sSelected = if Piece.selected(p) then "S" else "-"
-      val sFlipped = if Piece.flipped(p) then "F" else "-"
-      val sCaptured = if Piece.captured(p) then "C" else "-"
-      val sMoved = if Piece.moved(p) then "M" else "-"
+      val sSelected = if p.selected(p) then "S" else "-"
+      val sFlipped = if p.flipped(p) then "F" else "-"
+      val sCaptured = if p.captured(p) then "C" else "-"
+      val sMoved = if p.moved(p) then "M" else "-"
 
       val s = "@@@ " + PieceAssets.pieceTypes(p.pieceShape)
         + " " + PieceAssets.pieceNames(p.pieceIdentity % 6)

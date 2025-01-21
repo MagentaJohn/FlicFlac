@@ -294,7 +294,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
       case GameState.CYLINDER_TURN =>
         scribe.trace("@@@ SceneParams INITIATOR invokes SceneGame")
         val t1 = responderModel.turnTimer
-        val t2 = TurnTimer.restartForTurn(t1)
+        val t2 = sharedTurnTimer.restartForTurn(t1)
         val newModel = responderModel.copy(
           gameState = GameState.CYLINDER_TURN,
           initiatorGameState = GameState.CYLINDER_TURN,
@@ -407,7 +407,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           scribe.trace("@@@ SceneParams RESPONDER invokes SceneGame")
 
           val t1 = initiatorModel.turnTimer
-          val t2 = TurnTimer.restartForTurn(t1)
+          val t2 = sharedTurnTimer.restartForTurn(t1)
           val newModel = initiatorModel.copy(
             responderGameState = GameState.CYLINDER_TURN,
             gameState = GameState.CYLINDER_TURN,

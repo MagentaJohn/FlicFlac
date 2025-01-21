@@ -32,7 +32,7 @@ extension (pieces: Pieces)
   def extraTurnScoring(model: FlicFlacGameModel): (Int, Int) =
     var additionalScore = (0, 0)
     for p <- model.pieces.modelPieces do
-      if Piece.captured(p) then
+      if p.captured(p) then
         if p.pieceShape == CYLINDER then
           // blocks make capture
           additionalScore = (additionalScore._1, additionalScore._2 + 1)
@@ -83,7 +83,7 @@ extension (pieces: Pieces)
         end if
       end bShow
 
-      if Piece.selected(p) == false && bShow == true then
+      if p.selected(p) == false && bShow == true then
         val ffPos = hexBoard4.getXsYs(pSrc)
         val pPos = Point(ffPos.x, ffPos.y) // ..... converting FlicFlacPoint to IndigoPoint
         val pB1 = Point(pB.x, pB.y) // ............ converting FlicFlacPoint to IndigoPoint
@@ -96,7 +96,7 @@ extension (pieces: Pieces)
     // ... (only expecting one for now, but perhaps game might allow more in future)
 
     for p <- model.pieces.modelPieces do
-      if Piece.selected(p) == true then
+      if p.selected(p) == true then
         val layer = PieceAssets.getGraphic(p.pieceShape, p.pieceIdentity, p.bFlipped)
         val pSrc = p.pCurPos
         optDragPos match // watch out ... somehow optDragPos has already been scaled

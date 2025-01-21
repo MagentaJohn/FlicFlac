@@ -33,6 +33,7 @@ end LayerKeys
 val hexBoard4 = new HexBoard4()
 val scorePanel = new ScorePanel()
 val paramsPanel = new ParamsPanel()
+val sharedTurnTimer = TurnTimer(0, 0, false, false, 0, 0)
 
 case class FlicFlacGame(
     tyrianSubSystem: TyrianSubSystem[IO, Int, FlicFlacGameModel]

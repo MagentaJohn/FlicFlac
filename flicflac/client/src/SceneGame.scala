@@ -76,7 +76,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                       scribe.debug("@@@ PointerEvent " + dMsg)
                       val newHL = model.highLighter.setPosAndShine(pos)
                       val modelA1 = model.copy(highLighter = newHL)
-                      val updatedPiece = Piece.setSelected(piece, true)
+                      val updatedPiece = piece.setSelected(piece, true)
                       FlicFlacGameModel.modify(modelA1, Some(updatedPiece), None)
                     else
                       // Pointer Down, Pos on Grid, Piece Selected, PiecePos!=PointerPos <<##B##>>
@@ -97,7 +97,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                           dMsg = "##C##"
                           scribe.debug("@@@ PointerEvent " + dMsg)
                           val newHL = model.highLighter.setPosAndShine(pos)
-                          val updatedPiece = Piece.setSelected(piece, true)
+                          val updatedPiece = piece.setSelected(piece, true)
                           FlicFlacGameModel.modify(model, Some(updatedPiece), Some(newHL))
                         else
                           // Pointer Down, Pos on Grid, No Piece Selected, PiecePos=PointerPos but incorrect turn <<##D##>>
@@ -124,7 +124,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                       dMsg = "##F##"
                       scribe.debug("@@@ PointerEvent " + dMsg)
                       val newHL = model.highLighter.shine(false)
-                      val updatedPiece = Piece.setPosDeselect(piece, piece.pHomePos)
+                      val updatedPiece = piece.setPosDeselect(piece, piece.pHomePos)
                       // clear any panel showing
                       FlicFlacGameModel
                         .modify(model, Some(updatedPiece), Some(newHL))
@@ -162,7 +162,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                         // we only flip piece if this is a new move
                         dMsg = "##H##"
                         scribe.debug("@@@ PointerEvent " + dMsg)
-                        val updatedPiece = Piece.setPosFlipDeselect(piece, pos)
+                        val updatedPiece = piece.setPosFlipDeselect(piece, pos)
 
                         FlicFlacGameModel.modify(model, Some(updatedPiece), Some(newHL)).flatMap { um =>
                           val newPieces = Melee(um).combat(um)
@@ -171,7 +171,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                       else
                         dMsg = "##I##"
                         scribe.debug("@@@ PointerEvent " + dMsg)
-                        val updatedPiece = Piece.setPosDeselect(piece, pos)
+                        val updatedPiece = piece.setPosDeselect(piece, pos)
 
                         FlicFlacGameModel.modify(model, Some(updatedPiece), Some(newHL)).flatMap { updatedModel =>
                           val newPieces = Melee(updatedModel).combat(updatedModel)
@@ -185,7 +185,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                         dMsg = "##J##"
                         scribe.debug("@@@ PointerEvent " + dMsg)
                         val newHL = model.highLighter.shine(true)
-                        val updatedPiece = Piece.setSelected(piece, true)
+                        val updatedPiece = piece.setSelected(piece, true)
                         FlicFlacGameModel.modify(model, Some(updatedPiece), Some(newHL)).flatMap { updatedModel =>
                           val newPieces = Melee(updatedModel).combat(updatedModel)
                           FlicFlacGameModel.modifyPieces(updatedModel, newPieces)
@@ -195,7 +195,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                         dMsg = "##K##"
                         scribe.debug("@@@ PointerEvent " + dMsg)
                         val newHL = model.highLighter.shine(false)
-                        val updatedPiece = Piece.setPosDeselect(piece, piece.pCurPos)
+                        val updatedPiece = piece.setPosDeselect(piece, piece.pCurPos)
                         FlicFlacGameModel.modify(model, Some(updatedPiece), Some(newHL)).flatMap { updatedModel =>
                           val newPieces = Melee(updatedModel).combat(updatedModel)
                           FlicFlacGameModel.modifyPieces(updatedModel, newPieces)
@@ -234,7 +234,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                       dMsg = "##M##"
                       scribe.debug("@@@ PointerEvent " + dMsg)
                       val newHL = model.highLighter.shine(false)
-                      val updatedPiece = Piece.setPosDeselect(piece, piece.pCurPos)
+                      val updatedPiece = piece.setPosDeselect(piece, piece.pCurPos)
                       FlicFlacGameModel.modify(model, Some(updatedPiece), Some(newHL)).flatMap { updatedModel =>
                         val newPieces = Melee(updatedModel).combat(updatedModel)
                         FlicFlacGameModel.modifyPieces(updatedModel, newPieces).addGlobalEvents(Freeze.PanelContent(PanelType.P_INVISIBLE, ("", "")))
@@ -300,7 +300,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
             val newScore = model.pieces.extraTurnScoring(model)
             val captors = Melee(model).detectCaptors(model)
             if captors.isEmpty then
-              val newTT = TurnTimer.restartForTurn(model.turnTimer)
+              val newTT = sharedTurnTimer.restartForTurn(model.turnTimer)
               val newPieces = model.pieces.newTurn(model)
               val cylinderScore = newScore._1
               val blockScore = newScore._2
@@ -340,7 +340,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               end if
             else
               scribe.debug("@@@ CAPTORS @@@")
-              val newTT = TurnTimer.restartForCaptors(model.turnTimer)
+              val newTT = sharedTurnTimer.restartForCaptors(model.turnTimer)
               val newPieces = Melee(model).rewardCaptors(model, captors)
               val newModel =
                 model.copy(pieces = newPieces, possibleMoveSpots = emptySpots, gameScore = newScore, turnTimer = newTT)
@@ -378,7 +378,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               bBlinkOn = bNewBlinkOn
             end if
 
-            if TurnTimer.expired(model.turnTimer) then
+            if sharedTurnTimer.expired(model.turnTimer) then
               val bCylinder = (model.gameState == GameState.CYLINDER_TURN) && (model.ourPieceType == CYLINDER)
               val bBlock = (model.gameState == GameState.BLOCK_TURN) && (model.ourPieceType == BLOCK)
               if (bCylinder == true) || (bBlock == true) then
@@ -389,7 +389,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                 Outcome(model)
               end if
             else
-              val possibleTT = TurnTimer.update(model.turnTimer)
+              val possibleTT = sharedTurnTimer.update(model.turnTimer)
               possibleTT match
                 case Some(tt) =>
                   Outcome(model.copy(turnTimer = tt))

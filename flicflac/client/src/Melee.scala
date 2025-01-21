@@ -111,10 +111,10 @@ final case class Melee(model: FlicFlacGameModel):
       val newPiece =
         if vectorHealth(index) < 0 then
           // oh lordy - I have been captured
-          Piece.setCaptured(piece, true)
+          piece.setCaptured(piece, true)
         else
           // aha - I am still free
-          Piece.setCaptured(piece, false)
+          piece.setCaptured(piece, false)
         end if
       end newPiece
       newPieces = newPieces :+ newPiece
@@ -169,23 +169,23 @@ final case class Melee(model: FlicFlacGameModel):
         || (p.pieceShape == BLOCK && model.gameState == GameState.BLOCK_TURN)
       then
         if setCaptors.contains(p) then
-          val p1 = Piece.setCaptor(p, false)
-          val p2 = Piece.setMoved(p1, false)
-          if Piece.captured(p2) then
-            val p3 = Piece.moveToHome(p2)
-            val p4 = Piece.setTurnStartPos(p3, p3.pCurPos)
-            val p5 = Piece.setCaptured(p4, false)
+          val p1 = p.setCaptor(p, false)
+          val p2 = p.setMoved(p1, false)
+          if p.captured(p2) then
+            val p3 = p.moveToHome(p2)
+            val p4 = p.setTurnStartPos(p3, p3.pCurPos)
+            val p5 = p.setCaptured(p4, false)
             allPieces = allPieces :+ p5
           else
-            val p3 = Piece.setTurnStartPos(p2, p2.pCurPos)
+            val p3 = p.setTurnStartPos(p2, p2.pCurPos)
             allPieces = allPieces :+ p3
           end if
         else
-          val p1 = Piece.setMoved(p, true)
-          if Piece.captured(p1) then
-            val p2 = Piece.moveToHome(p1)
-            val p3 = Piece.setTurnStartPos(p2, p2.pCurPos)
-            val p4 = Piece.setCaptured(p3, false)
+          val p1 = p.setMoved(p, true)
+          if p.captured(p1) then
+            val p2 = p.moveToHome(p1)
+            val p3 = p.setTurnStartPos(p2, p2.pCurPos)
+            val p4 = p.setCaptured(p3, false)
             allPieces = allPieces :+ p4
           else
             // add piece as just moved
@@ -193,10 +193,10 @@ final case class Melee(model: FlicFlacGameModel):
           end if
         end if
       else
-        if Piece.captured(p) then
-          val p1 = Piece.moveToHome(p)
-          val p2 = Piece.setTurnStartPos(p1, p1.pCurPos)
-          val p3 = Piece.setCaptured(p2, false)
+        if p.captured(p) then
+          val p1 = p.moveToHome(p)
+          val p2 = p.setTurnStartPos(p1, p1.pCurPos)
+          val p3 = p.setCaptured(p2, false)
           allPieces = allPieces :+ p3
         else
           // add piece
