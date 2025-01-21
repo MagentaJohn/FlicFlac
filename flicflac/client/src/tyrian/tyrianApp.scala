@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import tyrian.Html.*
 import tyrian.*
 import cats.effect.IO

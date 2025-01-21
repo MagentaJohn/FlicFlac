@@ -8,52 +8,7 @@ import io.circe.Decoder
 import io.circe.syntax.*
 import io.circe.parser.decode
 
-final case class FlicFlacGameModel(
-    ourName: String, // ................. Negotiated at startup - rx packets SWAP
-    oppoName: String, // ................ Negotiated at startup - rx packets SWAP
-    boardSize: Int, // ,................. Negotiated at startup
-    ourPieceType: Int, // ............... Negotiated at startup - rx packets INVERT
-    winningScore: Int, // ............... Negotiated at startup
-    randEventFreq: Int, // .............. Negotiated at startup
-    initiatorGameState: GameState, // ... Negotiated at startup
-    responderGameState: GameState, // ... Negotiated at startup
-    gameState: GameState, // ............ Updates
-    gameScore: (Int, Int), // ........... Updates
-    pieces: Pieces, // .................. Updates
-    possibleMoveSpots: Spots, // ........ Updates
-    highLighter: HighLighter, // ........ Updates
-    turnTimer: TurnTimer // ............. Updates
-
-) derives Encoder.AsObject,
-      Decoder
-
-enum GameState derives Encoder.AsObject, Decoder: 
-  case START_CON1 // a state included in the set return by getStartUpStates
-  case START_CON2 // a state included in the set return by getStartUpStates
-  case START_CON3 // a state included in the set return by getStartUpStates
-  case START_CON4 // a state included in the set return by getStartUpStates
-  case START_CON5 // a state included in the set return by getStartUpStates
-  case START_CON6 // a state included in the set return by getStartUpStates
-  case START_CON7 // a state included in the set return by getStartUpStates
-  case START_CON8 // a state included in the set return by getStartUpStates
-  case BLOCK_TURN
-  case BLOCK_PAUSE
-  case BLOCK_RESOLVE
-  case CYLINDER_TURN
-  case CYLINDER_PAUSE
-  case CYLINDER_RESOLVE
-  case FINISH
-end GameState 
-
-enum PanelType:
-  case P_INVISIBLE
-  case P_HINT
-  case P_ERROR
-  case P_RESULTS
-end PanelType
-
-object FlicFlacGameModel:
-  scribe.debug("@@@ Object FlicFlacGameModel Start")
+extension (flicFlacGameModel : FlicFlacGameModel)
 
   def creation(playerParams: FlicFlacPlayerParams): FlicFlacGameModel =
     scribe.debug("@@@ FlicFlacGameModel creation")
@@ -260,10 +215,11 @@ object FlicFlacGameModel:
       case Right(model: FlicFlacGameModel) =>
         // FIXME we should check for version number here and goto create if mismatch
         scribe.debug("@@@ Restored model")
-        FlicFlacGameModel.creation(playerParams)
+        model.creation(playerParams)
       case Left(_) =>
         scribe.debug("@@@ Created model")
-        FlicFlacGameModel.creation(playerParams)
+        val newFFGM = new FlicFlacGameModel()
+        newFFGM.creation(playerParams)
     cacheOrNew
   end retrieve
 
@@ -288,5 +244,4 @@ object FlicFlacGameModel:
     end for
   end printPieces
 
-  scribe.debug("@@@ Object FlicFlacGameModel Finish")
-end FlicFlacGameModel
+end extension

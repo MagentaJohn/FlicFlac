@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import scala.scalajs.js
 import indigo.*
 import io.github.quafadas.peerscalajs.Peer

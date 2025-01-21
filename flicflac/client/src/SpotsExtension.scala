@@ -10,7 +10,7 @@ extension(spots: Spots)
     scribe.debug("@@@ Spots calculatePossibleMoves")
 
     val resultingSpots: Spots = Spots(Set.empty)
-    FlicFlacGameModel.findPieceSelected(model) match
+    model.findPieceSelected(model) match
       case Some(piece) =>
         scribe.debug("@@@ Spots finds a selected piece")
         calculateSpots(model, piece)

@@ -103,10 +103,11 @@ case class FlicFlacGame(
     scribe.debug("@@@ FlicFlacMain-initialModel()")
     val cachedParamsOrNew = FlicFlacPlayerParams.getParams(flicFlacStartupData)
     scribe.debug(s"@@@ PlayerParams: $cachedParamsOrNew")
+    val initialFlicFlacGameModel = FlicFlacGameModel()
     val newTurnTime = cachedParamsOrNew.playPams6_TurnTime
     val newCaptorsTime = cachedParamsOrNew.playPams7_CaptorsTime
     val newTT = TurnTimer(newTurnTime, newCaptorsTime, false, false, 0, 0)
-    val cachedGameOrNew = FlicFlacGameModel.retrieve(flicFlacStartupData)
+    val cachedGameOrNew = initialFlicFlacGameModel.retrieve(flicFlacStartupData)
     val updatedGame = cachedGameOrNew.copy(turnTimer = newTT)
     Outcome(updatedGame).addGlobalEvents(WebRtcEvent.MakePeerEntity)
   end initialModel

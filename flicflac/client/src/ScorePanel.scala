@@ -53,7 +53,7 @@ final case class ScorePanel():
     val cylinderIcon =
       if model.gameState == GameState.CYLINDER_TURN then
         if model.ourPieceType == CYLINDER then
-          FlicFlacGameModel.findPieceSelected(model) match
+          model.findPieceSelected(model) match
             case Some(piece) =>
               // show detailed graphics icon for selected piece
               GameAssets.gScorePanelPieceAndFlip(piece.pieceShape, piece.pieceIdentity, piece.bFlipped, dSF).moveTo(p5Scaled)
@@ -73,7 +73,7 @@ final case class ScorePanel():
     val blockIcon =
       if model.gameState == GameState.BLOCK_TURN then
         if model.ourPieceType == BLOCK then
-          FlicFlacGameModel.findPieceSelected(model) match
+          model.findPieceSelected(model) match
             case Some(piece) =>
               // show detailed graphics icon for selected piece
               GameAssets.gScorePanelPieceAndFlip(piece.pieceShape, piece.pieceIdentity, piece.bFlipped, dSF).moveTo(p6Scaled)
