@@ -12,9 +12,9 @@ object SRGBA:
         Integer.parseInt(hex.substring(5, 7), 16),
         Integer.parseInt(hex.substring(7, 9), 16)
       )
-    else
-      SRGBA(0,0,0,1) // BLACK
+    else SRGBA(0, 0, 0, 1) // BLACK
     end if
+  end fromHexString
 
   def fromColorInts(r: Int, g: Int, b: Int, a: Int): SRGBA =
     SRGBA((1.0 / 255) * r, (1.0 / 255) * g, (1.0 / 255) * b, (1.0 / 255) * a)

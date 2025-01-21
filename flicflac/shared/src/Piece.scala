@@ -18,7 +18,8 @@ final case class Piece(
     bCaptured: Boolean = false, // ......... piece is captured (or not)
     bCaptor: Boolean = false, // ........... piece has made a capture this turn
     bMoved: Boolean = false // ............. piece has moved this turn
-) derives Encoder.AsObject, Decoder:
+) derives Encoder.AsObject,
+      Decoder:
 
   // --------------------------------------------------
   // Inspecting this piece ...
@@ -120,4 +121,3 @@ final case class Piece(
   end pieceId
 
 end Piece
-

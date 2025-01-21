@@ -6,7 +6,7 @@ import indigo.*
 import io.circe.Encoder
 import io.circe.Decoder
 
-extension ( highLighter: HighLighter )
+extension (highLighter: HighLighter)
 
   /*
   paint generates a "SceneUpdateFragment" containing the new position of the Highligter Hex

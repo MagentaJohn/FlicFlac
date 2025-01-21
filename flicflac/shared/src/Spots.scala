@@ -9,5 +9,4 @@ final case class Spots(
 ) derives Encoder.AsObject,
       Decoder:
 
-
 end Spots

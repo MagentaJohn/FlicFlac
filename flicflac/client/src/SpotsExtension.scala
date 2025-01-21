@@ -4,7 +4,7 @@ import shared.*
 
 import indigo.*
 
-extension(spots: Spots)
+extension (spots: Spots)
 
   def calculatePossibleMoves(model: FlicFlacGameModel): Spots =
     scribe.debug("@@@ Spots calculatePossibleMoves")

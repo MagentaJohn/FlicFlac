@@ -4,7 +4,7 @@ import shared.*
 
 import indigo.*
 
-extension ( turnTimer: TurnTimer )
+extension (turnTimer: TurnTimer)
 
   def ttPaint(model: FlicFlacGameModel): Layer =
     // all measurements before scaling ...

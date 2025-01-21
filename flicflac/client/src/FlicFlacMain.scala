@@ -29,7 +29,6 @@ object LayerKeys:
   val Overlay: BindingKey = BindingKey("Overlay")
 end LayerKeys
 
-
 val hexBoard4 = new HexBoard4()
 val scorePanel = new ScorePanel()
 val paramsPanel = new ParamsPanel()

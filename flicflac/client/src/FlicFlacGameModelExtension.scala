@@ -8,7 +8,7 @@ import io.circe.Decoder
 import io.circe.syntax.*
 import io.circe.parser.decode
 
-extension (flicFlacGameModel : FlicFlacGameModel)
+extension (flicFlacGameModel: FlicFlacGameModel)
 
   def creation(playerParams: FlicFlacPlayerParams): FlicFlacGameModel =
     scribe.debug("@@@ FlicFlacGameModel creation")
@@ -23,9 +23,9 @@ extension (flicFlacGameModel : FlicFlacGameModel)
     // pieces
     val startingSpots: Spots = Spots(Set.empty)
     val turnTimer = sharedTurnTimer.copy(
-      iTotalTurnTime = playerParams.playPams6_TurnTime, 
+      iTotalTurnTime = playerParams.playPams6_TurnTime,
       iCaptorsTurnTime = playerParams.playPams7_CaptorsTime
-      )
+    )
     val highLighter = new HighLighter(false, PointXY(0, 0))
 
     // create the hexboard

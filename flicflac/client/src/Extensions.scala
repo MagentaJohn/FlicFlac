@@ -107,5 +107,3 @@ extension (p: Pointers)
       case _                           => false
     }
 end extension
-
-

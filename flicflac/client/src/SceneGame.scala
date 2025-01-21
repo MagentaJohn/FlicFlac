@@ -10,7 +10,6 @@ import io.circe.parser.decode
 import indigo.shared.events.KeyboardEvent.KeyUp
 import indigo.platform.networking.Network
 
-
 object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacViewModel]:
 
   type SceneModel = FlicFlacGameModel

@@ -6,7 +6,6 @@ import indigo.*
 import io.circe.Encoder
 import io.circe.Decoder
 
-
 extension (pieces: Pieces)
 
   def newTurn(model: FlicFlacGameModel): Pieces =

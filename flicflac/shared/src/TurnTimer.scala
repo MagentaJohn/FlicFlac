@@ -9,7 +9,8 @@ final case class TurnTimer(
     val bCaptorsTurn: Boolean = false, // .... indicates false for turn time and true for captors tome
     val iCurrentTime: Int = 0, // ............ the current time in 10ths of a second
     val iThisTurnExpires: Int = 0 // ......... the future time in 10ths of a second when turn expires
-) derives Encoder.AsObject, Decoder:
+) derives Encoder.AsObject,
+      Decoder:
 
   def restartForTurn(tt: TurnTimer): TurnTimer =
     val a1 = (tt.iTotalTurnTime > 0)
