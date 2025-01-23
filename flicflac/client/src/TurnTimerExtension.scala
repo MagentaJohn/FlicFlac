@@ -52,16 +52,16 @@ extension (turnTimer: TurnTimer)
 
     val dSF = hexBoard4.scalingFactor
     val scalableX = hexBoard4.boardSize match
-      case 5 => 1050
-      case 6 => 1050
-      case 7 => 1200
-      case _ => 1200
+      case BOARD_SIZE_SMALL => 1050
+      case BOARD_SIZE_MEDIUM => 1050
+      case BOARD_SIZE_LARGE => 1200
+      case _ => 1200 // BOARD_SIZE_XLARGE
 
     val bodyCropMark = hexBoard4.boardSize match
-      case 5 => 270
-      case 6 => 160
-      case 7 => 80
-      case _ => 0 // size 8
+      case BOARD_SIZE_SMALL => 270
+      case BOARD_SIZE_MEDIUM => 160
+      case BOARD_SIZE_LARGE => 80
+      case _ => 0 // BOARD_SIZE_XLARGE
 
     // we need to adjust the body length to compensate for any cropping incurred by size reduction
     val iBodyLength = 1170 - bodyCropMark

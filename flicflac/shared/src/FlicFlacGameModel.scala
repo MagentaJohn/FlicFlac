@@ -33,7 +33,7 @@ end PanelType
 final case class FlicFlacGameModel(
     ourName: String = "Player1", // ......................................... Negotiated at startup - rx packets SWAP
     oppoName: String = "Player2", // ........................................ Negotiated at startup - rx packets SWAP
-    boardSize: Int = 8, // ,................................................. Negotiated at startup
+    boardSize: Int = BOARD_SIZE_XLARGE, // ,................................. Negotiated at startup
     ourPieceType: Int = CYLINDER, // ........................................ Negotiated at startup - rx packets INVERT
     winningScore: Int = 11, // .............................................. Negotiated at startup
     randEventFreq: Int = 1, // .............................................. Negotiated at startup

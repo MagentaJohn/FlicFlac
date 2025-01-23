@@ -1,5 +1,10 @@
 package shared
 
+val BOARD_SIZE_SMALL = 5
+val BOARD_SIZE_MEDIUM = 6
+val BOARD_SIZE_LARGE = 7
+val BOARD_SIZE_XLARGE = 8 // default board size
+
 /*  class HH is the class behind each individual hex cell of the grid
     including the ones you cannot see.
  */
@@ -29,7 +34,7 @@ end HH3
     *
     * Please refer to my Documentation/HexInfo.pdf for a full description of the construction of the hexagonal grid
     *
-    * This grid is "flat-top orientated" and uses a primary "cartesian coordinate" system (xCoord,yCoord) of "odd-q" for
+    * This grid is "flat-top orientated" and uses a primary "cartesian coordinate" system (xCoord,yCoord) of "even-q" for
     * display purposes. This grid also carries a secondary "cube coordinate" system (qCoord, rCoord, sCoord) for
     * purposes of the gaming model
     *
@@ -56,7 +61,7 @@ end HH3
 ...... xP,yP are display coords for cell (and these are the coords that are scaled)
 */
 case class HexBoard4(
-  var boardSize: Int = 8, // ..................................... the size as supplied by the FlicFlacGameModel (default 8)
+  var boardSize: Int = BOARD_SIZE_XLARGE, // ..................... the size as supplied by the FlicFlacGameModel (default 8)
   val arrayWidth: Int = 9, // .................................... forcing arrayWidth=9 (calculated from sZ=3)
   val arrayHeight: Int = 34, // .................................. forcing arrayHeight=34 (calculated from sZ=3)
   val graphicWidth: Int = 90, // ................................. the width of the graphic crop for each hex (90)

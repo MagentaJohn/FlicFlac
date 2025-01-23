@@ -11,12 +11,12 @@ extension (hexBoard4: HexBoard4)
   def create(size: Int): Unit =
     hexBoard4.boardSize = size
     hexBoard4.pBase = size match
-      case 5 => PointXY(0, 0)
-      case 6 => PointXY(50, 0)
-      case 7 => PointXY(50, 0)
-      case _ => PointXY(200, 0)
+      case BOARD_SIZE_SMALL => PointXY(0, 0)
+      case BOARD_SIZE_MEDIUM => PointXY(50, 0)
+      case BOARD_SIZE_LARGE => PointXY(50, 0)
+      case _ => PointXY(200, 0) // BOARD_SIZE_XLARGE
 
-    // start with black board, populates q,r,s (for debugging the helper routine printBoard can follow this line)
+    // start with black board, populates q,r,s
     fillBoard(hexBoard4.arrayWidth, hexBoard4.arrayHeight, RGBA.Black) // This is also index CK but here we must interface to indigo
 
     // this is the pattern of the board
@@ -74,44 +74,50 @@ extension (hexBoard4: HexBoard4)
   color combinations in the row templates
    */
 
-// format: off  
+  def colorBoardHexes(startingRow: Int, arrayWidth: Int, arrayHeight: Int): Unit =
 
-  def colorBoardHexes(row: Int, arrayWidth: Int, arrayHeight: Int): Unit =
+    val rowTemplate8A: Array[Vector[Int]] = Array(
+      Vector (CR, CY, CR, CR, CY, CR, CR, CY, CR),
+      Vector (CO, CO, CP, CO, CO, CP, CO, CO, CP),
+      Vector (CK, CK, CK, CK, CK, CK, CK, CK, CK),
+      Vector (CY, CY, CB, CY, CY, CB, CY, CY, CB),
+      Vector (CG, CO, CG, CG, CO, CG, CG, CO, CG),
+      Vector (CK, CK, CK, CK, CK, CK, CK, CK, CK),
 
-    val rowTemplate5: Array[Vector[Int]] = Array(
-      Vector(CB, CY, CY), Vector(CG, CO, CG), Vector(CK, CK, CK), Vector(CB, CR, CB), Vector(CG, CP, CP), Vector(CK, CK, CK),
-      Vector(CY, CR, CR), Vector(CO, CP, CO), Vector(CK, CK, CK), Vector(CY, CB, CY), Vector(CO, CG, CG), Vector(CK, CK, CK),
-      Vector(CR, CB, CB), Vector(CP, CG, CP), Vector(CK, CK, CK), Vector(CR, CY, CR), Vector(CP, CO, CO), Vector(CK, CK, CK)
+      Vector (CB, CR, CB, CB, CR, CB, CB, CR, CB),
+      Vector (CP, CP, CG, CP, CP, CG, CP, CP, CG),
+      Vector (CK, CK, CK, CK, CK, CK, CK, CK, CK),
+      Vector (CR, CR, CY, CR, CR, CY, CR, CR, CY),
+      Vector (CO, CP, CO, CO, CP, CO, CO, CP, CO),
+      Vector (CK, CK, CK, CK, CK, CK, CK, CK, CK),
+
+      Vector (CY, CB, CY, CY, CB, CY, CY, CB, CY),
+      Vector (CG, CG, CO, CG, CG, CO, CG, CG, CO),
+      Vector (CK, CK, CK, CK, CK, CK, CK, CK, CK),
+      Vector (CB, CB, CR, CB, CB, CR, CB, CB, CR),
+      Vector (CP, CG, CP, CP, CG, CP, CP, CG, CP),
+      Vector (CK, CK, CK, CK, CK, CK, CK, CK, CK),
     )
 
-    val rowTemplate6: Array[Vector[Int]] = Array(
-      Vector(CK, CK, CK), Vector(CY, CY, CB), Vector(CG, CO, CG), Vector(CK, CK, CK), Vector(CB, CR, CB), Vector(CP, CP, CG),
-      Vector(CK, CK, CK), Vector(CR, CR, CY), Vector(CO, CP, CO), Vector(CK, CK, CK), Vector(CY, CB, CY), Vector(CG, CG, CO),
-      Vector(CK, CK, CK), Vector(CB, CB, CR), Vector(CP, CG, CP), Vector(CK, CK, CK), Vector(CR, CY, CR), Vector(CO, CO, CP)
-    )
+    val tOffsets: (Int, Int, Int) = hexBoard4.boardSize match
+      case BOARD_SIZE_SMALL => (2, 12, 16) // = 2,12,16
+      case BOARD_SIZE_MEDIUM => (2, 2, 0) // = 2,2,0
+      case BOARD_SIZE_LARGE => (2, 10, 1) // = 2,10,1
+      case _ => (2, 0, 0) // BOARD_SIZE_XLARGE = 2,0,0
 
-    val rowTemplate7: Array[Vector[Int]] = Array(
-      Vector(CP, CO, CO), Vector(CK, CK, CK), Vector(CB, CY, CY), Vector(CG, CO, CG), Vector(CK, CK, CK), Vector(CB, CR, CB),
-      Vector(CG, CP, CP), Vector(CK, CK, CK), Vector(CY, CR, CR), Vector(CO, CP, CO), Vector(CK, CK, CK), Vector(CY, CB, CY),
-      Vector(CO, CG, CG), Vector(CK, CK, CK), Vector(CR, CB, CB), Vector(CP, CG, CP), Vector(CK, CK, CK), Vector(CR, CY, CR)
-    )
-
-    val rowTemplate8: Array[Vector[Int]] = Array(
-      Vector(CR, CY, CR), Vector(CO, CO, CP), Vector(CK, CK, CK), Vector(CY, CY, CB), Vector(CG, CO, CG), Vector(CK, CK, CK),
-      Vector(CB, CR, CB), Vector(CP, CP, CG), Vector(CK, CK, CK), Vector(CR, CR, CY), Vector(CO, CP, CO), Vector(CK, CK, CK),
-      Vector(CY, CB, CY), Vector(CG, CG, CO), Vector(CK, CK, CK), Vector(CB, CB, CR), Vector(CP, CG, CP), Vector(CK, CK, CK)
-    )
-// format: on
+    val startingRow = tOffsets._1
+    val verticalOffset = tOffsets._2
+    val horizontalOffset = tOffsets._3
 
     val rowTemplateX = hexBoard4.boardSize match
-      case 5 => rowTemplate5
-      case 6 => rowTemplate6
-      case 7 => rowTemplate7
-      case _ => rowTemplate8
+      case BOARD_SIZE_SMALL => rowTemplate8A
+      case BOARD_SIZE_MEDIUM => rowTemplate8A
+      case BOARD_SIZE_LARGE => rowTemplate8A
+      case _ => rowTemplate8A // BOARD_SIZE_XLARGE
 
     var col = 0
     var n = 0
-    var thisRow = row
+    var thisRow = startingRow
     while thisRow < arrayHeight - 2 do
       if (thisRow & 1) == 0 then
         col = 2
@@ -123,13 +129,14 @@ extension (hexBoard4: HexBoard4)
 
       // we use -2 here to allow for top border
       while n < arrayWidth - 1 do
-        val hexColor = rowTemplateX((thisRow - 2) % rowTemplateX.length)(n % 3)
+        val hexColor = rowTemplateX((thisRow + verticalOffset- 2) % rowTemplateX.length)((n + horizontalOffset) % 9)
         setHexColor(PointXY(n, thisRow), hexColor)
         col += 2
         n += 1
       end while
       thisRow += 1
     end while
+
   end colorBoardHexes
 
   /*
@@ -138,10 +145,10 @@ extension (hexBoard4: HexBoard4)
   def getQRSofTopCentreHex(boardSize: Int, width: Int, height: Int): (Int, Int, Int) =
     val x: Int = (width - 1) / 2
     val y = boardSize match
-      case 5 => 3 // Small
-      case 6 => 2 // Medium
-      case 7 => 1 // Large
-      case _ => 0 // Extra Large
+      case BOARD_SIZE_SMALL => 3
+      case BOARD_SIZE_MEDIUM => 2
+      case BOARD_SIZE_LARGE => 1
+      case _ => 0 // BOARD_SIZE_XLARGE
     return (hexBoard4.hexArray(x)(y).q, hexBoard4.hexArray(x)(y).r, hexBoard4.hexArray(x)(y).s)
   end getQRSofTopCentreHex
 
@@ -164,10 +171,10 @@ extension (hexBoard4: HexBoard4)
     val x: Int = (width - 1) / 2
     // val y: Int = if ((width - 1) & 1) == 1 then height - 1 else height - 2
     val y = boardSize match
-      case 5 => height - 11 // Small
-      case 6 => height - 8 // Medium
-      case 7 => height - 5 // Large
-      case _ => height - 2 // Extra Large
+      case BOARD_SIZE_SMALL => height - 11
+      case BOARD_SIZE_MEDIUM => height - 8
+      case BOARD_SIZE_LARGE => height - 5
+      case _ => height - 2 // BOARD_SIZE_XLARGE
 
     return (hexBoard4.hexArray(x)(y).q, hexBoard4.hexArray(x)(y).r, hexBoard4.hexArray(x)(y).s)
   end getQRSofBottomCentreHex
@@ -268,7 +275,17 @@ extension (hexBoard4: HexBoard4)
           val scaledX = hh.xS + hexBoard4.pBase.x
           val scaledY = hh.yS + hexBoard4.pBase.y
           hexGridLayer = hexGridLayer |+| Layer(layer.moveTo(scaledX, scaledY))
+
+
+// FIXME just for documentation
+//
+//          val tb = TextBox(hh.q+","+hh.r).alignLeft.bold
+//            .withColor(RGBA.Black)
+//            .withFontSize(Pixels(18))
+//          hexGridLayer = hexGridLayer |+| Layer(tb.moveTo(scaledX+30,scaledY+30))
+//
         end if
+
         x += 1
       end while
       y += 1
@@ -402,57 +419,92 @@ extension (hexBoard4: HexBoard4)
   end getAxAyFromDisplayXY
 
   def getCylinderHomePos(id: Int): PointXY =
-    val p1 = hexBoard4.boardSize match
-      case 5 =>
-        if id == CR then PointXY(2, 2) else PointXY(1, 2)
-      case 6 => PointXY(1, 1)
-      case 7 => PointXY(1, 1)
-      case _ => PointXY(0, 1)
 
-    val aW = hexBoard4.arrayWidth
-    val aH = hexBoard4.arrayHeight
-    val p4 = hexBoard4.boardSize match
-      case 5 =>
-        if id == CG then PointXY(aW - 2, aH - 10) else PointXY(aW - 3, aH - 10)
-      case 6 => PointXY(aW - 3, aH - 7)
-      case 7 => PointXY(aW - 2, aH - 5)
-      case _ => PointXY(aW - 2, aH - 3)
+    hexBoard4.boardSize match
+      case BOARD_SIZE_SMALL =>
+        id match
+          case CB => PointXY(2, 5) // .......Blue
+          case CR => PointXY(3, 4) // .......Red
+          case CY => PointXY(3, 3) // .......Yellow
+          case CO => PointXY(5, 23) // ......Orange
+          case CG => PointXY(6, 22) // ......Green
+          case CP => PointXY(6, 21) // ......Purple
+        end match
 
-    id match
-      case CB => p1 + PointXY(1, 3) // .......Blue
-      case CR => p1 + PointXY(1, 2) // .......Red
-      case CY => p1 + PointXY(2, 1) // .......Yellow
-      case CO => p4 + PointXY(-1, -1) // .....Orange
-      case CG => p4 + PointXY(-1, -2) // .....Green
-      case CP => p4 + PointXY(0, -3) // ......Purple
-    end match
+      case BOARD_SIZE_MEDIUM =>
+        id match
+          case CB => PointXY(2, 4) // .......Blue
+          case CR => PointXY(2, 3) // .......Red
+          case CY => PointXY(3, 2) // .......Yellow
+          case CO => PointXY(5, 26) // ......Orange
+          case CG => PointXY(5, 25) // ......Green
+          case CP => PointXY(6, 24) // ......Purple
+        end match
+
+      case BOARD_SIZE_LARGE => 
+        id match
+          case CB => PointXY(2, 4) // .......Blue
+          case CR => PointXY(2, 3) // .......Red
+          case CY => PointXY(3, 2) // .......Yellow
+          case CO => PointXY(6, 28) // ......Orange
+          case CG => PointXY(6, 27) // ......Green
+          case CP => PointXY(7, 26) // ......Purple
+        end match
+
+      case _ => // this is BOARD_SIZE_XLARGE, the default
+        id match
+          case CB => PointXY(1, 4) // .......Blue
+          case CR => PointXY(1, 3) // .......Red
+          case CY => PointXY(2, 2) // .......Yellow
+          case CO => PointXY(6, 30) // ......Orange
+          case CG => PointXY(6, 29) // ......Green
+          case CP => PointXY(7, 28) // ......Purple
+        end match
+      end match
   end getCylinderHomePos
 
   def getBlockHomePos(id: Int): PointXY =
-    val aW = hexBoard4.arrayWidth
-    val aH = hexBoard4.arrayHeight
-    val p2 = hexBoard4.boardSize match
-      case 5 =>
-        if id == CG then PointXY(aW - 2, 2) else PointXY(aW - 3, 2)
-      case 6 => PointXY(aW - 3, 1)
-      case 7 => PointXY(aW - 2, 1)
-      case _ => PointXY(aW - 2, 1)
+    hexBoard4.boardSize match
+      case BOARD_SIZE_SMALL =>
+        id match
+          case CB => PointXY(2, 21) // .......Blue
+          case CR => PointXY(3, 22) // .......Red
+          case CY => PointXY(3, 23) // .......Yellow
+          case CO => PointXY(5, 3) // ........Orange
+          case CG => PointXY(6, 4) // ........Green
+          case CP => PointXY(6, 5) // ........Purple
+        end match
 
-    val p3 = hexBoard4.boardSize match
-      case 5 =>
-        if id == CR then PointXY(2, aH - 10) else PointXY(1, aH - 10)
-      case 6 => PointXY(1, aH - 7)
-      case 7 => PointXY(1, aH - 5)
-      case _ => PointXY(0, aH - 3)
+      case BOARD_SIZE_MEDIUM =>
+        id match
+          case CB => PointXY(2, 24) // .......Blue
+          case CR => PointXY(2, 25) // .......Red
+          case CY => PointXY(3, 26) // .......Yellow
+          case CO => PointXY(5, 2) // ........Orange
+          case CG => PointXY(5, 3) // ........Green
+          case CP => PointXY(6, 4) // ........Purple
+        end match
 
-    id match
-      case CB => p3 + PointXY(1, -3) // .....Blue
-      case CR => p3 + PointXY(1, -2) // .....Red
-      case CY => p3 + PointXY(2, -1) // .....Yellow
-      case CO => p2 + PointXY(-1, 1) // .....Orange
-      case CG => p2 + PointXY(-1, 2) // .....Green
-      case CP => p2 + PointXY(0, 3) // ......Purple
-    end match
+      case BOARD_SIZE_LARGE => 
+        id match
+          case CB => PointXY(2, 26) // .......Blue
+          case CR => PointXY(2, 27) // .......Red
+          case CY => PointXY(3, 28) // .......Yellow
+          case CO => PointXY(6, 2) // ........Orange
+          case CG => PointXY(6, 3) // ........Green
+          case CP => PointXY(7, 4) // ........Purple
+        end match
+
+      case _ => // this is BOARD_SIZE_XLARGE, the default
+        id match
+          case CB => PointXY(1, 28) // .......Blue
+          case CR => PointXY(1, 29) // .......Red
+          case CY => PointXY(2, 30) // .......Yellow
+          case CO => PointXY(6, 2) // ........Orange
+          case CG => PointXY(6, 3) // ........Green
+          case CP => PointXY(7, 4) // ........Purple
+        end match
+      end match
   end getBlockHomePos
 
   // convert from embedded qrs to embedded xy

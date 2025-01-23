@@ -573,8 +573,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         |+| SceneUpdateFragment(LayerKeys.Middleground -> hexBoard4.hbPaint(model, dSF))
         |+| SceneUpdateFragment(LayerKeys.ForegroundHighL -> model.highLighter.hlPaint(model, hexBoard4, dSF, pB))
         |+| SceneUpdateFragment(LayerKeys.ForegroundSpots -> model.possibleMoveSpots.spPaint(model))
-        |+| SceneUpdateFragment(LayerKeys.ForegroundPieces -> model.pieces.piPaint(model, dSF, bBlinkOn, viewModel.optDragPos)
-        )
+        |+| SceneUpdateFragment(LayerKeys.ForegroundPieces -> model.pieces.piPaint(model, dSF, bBlinkOn, viewModel.optDragPos))
     )
 // format: on
   end present

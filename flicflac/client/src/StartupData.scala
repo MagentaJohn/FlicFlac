@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import indigo.*
 import indigoextras.ui.*
 
@@ -60,8 +62,8 @@ object FlicFlacConfig:
   val config: GameConfig =
     GameConfig(
       viewport = GameViewport(
-        GameAssets.GetGameSceneDimensions(8).width,
-        GameAssets.GetGameSceneDimensions(8).height
+        GameAssets.GetGameSceneDimensions(BOARD_SIZE_XLARGE).width,
+        GameAssets.GetGameSceneDimensions(BOARD_SIZE_XLARGE).height
       ), // default model.boardSize is 8
       frameRateLimit = Option(FPS.`30`), // this is the slowest FPS indigo game engine allows ... JP 27/08/24
       clearColor = RGBA.fromHexString("#000000"),

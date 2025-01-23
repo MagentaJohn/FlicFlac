@@ -1,5 +1,7 @@
 package game
 
+import shared.*
+
 import indigo.*
 import indigoextras.ui.*
 import indigo.shared.materials
@@ -32,10 +34,10 @@ object GameAssets:
 
   def GetGameSceneDimensions(boardSize: Int): Rectangle =
     boardSize match
-      case 5 => Rectangle(0, 0, 1150, 1250)
-      case 6 => Rectangle(0, 0, 1200, 1250)
-      case 7 => Rectangle(0, 0, 1350, 1250)
-      case _ => Rectangle(0, 0, 1500, 1300)
+      case BOARD_SIZE_SMALL => Rectangle(0, 0, 1150, 1250)
+      case BOARD_SIZE_MEDIUM => Rectangle(0, 0, 1200, 1250)
+      case BOARD_SIZE_LARGE => Rectangle(0, 0, 1350, 1250)
+      case _ => Rectangle(0, 0, 1500, 1300) // BOARD_SIZE_XLARGE
   end GetGameSceneDimensions
 
   def get(): Set[AssetType] =
