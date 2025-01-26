@@ -28,8 +28,12 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     )
     val highLighter = new HighLighter(false, PointXY(0, 0))
 
-    // create the hexboard
-    hexBoard4.create(boardSize)
+    // create the shared hexboard
+    hexBoard.forge(boardSize)
+    
+    // derive the client hexboard, hexboard4
+    hexBoard4.derive(hexBoard)
+
 
     FlicFlacGameModel(
       sOurName,
@@ -42,26 +46,27 @@ extension (flicFlacGameModel: FlicFlacGameModel)
       GameState.START_CON1,
       GameState.START_CON1,
       score,
-      summonPieces(hexBoard4),
+      summonPieces(hexBoard),
       startingSpots,
       highLighter,
       turnTimer
     )
   end creation
 
-  def summonPieces(hexBoard4: HexBoard4): Pieces =
-    val cy1 = hexBoard4.getCylinderHomePos(CB)
-    val cy2 = hexBoard4.getCylinderHomePos(CG)
-    val cy3 = hexBoard4.getCylinderHomePos(CY)
-    val cy4 = hexBoard4.getCylinderHomePos(CO)
-    val cy5 = hexBoard4.getCylinderHomePos(CR)
-    val cy6 = hexBoard4.getCylinderHomePos(CP)
-    val bk1 = hexBoard4.getBlockHomePos(CB)
-    val bk2 = hexBoard4.getBlockHomePos(CG)
-    val bk3 = hexBoard4.getBlockHomePos(CY)
-    val bk4 = hexBoard4.getBlockHomePos(CO)
-    val bk5 = hexBoard4.getBlockHomePos(CR)
-    val bk6 = hexBoard4.getBlockHomePos(CP)
+    def summonPieces(hexBoard: HexBoard): Pieces =
+    val size = hexBoard.boardSize
+    val cy1 = hexBoard.getCylinderHomePos(size, CB)
+    val cy2 = hexBoard.getCylinderHomePos(size, CG)
+    val cy3 = hexBoard.getCylinderHomePos(size, CY)
+    val cy4 = hexBoard.getCylinderHomePos(size, CO)
+    val cy5 = hexBoard.getCylinderHomePos(size, CR)
+    val cy6 = hexBoard.getCylinderHomePos(size, CP)
+    val bk1 = hexBoard.getBlockHomePos(size, CB)
+    val bk2 = hexBoard.getBlockHomePos(size, CG)
+    val bk3 = hexBoard.getBlockHomePos(size, CY)
+    val bk4 = hexBoard.getBlockHomePos(size, CO)
+    val bk5 = hexBoard.getBlockHomePos(size, CR)
+    val bk6 = hexBoard.getBlockHomePos(size, CP)
 
     val startingModelPieces: Vector[Piece] = Vector(
       Piece(CYLINDER, CB, cy1, cy1, cy1, false),
@@ -135,7 +140,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
   end modifyHighLighter
 
   def modifyPossibleMoves(previousModel: FlicFlacGameModel): FlicFlacGameModel =
-    val newSpots = previousModel.possibleMoveSpots.calculatePossibleMoves(previousModel)
+    val newSpots = previousModel.possibleMoveSpots.calculatePossibleMoves(hexBoard, previousModel)
     previousModel.copy(possibleMoveSpots = newSpots)
   end modifyPossibleMoves
 
@@ -156,8 +161,11 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     val turnTimer1 = TurnTimer(turnTime, captorsTime)
     val turnTimer2 = sharedTurnTimer.restartForTurn(turnTimer1)
 
-    // create the hexboard
-    hexBoard4.create(iBoardSize)
+    // adjust the shared hexboard
+    hexBoard.forge(iBoardSize)
+    
+    // derive the client hexboard
+    hexBoard4.derive(hexBoard)
 
     FlicFlacGameModel(
       sOurName,
@@ -170,7 +178,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
       GameState.START_CON1,
       GameState.CYLINDER_TURN,
       score,
-      summonPieces(hexBoard4),
+      summonPieces(hexBoard),
       emptySpots,
       highLighter,
       turnTimer2

@@ -46,7 +46,6 @@ final case class FlicFlacGameModel(
     highLighter: HighLighter = HighLighter(false, PointXY(0, 0)), // ........ Updates
     turnTimer: TurnTimer = TurnTimer(20, 10) // ............................. Updates
 
-) derives Encoder.AsObject,
-      Decoder:
+) derives Encoder.AsObject, Decoder:
 
 end FlicFlacGameModel
