@@ -48,4 +48,49 @@ final case class FlicFlacGameModel(
 
 ) derives Encoder.AsObject, Decoder:
 
+  def summonPieces(hexBoard: HexBoard): Pieces =
+    val size = hexBoard.boardSize
+    val cy1 = hexBoard.getCylinderHomePos(size, CB)
+    val cy2 = hexBoard.getCylinderHomePos(size, CG)
+    val cy3 = hexBoard.getCylinderHomePos(size, CY)
+    val cy4 = hexBoard.getCylinderHomePos(size, CO)
+    val cy5 = hexBoard.getCylinderHomePos(size, CR)
+    val cy6 = hexBoard.getCylinderHomePos(size, CP)
+    val bk1 = hexBoard.getBlockHomePos(size, CB)
+    val bk2 = hexBoard.getBlockHomePos(size, CG)
+    val bk3 = hexBoard.getBlockHomePos(size, CY)
+    val bk4 = hexBoard.getBlockHomePos(size, CO)
+    val bk5 = hexBoard.getBlockHomePos(size, CR)
+    val bk6 = hexBoard.getBlockHomePos(size, CP)
+
+    val startingModelPieces: Vector[Piece] = Vector(
+      Piece(CYLINDER, CB, cy1, cy1, cy1, false),
+      Piece(CYLINDER, CG, cy2, cy2, cy2, false),
+      Piece(CYLINDER, CY, cy3, cy3, cy3, false),
+      Piece(CYLINDER, CO, cy4, cy4, cy4, false),
+      Piece(CYLINDER, CR, cy5, cy5, cy5, false),
+      Piece(CYLINDER, CP, cy6, cy6, cy6, false),
+      Piece(BLOCK, CB, bk1, bk1, bk1, false),
+      Piece(BLOCK, CG, bk2, bk2, bk2, false),
+      Piece(BLOCK, CY, bk3, bk3, bk3, false),
+      Piece(BLOCK, CO, bk4, bk4, bk4, false),
+      Piece(BLOCK, CR, bk5, bk5, bk5, false),
+      Piece(BLOCK, CP, bk6, bk6, bk6, false)
+    )
+    Pieces(startingModelPieces)
+  end summonPieces
+
+  def somePiece(hexBoard: HexBoard): Piece =
+    Piece(CYLINDER, CB, PointXY(0,0), PointXY(0,0), PointXY(0,0), false)
+  end somePiece
+
+
+  def findPieceByPos(model: FlicFlacGameModel, pos: PointXY): Option[Piece] =
+    model.pieces.modelPieces.find(p => p.position(p) == pos)
+  end findPieceByPos
+
+  def findPieceSelected(model: FlicFlacGameModel): Option[Piece] =
+    model.pieces.modelPieces.find(p => p.selected(p) == true)
+  end findPieceSelected
+
 end FlicFlacGameModel

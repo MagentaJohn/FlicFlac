@@ -13,7 +13,7 @@ final case class Spots(
     scribe.debug("@@@ Spots calculatePossibleMoves")
 
     val resultingSpots: Spots = Spots(Set.empty)
-    model.pieces.findPieceSelected(model) match
+    model.findPieceSelected(model) match
       case Some(piece) =>
         scribe.debug("@@@ Spots finds a selected piece")
         calculateSpots(hexBoard, model, piece)

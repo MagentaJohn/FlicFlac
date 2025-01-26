@@ -155,7 +155,7 @@ case class HexBoard4(
           hexGridLayer = hexGridLayer |+| Layer(layer.moveTo(scaledX, scaledY))
 
 
-// FIXME just for documentation
+// I used this bit of code just to generate PNG files for documentation (JP 26/01/25)
 //
 //          val tb = TextBox(hh.q+","+hh.r).alignLeft.bold
 //            .withColor(RGBA.Black)
