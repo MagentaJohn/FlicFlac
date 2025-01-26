@@ -75,5 +75,5 @@ final case class Pieces(
     end for
     (model.gameScore._1 + additionalScore._1, model.gameScore._2 + additionalScore._2)
   end extraTurnScoring
-  
+
 end Pieces

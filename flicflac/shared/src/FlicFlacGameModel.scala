@@ -46,7 +46,8 @@ final case class FlicFlacGameModel(
     highLighter: HighLighter = HighLighter(false, PointXY(0, 0)), // ........ Updates
     turnTimer: TurnTimer = TurnTimer(20, 10) // ............................. Updates
 
-) derives Encoder.AsObject, Decoder:
+) derives Encoder.AsObject,
+      Decoder:
 
   def summonPieces(hexBoard: HexBoard): Pieces =
     val size = hexBoard.boardSize
@@ -81,9 +82,8 @@ final case class FlicFlacGameModel(
   end summonPieces
 
   def somePiece(hexBoard: HexBoard): Piece =
-    Piece(CYLINDER, CB, PointXY(0,0), PointXY(0,0), PointXY(0,0), false)
+    Piece(CYLINDER, CB, PointXY(0, 0), PointXY(0, 0), PointXY(0, 0), false)
   end somePiece
-
 
   def findPieceByPos(model: FlicFlacGameModel, pos: PointXY): Option[Piece] =
     model.pieces.modelPieces.find(p => p.position(p) == pos)

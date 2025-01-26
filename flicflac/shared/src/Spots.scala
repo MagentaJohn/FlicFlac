@@ -9,7 +9,7 @@ final case class Spots(
 ) derives Encoder.AsObject,
       Decoder:
 
-  def calculatePossibleMoves(hexBoard:HexBoard, model: FlicFlacGameModel): Spots =
+  def calculatePossibleMoves(hexBoard: HexBoard, model: FlicFlacGameModel): Spots =
     scribe.debug("@@@ Spots calculatePossibleMoves")
 
     val resultingSpots: Spots = Spots(Set.empty)
@@ -24,7 +24,7 @@ final case class Spots(
     end match
   end calculatePossibleMoves
 
-  def calculateSpots(hexBoard:HexBoard, model: FlicFlacGameModel, piece: Piece): Spots =
+  def calculateSpots(hexBoard: HexBoard, model: FlicFlacGameModel, piece: Piece): Spots =
     scribe.debug("@@@ Spots calculateSpots start")
     val bBlocks = ((piece.pieceShape == BLOCK) && (model.gameState == GameState.BLOCK_TURN))
     val bCylinders = ((piece.pieceShape == CYLINDER) && (model.gameState == GameState.CYLINDER_TURN))
@@ -42,7 +42,7 @@ final case class Spots(
         end match
       else
         scribe.debug("@@@ calculateSpots piece not moved @ " + piece.pCurPos)
-        spotify(hexBoard:HexBoard, model: FlicFlacGameModel, piece: Piece)
+        spotify(hexBoard: HexBoard, model: FlicFlacGameModel, piece: Piece)
       end if
     else
       scribe.debug("@@@ calculateSpots out of turn " + model.gameState)
@@ -50,7 +50,7 @@ final case class Spots(
     end if
   end calculateSpots
 
-  def spotify(hexBoard:HexBoard, model: FlicFlacGameModel, piece: Piece): Spots =
+  def spotify(hexBoard: HexBoard, model: FlicFlacGameModel, piece: Piece): Spots =
 
     val vPieces = model.pieces.modelPieces
 
@@ -72,33 +72,33 @@ final case class Spots(
           if piece.pieceIdentity == CB || piece.pieceIdentity == CR || piece.pieceIdentity == CY then
             // spots for top left
             model.boardSize match
-              case BOARD_SIZE_SMALL => ss1 = Set((2, 9), (3, 8), (3, 7), (4, 6), (4, 5))
+              case BOARD_SIZE_SMALL  => ss1 = Set((2, 9), (3, 8), (3, 7), (4, 6), (4, 5))
               case BOARD_SIZE_MEDIUM => ss1 = Set((1, 9), (2, 8), (2, 7), (3, 6), (3, 5), (4, 4))
-              case BOARD_SIZE_LARGE => ss1 = Set((1, 9), (2, 8), (2, 7), (3, 6), (3, 5), (4, 4), (4, 3))
-              case _ => ss1 = Set((0, 9), (1, 8), (1, 7), (2, 6), (2, 5), (3, 4), (3, 3), (4, 2)) // BOARD_SIZE_XLARGE
+              case BOARD_SIZE_LARGE  => ss1 = Set((1, 9), (2, 8), (2, 7), (3, 6), (3, 5), (4, 4), (4, 3))
+              case _                 => ss1 = Set((0, 9), (1, 8), (1, 7), (2, 6), (2, 5), (3, 4), (3, 3), (4, 2)) // BOARD_SIZE_XLARGE
           else
             // spots for bottom right
             model.boardSize match
-              case BOARD_SIZE_SMALL => ss1 = Set((4, 21), (5, 20), (5, 19), (6, 18), (6, 17))
+              case BOARD_SIZE_SMALL  => ss1 = Set((4, 21), (5, 20), (5, 19), (6, 18), (6, 17))
               case BOARD_SIZE_MEDIUM => ss1 = Set((4, 24), (4, 23), (5, 22), (5, 21), (6, 20), (6, 19))
-              case BOARD_SIZE_LARGE => ss1 = Set((4, 27), (5, 26), (5, 25), (6, 24), (6, 23), (7, 22), (7, 21))
-              case _ => ss1 = Set((4, 30), (4, 29), (5, 28), (5, 27), (6, 26), (6, 25), (7, 24), (7, 23)) // BOARD_SIZE_XLARGE
+              case BOARD_SIZE_LARGE  => ss1 = Set((4, 27), (5, 26), (5, 25), (6, 24), (6, 23), (7, 22), (7, 21))
+              case _                 => ss1 = Set((4, 30), (4, 29), (5, 28), (5, 27), (6, 26), (6, 25), (7, 24), (7, 23)) // BOARD_SIZE_XLARGE
           end if
         case BLOCK =>
           if piece.pieceIdentity == CB || piece.pieceIdentity == CR || piece.pieceIdentity == CY then
             // spots for bottom left
             model.boardSize match
-              case BOARD_SIZE_SMALL => ss1 = Set((2, 17), (3, 18), (3, 19), (4, 20), (4, 21))
+              case BOARD_SIZE_SMALL  => ss1 = Set((2, 17), (3, 18), (3, 19), (4, 20), (4, 21))
               case BOARD_SIZE_MEDIUM => ss1 = Set((1, 19), (2, 20), (2, 21), (3, 22), (3, 23), (4, 24))
-              case BOARD_SIZE_LARGE => ss1 = Set((1, 21), (2, 22), (2, 23), (3, 24), (3, 25), (4, 26), (4, 27))
-              case _ => ss1 = Set((0, 23), (1, 24), (1, 25), (2, 26), (2, 27), (3, 28), (3, 29), (4, 30)) // BOARD_SIZE_XLARGE
+              case BOARD_SIZE_LARGE  => ss1 = Set((1, 21), (2, 22), (2, 23), (3, 24), (3, 25), (4, 26), (4, 27))
+              case _                 => ss1 = Set((0, 23), (1, 24), (1, 25), (2, 26), (2, 27), (3, 28), (3, 29), (4, 30)) // BOARD_SIZE_XLARGE
           else
             // spots for top right
             model.boardSize match
-              case BOARD_SIZE_SMALL => ss1 = Set((4, 5), (5, 6), (5, 7), (6, 8), (6, 9))
+              case BOARD_SIZE_SMALL  => ss1 = Set((4, 5), (5, 6), (5, 7), (6, 8), (6, 9))
               case BOARD_SIZE_MEDIUM => ss1 = Set((4, 4), (4, 5), (5, 6), (5, 7), (6, 8), (6, 9))
-              case BOARD_SIZE_LARGE => ss1 = Set((4, 3), (5, 4), (5, 5), (6, 6), (6, 7), (7, 8), (7, 9))
-              case _ => ss1 = Set((4, 2), (4, 3), (5, 4), (5, 5), (6, 6), (6, 7), (7, 8), (7, 9)) // BOARD_SIZE_XLARGE
+              case BOARD_SIZE_LARGE  => ss1 = Set((4, 3), (5, 4), (5, 5), (6, 6), (6, 7), (7, 8), (7, 9))
+              case _                 => ss1 = Set((4, 2), (4, 3), (5, 4), (5, 5), (6, 6), (6, 7), (7, 8), (7, 9)) // BOARD_SIZE_XLARGE
           end if
       end match
 
@@ -141,7 +141,7 @@ final case class Spots(
       setInnerRingNotBlackQRS.foreach { case (q2, r2, s2) =>
         val set2M = spotRingQRS(q2, r2, s2)
         set2M.foreach { case (q2m, r2m, s2m) =>
-          if hexBoard.isThisHexValid(hexBoard.hexArray,q2m, r2m, s2m)
+          if hexBoard.isThisHexValid(hexBoard.hexArray, q2m, r2m, s2m)
             && hexBoard.isThisHexBlack(hexBoard.hexArray, q2m, r2m, s2m) == false
             && hexBoard.isThisHexFree(q2m, r2m, s2m, vPieces)
           then
@@ -189,6 +189,5 @@ final case class Spots(
     )
     ring1
   end spotRingQRS
-
 
 end Spots

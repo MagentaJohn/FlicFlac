@@ -18,7 +18,7 @@ case class HH(
     c: Int, // .... colour and visibility of hex
     q: Int, // .... cubic q Coord (-ve to +ve = left to right)
     r: Int, // .... cubic r Coord (-ve to +ve = top right to bottom left)
-    s: Int, // .... cubic s Coord (-ve to +ve = bottom right to top left)
+    s: Int // ..... cubic s Coord (-ve to +ve = bottom right to top left)
 )
 end HH
 
@@ -63,7 +63,7 @@ case class HexBoard(
   var hexArray: Array[Array[HH]] = Array.ofDim[HH](XLARGE_ARRAY_WIDTH, XLARGE_ARRAY_HEIGHT), //... starting array size (9x34)
 ) :
 
-  def forge(size: Int): Unit = 
+  def forge(size: Int): Unit =
     // set the size
     boardSize = size
 
@@ -192,7 +192,7 @@ case class HexBoard(
         var x = 0
         while x < width do
           val hh = hexArray(x)(y)
-          if (hh.q < qrs._1) || (hh.q > qrs._2) || (hh.r < qrs._3) || (hh.r > qrs._4) || (hh.s < qrs._5) || (hh.s > qrs._6) then 
+          if (hh.q < qrs._1) || (hh.q > qrs._2) || (hh.r < qrs._3) || (hh.r > qrs._4) || (hh.s < qrs._5) || (hh.s > qrs._6) then
             setHexColor(hexArray, PointXY(x, y), color)
           end if
           x += 1
@@ -225,7 +225,7 @@ case class HexBoard(
           case CP => PointXY(6, 24) // ......Purple
         end match
 
-      case BOARD_SIZE_LARGE => 
+      case BOARD_SIZE_LARGE =>
         id match
           case CB => PointXY(2, 4) // .......Blue
           case CR => PointXY(2, 3) // .......Red
@@ -269,7 +269,7 @@ case class HexBoard(
           case CP => PointXY(6, 4) // ........Purple
         end match
 
-      case BOARD_SIZE_LARGE => 
+      case BOARD_SIZE_LARGE =>
         id match
           case CB => PointXY(2, 26) // .......Blue
           case CR => PointXY(2, 27) // .......Red

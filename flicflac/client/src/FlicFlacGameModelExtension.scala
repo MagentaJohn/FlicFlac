@@ -30,7 +30,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
 
     // create the shared hexboard
     hexBoard.forge(boardSize)
-    
+
     // derive the client hexboard, hexboard4
     hexBoard4.derive(hexBoard)
 
@@ -122,7 +122,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
 
     // adjust the shared hexboard
     hexBoard.forge(iBoardSize)
-    
+
     // derive the client hexboard
     hexBoard4.derive(hexBoard)
 
