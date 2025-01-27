@@ -201,7 +201,7 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
                 scribe.trace("@@@-41 ConnectionOpen.on data")
                 val str = js.JSON.stringify(data)
                 val ffgm = decodeRxJsonObject(data, 48) // 48 is the error number
-                val ffgm1 = convertRxGameModel(ffgm)
+                val ffgm1 = ffgm.convertRxGameModel(ffgm)
                 latestUpdate = Some(FlicFlacGameUpdate.Info(ffgm1))
             )
             c.on(
@@ -236,7 +236,7 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
                 (data: js.Object) =>
                   scribe.trace("@@@-61 ConnectionOpen.on data ")
                   val ffgm = decodeRxJsonObject(data, 68) // 68 is the error number
-                  val ffgm1 = convertRxGameModel(ffgm)
+                  val ffgm1 = ffgm.convertRxGameModel(ffgm)
                   latestUpdate = Some(FlicFlacGameUpdate.Info(ffgm1))
               )
 
@@ -455,13 +455,6 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
           latestUpdate = Some(FlicFlacGameUpdate.Info(ffgm.copy(responderGameState = gs)))
         end if
   end setGameState
-
-  def convertRxGameModel(rxModel: FlicFlacGameModel): FlicFlacGameModel =
-    val name1 = rxModel.ourName // .............................................. used to swap into oppoName
-    val name2 = rxModel.oppoName // ............................................. used to swap into ourName
-    val pieceType = (rxModel.ourPieceType & 1) ^ 1 // ........................... inverting piece type
-    rxModel.copy(ourName = name2, oppoName = name1, ourPieceType = pieceType)
-  end convertRxGameModel
 
 end SSPeerJS
 

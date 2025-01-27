@@ -2,13 +2,12 @@ package game
 
 import shared.*
 
-import indigo.*
 import cats.instances.double
-import game.PieceAssets.pieceNames
+//import game.PieceAssets.pieceNames
 
 final case class Melee(model: FlicFlacGameModel):
 
-  def combat(model: FlicFlacGameModel): Pieces =
+  def combat(model: FlicFlacGameModel, hexBoard: HexBoard): Pieces =
 
     // Step A ... get 4 sets of links
 
@@ -20,9 +19,9 @@ final case class Melee(model: FlicFlacGameModel):
     var allPiecesQRS = Vector.empty[(Int, Int, Int)]
     var allPiecesEmpowered = Vector.empty[(Boolean)]
     allPieces.foreach { piece =>
-      val qrs = hexBoard4.getQRSfromAxAy(piece.pCurPos.x, piece.pCurPos.y)
+      val qrs = hexBoard.getQRSfromAxAy(piece.pCurPos.x, piece.pCurPos.y)
       allPiecesQRS = allPiecesQRS :+ qrs
-      if hexBoard4.getHexColor(piece.pCurPos) == piece.pieceIdentity then
+      if hexBoard.getHexColor(hexBoard.hexArray, piece.pCurPos) == piece.pieceIdentity then
         // body color same as hex color detected
         allPiecesEmpowered = allPiecesEmpowered :+ true
       else
@@ -37,14 +36,14 @@ final case class Melee(model: FlicFlacGameModel):
         // that are in their home positions
 
         val index1 = (p1.pieceShape * 6) + p1.pieceIdentity
-        val shape1 = PieceAssets.pieceTypes(p1.pieceShape)
-        val color1 = (PieceAssets.pieceNames(index1 % 6)).trim
+        val shape1 = pieceTypes(p1.pieceShape)
+        val color1 = (pieceNames(index1 % 6)).trim
         val qrs1 = allPiecesQRS(index1)
         val setQRS1 = model.possibleMoveSpots.spotRingQRS(qrs1._1, qrs1._2, qrs1._3)
         allPieces.foreach { p2 =>
           val index2 = (p2.pieceShape * 6) + p2.pieceIdentity
-          val shape2 = PieceAssets.pieceTypes(p2.pieceShape)
-          val color2 = (PieceAssets.pieceNames(index2 % 6)).trim
+          val shape2 = pieceTypes(p2.pieceShape)
+          val color2 = (pieceNames(index2 % 6)).trim
           val qrs2 = allPiecesQRS(index2)
           if setQRS1.contains(qrs2) then
             val p1BodyColor = p1.pieceIdentity
@@ -128,7 +127,7 @@ final case class Melee(model: FlicFlacGameModel):
   .. to opponent
    */
 
-  def detectCaptors(model: FlicFlacGameModel): Set[(Piece)] =
+  def detectCaptors(model: FlicFlacGameModel, hexBoard: HexBoard): Set[(Piece)] =
     val allPieces = model.pieces.modelPieces
     val (cylinders, blocks) = allPieces.splitAt(6)
     // second part of filter below discards our own pieces (ie kamikasi prisoners)
@@ -136,13 +135,13 @@ final case class Melee(model: FlicFlacGameModel):
     var setCaptors = Set.empty[(Piece)]
 
     vPrisoners.foreach { p =>
-      val qrs = hexBoard4.getQRSfromAxAy(p.pCurPos.x, p.pCurPos.y)
+      val qrs = hexBoard.getQRSfromAxAy(p.pCurPos.x, p.pCurPos.y)
       val spotQRS = model.possibleMoveSpots.spotRingQRS(qrs._1, qrs._2, qrs._3)
       val prisonerColor = p.pieceIdentity
       val possibleCaptors = if model.gameState == GameState.CYLINDER_TURN then cylinders else blocks
 
       possibleCaptors.foreach { pp =>
-        val qrs1 = hexBoard4.getQRSfromAxAy(pp.pCurPos.x, pp.pCurPos.y)
+        val qrs1 = hexBoard.getQRSfromAxAy(pp.pCurPos.x, pp.pCurPos.y)
         if spotQRS.contains(qrs1) then
           val captorColor1 = if pp.bFlipped then (pp.pieceIdentity + 4) % 6 else (pp.pieceIdentity + 1) % 6
           val captorColor2 = if pp.bFlipped then (pp.pieceIdentity + 5) % 6 else (pp.pieceIdentity + 2) % 6
@@ -212,7 +211,7 @@ final case class Melee(model: FlicFlacGameModel):
     val (cylinders, blocks) = allPieces splitAt 6 // Cylinders are 0...5 & blocks are 6...11
     var str1 = "Cyldrs "
     cylinders.foreach { p =>
-      val color = PieceAssets.pieceNames(p.pieceIdentity)
+      val color = pieceNames(p.pieceIdentity)
       val index = (p.pieceShape * 6) + p.pieceIdentity
       str1 = str1 + "<" + color.trim + ":" + vectorHealth(index) + ">"
     }
@@ -220,7 +219,7 @@ final case class Melee(model: FlicFlacGameModel):
 
     var str2 = "Blocks "
     blocks.foreach { p =>
-      val color = PieceAssets.pieceNames(p.pieceIdentity)
+      val color = pieceNames(p.pieceIdentity)
       val index = (p.pieceShape * 6) + p.pieceIdentity
       str2 = str2 + "<" + color.trim + ":" + vectorHealth(index) + ">"
     }

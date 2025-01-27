@@ -9,6 +9,20 @@ import io.circe.Decoder
 extension (highLighter: HighLighter)
 
   /*
+  setPos repositions the highlighter hex as appropriate
+   */
+  def setPosAndShine(model: FlicFlacGameModel, newPos: PointXY): HighLighter =
+    model.highLighter.copy(displayOn = true, currentPos = newPos)
+  end setPosAndShine
+
+  /*
+  show enables or disables the display of the HighLighter hex
+   */
+  def shine(model: FlicFlacGameModel, onOff: Boolean): HighLighter =
+    model.highLighter.copy(displayOn = onOff)
+  end shine
+
+  /*
   paint generates a "SceneUpdateFragment" containing the new position of the Highligter Hex
    */
 

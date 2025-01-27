@@ -11,12 +11,6 @@ object PieceAssets:
   val blocksAssetName = AssetName(GameAssets.blAssetName)
   val cylindersAssetName = AssetName(GameAssets.cyAssetName)
 
-  val pieceTypes: Vector[String] =
-    Vector("Cyldr", "Block")
-
-  val pieceNames: Vector[String] = // Piece Names %6
-    Vector("Blue  ", "Green ", "Yellow", "Orange", "Red   ", "Purple", "Grey  ")
-
   def getGraphic(shape: Int, id: Int, flipped: Boolean): Graphic[Material.ImageEffects] =
     val safeId = id % (6 + 1) // there are six main colours + 1 more, which is for grey (the captured color)
     val pieceAssetName = if shape == CYLINDER then cylindersAssetName else blocksAssetName

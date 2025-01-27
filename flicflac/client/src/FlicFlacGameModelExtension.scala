@@ -10,7 +10,7 @@ import io.circe.parser.decode
 
 extension (flicFlacGameModel: FlicFlacGameModel)
 
-  def creation(playerParams: FlicFlacPlayerParams): FlicFlacGameModel =
+  def creation(playerParams: PlayerParams): FlicFlacGameModel =
     scribe.debug("@@@ FlicFlacGameModel creation")
 
     val sOurName = playerParams.playPams1_Name1
@@ -173,7 +173,8 @@ extension (flicFlacGameModel: FlicFlacGameModel)
   end getStartUpStates
 
   def retrieve(startupData: FlicFlacStartupData): FlicFlacGameModel =
-    val playerParams = FlicFlacPlayerParams.getParams(startupData)
+    val pp = new PlayerParams("","",0,0,0,0,0,0) // dummy PlayerParams to get access to getParams
+    val playerParams = pp.getParams(startupData)
     val ourName = playerParams.playPams1_Name1
     val oppoName = playerParams.playPams2_Name2
 
@@ -198,8 +199,8 @@ extension (flicFlacGameModel: FlicFlacGameModel)
       val sCaptured = if p.captured(p) then "C" else "-"
       val sMoved = if p.moved(p) then "M" else "-"
 
-      val s = "@@@ " + PieceAssets.pieceTypes(p.pieceShape)
-        + " " + PieceAssets.pieceNames(p.pieceIdentity % 6)
+      val s = "@@@ " + pieceTypes(p.pieceShape)
+        + " " + pieceNames(p.pieceIdentity % 6)
         + ": "
         + "CurPos(" + p.pCurPos.x + "," + p.pCurPos.y + ") "
         + "HomePos(" + p.pHomePos.x + "," + p.pHomePos.y + ") "

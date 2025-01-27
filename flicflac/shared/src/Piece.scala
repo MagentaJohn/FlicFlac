@@ -119,5 +119,5 @@ final case class Piece(
   def pieceId(p: Piece): Int =
     p.pieceIdentity
   end pieceId
-
+ 
 end Piece

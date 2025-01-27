@@ -6,21 +6,22 @@ import io.circe.syntax.*
 import io.circe.parser.decode
 
 enum GameState derives Encoder.AsObject, Decoder:
-  case START_CON1 // a state included in the set return by getStartUpStates
-  case START_CON2 // a state included in the set return by getStartUpStates
-  case START_CON3 // a state included in the set return by getStartUpStates
-  case START_CON4 // a state included in the set return by getStartUpStates
-  case START_CON5 // a state included in the set return by getStartUpStates
-  case START_CON6 // a state included in the set return by getStartUpStates
-  case START_CON7 // a state included in the set return by getStartUpStates
-  case START_CON8 // a state included in the set return by getStartUpStates
-  case BLOCK_TURN
-  case BLOCK_PAUSE
-  case BLOCK_RESOLVE
-  case CYLINDER_TURN
-  case CYLINDER_PAUSE
-  case CYLINDER_RESOLVE
-  case FINISH
+  case START_CON1 // ........... default initial state for this model
+  case START_CON2 // ........... peerJS has successfuly opened a node for this model
+  case START_CON3 // ........... peerJS has successfull established a connection with remote node
+  case START_CON4 // ........... playParams resolved by Responder, accepted by Initiator
+  case START_CON5 // ........... Responder invokes CON5 (previously CON4), Initiator accepts
+  case START_CON6 // ........... Responder invokes CON6 (previously CON5), Initiator accepts
+  case START_CON7 // ........... Responder invokes CON7 (previously CON6), Initiator accepts
+  case START_CON8 // ........... Responder invokes CYLINDER_TURN (previously CON7), queues StartGameEvent and switches scenes
+  // ........................... Initiator accepts (waits for CYLINDER_TURN to arrive to queue StartGameEvent and switche scenes)
+  case BLOCK_TURN // ........... Block Turn
+  case BLOCK_PAUSE // .......... Not used
+  case BLOCK_RESOLVE // ........ Not used
+  case CYLINDER_TURN // ........ Cylinder Turn
+  case CYLINDER_PAUSE // ....... Not used
+  case CYLINDER_RESOLVE // ..... Not used
+  case FINISH // ............... Game Finished and score displayed
 end GameState
 
 enum PanelType:
@@ -43,54 +44,17 @@ final case class FlicFlacGameModel(
     gameScore: (Int, Int) = (0, 0), // ...................................... Updates
     pieces: Pieces = Pieces(Vector.empty), // ............................... Updates
     possibleMoveSpots: Spots = Spots(Set.empty), // ......................... Updates
-    highLighter: HighLighter = HighLighter(false, PointXY(0, 0)), // ........ Updates
+    highLighter: HighLighter = HighLighter(false, PointXY(0, 0)), // ........ Updates - AI can ignore
     turnTimer: TurnTimer = TurnTimer(20, 10) // ............................. Updates
 
 ) derives Encoder.AsObject,
       Decoder:
 
-  def summonPieces(hexBoard: HexBoard): Pieces =
-    val size = hexBoard.boardSize
-    val cy1 = hexBoard.getCylinderHomePos(size, CB)
-    val cy2 = hexBoard.getCylinderHomePos(size, CG)
-    val cy3 = hexBoard.getCylinderHomePos(size, CY)
-    val cy4 = hexBoard.getCylinderHomePos(size, CO)
-    val cy5 = hexBoard.getCylinderHomePos(size, CR)
-    val cy6 = hexBoard.getCylinderHomePos(size, CP)
-    val bk1 = hexBoard.getBlockHomePos(size, CB)
-    val bk2 = hexBoard.getBlockHomePos(size, CG)
-    val bk3 = hexBoard.getBlockHomePos(size, CY)
-    val bk4 = hexBoard.getBlockHomePos(size, CO)
-    val bk5 = hexBoard.getBlockHomePos(size, CR)
-    val bk6 = hexBoard.getBlockHomePos(size, CP)
-
-    val startingModelPieces: Vector[Piece] = Vector(
-      Piece(CYLINDER, CB, cy1, cy1, cy1, false),
-      Piece(CYLINDER, CG, cy2, cy2, cy2, false),
-      Piece(CYLINDER, CY, cy3, cy3, cy3, false),
-      Piece(CYLINDER, CO, cy4, cy4, cy4, false),
-      Piece(CYLINDER, CR, cy5, cy5, cy5, false),
-      Piece(CYLINDER, CP, cy6, cy6, cy6, false),
-      Piece(BLOCK, CB, bk1, bk1, bk1, false),
-      Piece(BLOCK, CG, bk2, bk2, bk2, false),
-      Piece(BLOCK, CY, bk3, bk3, bk3, false),
-      Piece(BLOCK, CO, bk4, bk4, bk4, false),
-      Piece(BLOCK, CR, bk5, bk5, bk5, false),
-      Piece(BLOCK, CP, bk6, bk6, bk6, false)
-    )
-    Pieces(startingModelPieces)
-  end summonPieces
-
-  def somePiece(hexBoard: HexBoard): Piece =
-    Piece(CYLINDER, CB, PointXY(0, 0), PointXY(0, 0), PointXY(0, 0), false)
-  end somePiece
-
-  def findPieceByPos(model: FlicFlacGameModel, pos: PointXY): Option[Piece] =
-    model.pieces.modelPieces.find(p => p.position(p) == pos)
-  end findPieceByPos
-
-  def findPieceSelected(model: FlicFlacGameModel): Option[Piece] =
-    model.pieces.modelPieces.find(p => p.selected(p) == true)
-  end findPieceSelected
+  def convertRxGameModel(rxModel: FlicFlacGameModel): FlicFlacGameModel =
+    val name1 = rxModel.ourName // .............................................. used to swap into oppoName
+    val name2 = rxModel.oppoName // ............................................. used to swap into ourName
+    val pieceType = (rxModel.ourPieceType & 1) ^ 1 // ........................... inverting piece type
+    rxModel.copy(ourName = name2, oppoName = name1, ourPieceType = pieceType)
+  end convertRxGameModel
 
 end FlicFlacGameModel
