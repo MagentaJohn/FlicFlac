@@ -24,11 +24,11 @@
       <div>
         <i>1) Enter your name</i><br />
         <span
-          title="This name is needed by your opponent to establish the game link. This unique name must be different from your opponents name and will be used to establish the game link."
+          title="This name is needed by your opponent to establish the game link. This unique, alphanumeric name must be different from your opponents name."
         >
           <div id="errorMsg1" class="configErrorMsg">
             <b>Invalid Name</b><br />
-            Your name should be at least 3 characters long<br />
+            Your name should be alphanumeric and at least 3 characters long<br />
           </div>
           <div>
             <label for="myName" class="configLabel">Your Name:</label>
@@ -43,14 +43,13 @@
       </div>
 
       <div>
-        <i>2) Enter your opponent&apos;s name</i><br />
+        <i>2) Enter your opponent&apos;s name (or use *** for AI)</i><br />
         <span
-          title="This unique name, provided by your opponent, is needed to establish the game link. It must be different from your name."
+          title="This unique, alphanumeric name, provided by your opponent, is needed to establish the game link. It must be different from your name. To invoke the AI opponent use ***"
         >
           <div id="errorMsg2" class="configErrorMsg">
             <b>Invalid Name</b><br />
-            Your opponent&apos;s name should be at least 3 characters long and
-            different from your name<br />
+            Your opponent&apos;s name should be at least 3 characters long, alphanumeric and be different from your name. (*** invokes AI)<br />
           </div>
           <div>
             <label for="oppoName" class="configLabel"
@@ -301,6 +300,7 @@
     </div>
 
     <script>
+
       document.getElementById("size5").addEventListener("click", function () {
         document.body.style.background = "url('./FlicFlacSize5R.png')";
         document.body.style.setProperty("background-repeat", "no-repeat");
@@ -416,14 +416,16 @@
 
         var invalidParams = false;
 
-        if (myName.length < 3) {
+        if ((myName.length < 3) || (isAlphaNumeric(myName) == false)) {
           document.getElementById("errorMsg1").style.display = "block";
           invalidParams = true;
         }
 
-        if (oppoName.length < 3) {
-          document.getElementById("errorMsg2").style.display = "block";
-          invalidParams = true;
+        if (oppoName.localeCompare("***") != 0) { // testing for AI option
+          if ((oppoName.length < 3) || (isAlphaNumeric(oppoName) == false)) {
+            document.getElementById("errorMsg2").style.display = "block";
+            invalidParams = true;
+          }
         }
 
         if (myName == oppoName) {
@@ -506,10 +508,18 @@
           );
 
           // relocate to indigo environment ... N1 and N2 are crucial to indigo code
+
           window.location.href =
             "./index2.html?N1=" + myName + "&N2=" + oppoName;
         }
       }
+    
+      function isAlphaNumeric(str) {
+        var regEx = /^[A-Za-z0-9]+$/i;
+        var bResult = regEx.test(str);
+        return bResult
+      }
+
     </script>
     <script>
       const sse = new EventSource("/refresh/v1/sse");
