@@ -20,6 +20,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     val iWinningScore = playerParams.playPams5_ScoreToWin
     val iRandEventFreq = playerParams.playPams8_RandEventProb
     val score = (0, 0)
+    val turnNumber = 0
     // pieces
     val startingSpots: Spots = Spots(Set.empty)
     val turnTimer = sharedTurnTimer.copy(
@@ -45,6 +46,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
       GameState.START_CON1,
       GameState.START_CON1,
       score,
+      turnNumber,
       Pieces(Vector.empty), // this will be populated when SceneGame receives the message "StartLiveGame"
       startingSpots,
       highLighter,
@@ -112,7 +114,8 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     val iOurPieceType = previousModel.ourPieceType
     val iWinningScore = previousModel.winningScore
     val iRandEventFreq = previousModel.randEventFreq
-    val score = (0, 0)
+    val score = previousModel.gameScore
+    val turnNumber = previousModel.turnNumber
     val highLighter = new HighLighter(false, PointXY(0, 0))
     val emptySpots: Spots = Spots(Set.empty)
     val turnTime = previousModel.turnTimer.iTotalTurnTime
@@ -137,6 +140,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
       GameState.START_CON1,
       GameState.CYLINDER_TURN,
       score,
+      turnNumber,
       Pieces(Vector.empty), // this will be populated when SceneGame receives the message "StartLiveGame"
       emptySpots,
       highLighter,
@@ -183,7 +187,16 @@ extension (flicFlacGameModel: FlicFlacGameModel)
       case Right(model: FlicFlacGameModel) =>
         // FIXME we should check for version number here and goto create if mismatch
         scribe.debug("@@@ Restored model")
-        model.creation(playerParams)
+
+        // create the shared hexboard
+        hexBoard.forge(playerParams.playPams4_BoardSize)
+
+        // derive the client hexboard, hexboard4
+        hexBoard4.derive(hexBoard)
+
+        // use the model acquired from the storage
+        model
+
       case Left(_) =>
         scribe.debug("@@@ Created model")
         val newFFGM = new FlicFlacGameModel()

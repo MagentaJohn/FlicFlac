@@ -44,7 +44,7 @@ case class FlicFlacGame(
   Logger.root
     .clearHandlers()
     .withHandler(formatter = Formatter.simple)
-    .withMinimumLevel(Level.Debug)
+    .withMinimumLevel(Level.Trace)
     .replace()
 
   val magnification = 1

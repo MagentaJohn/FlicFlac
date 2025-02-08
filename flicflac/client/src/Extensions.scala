@@ -12,14 +12,6 @@ import scribe.*
  */
 extension (b: Button)
   def updateFromPointers(p: Pointers): Outcome[Button] =
-    val configLoggerHere = "@@@ updateFromPointers START".logger
-      // .withMinimumLevel(
-      //   Level.Trace
-      // ) // uncomment this to get the logging below, config should onl apply in this scope.
-      .replace()
-
-    configLoggerHere.trace()
-
     val inBounds = b.bounds.isPointWithin(p.position)
 
     val hoverEvents: Batch[GlobalEvent] =
@@ -37,48 +29,38 @@ extension (b: Button)
     val pointerEvents: Batch[GlobalEvent] =
       hoverEvents ++ downEvents ++ upEvents
 
-    "@@@ updateFromPointers MATCH".logger.trace()
-
     b.state match
 
       // Stay in Down state
       case ButtonState.Down if inBounds && p.pressed =>
-        "@@@ updateFromPointers TP1".logger.trace()
         Outcome(b).addGlobalEvents(b.onHoldDown() ++ pointerEvents)
 
       // Move from Up to Down state on button/pointer press
       case ButtonState.Up if inBounds && p.pressed =>
-        "@@@ updateFromPointers TP2".logger.trace()
         Outcome(b.toDownState).addGlobalEvents(b.onHoverOver() ++ pointerEvents)
 
       // Move from Down to Up state (out of bounds)
       case ButtonState.Down if !inBounds && (p.pressed || p.released || p.moved) =>
-        "@@@ updateFromPointers TP3".logger.trace()
         Outcome(b.toUpState).addGlobalEvents(b.onHoverOut() ++ pointerEvents)
 
       // Move from Down to Up state (mouse/pointer released)
       case ButtonState.Down if inBounds && p.released =>
-        "@@@ updateFromPointers TP4".logger.trace()
         Outcome(b.toUpState).addGlobalEvents(pointerEvents)
 
       // Move from Over to Up state (out of bounds)
       case ButtonState.Over if !inBounds && (p.pressed || p.released || p.moved) =>
-        "@@@ updateFromPointers TP5".logger.trace()
         Outcome(b.toUpState).addGlobalEvents(b.onHoverOut() ++ pointerEvents)
 
       // Move from Over to Down state (mouse/pointer press)
       case ButtonState.Over if inBounds && p.pressed =>
-        "@@@ updateFromPointers TP6".logger.trace()
         Outcome(b.toDownState).addGlobalEvents(b.onDown() ++ pointerEvents)
 
       // Move from Up to Over (mouse/pointer moved within bounds)
       case ButtonState.Up if inBounds && p.moved =>
-        "@@@ updateFromPointers TP7".logger.trace()
         Outcome(b.toOverState).addGlobalEvents(b.onHoverOver() ++ pointerEvents)
 
       // Unaccounted for states.
       case _ =>
-        "@@@ updateFromPointers TP8".logger.trace()
         Outcome(b).addGlobalEvents(pointerEvents)
     end match
   ; // dummy statement here helps scalafmt to format correctly

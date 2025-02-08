@@ -42,6 +42,7 @@ final case class FlicFlacGameModel(
     responderGameState: GameState = GameState.START_CON1, // ................ Negotiated at startup
     gameState: GameState = GameState.CYLINDER_TURN, // ...................... Updates
     gameScore: (Int, Int) = (0, 0), // ...................................... Updates
+    turnNumber: Int = 0, // ................................................. Updates
     pieces: Pieces = Pieces(Vector.empty), // ............................... Updates
     possibleMoveSpots: Spots = Spots(Set.empty), // ......................... Updates
     highLighter: HighLighter = HighLighter(false, PointXY(0, 0)), // ........ Updates - AI can ignore

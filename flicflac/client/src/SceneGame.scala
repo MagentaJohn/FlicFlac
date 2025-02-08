@@ -319,12 +319,14 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                   GameState.CYLINDER_TURN
                 end if
               end newGameState
+              val newTurnNumber = model.turnNumber + 1
 
               val newModel = model.copy(
                 gameState = newGameState,
                 pieces = newPieces,
                 possibleMoveSpots = emptySpots,
                 gameScore = newScore,
+                turnNumber = newTurnNumber,
                 turnTimer = newTT
               )
 
@@ -342,8 +344,15 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               scribe.debug("@@@ CAPTORS @@@")
               val newTT = sharedTurnTimer.restartForCaptors(model.turnTimer)
               val newPieces = Melee(model).rewardCaptors(model, captors)
+              val newTurnNumber = model.turnNumber + 1
+
               val newModel =
-                model.copy(pieces = newPieces, possibleMoveSpots = emptySpots, gameScore = newScore, turnTimer = newTT)
+                model.copy(
+                  pieces = newPieces, 
+                  possibleMoveSpots = emptySpots, 
+                  gameScore = newScore,
+                  turnNumber = newTurnNumber,
+                  turnTimer = newTT)
 
               if newModel.gameState == GameState.FINISH then
                 val results = constructResults(newModel)
@@ -469,7 +478,6 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
     case e: PointerEvent.PointerMove =>
       model.pieces.findPieceSelected(model) match
         case Some(p) =>
-          scribe.trace("@@@ PointerEventMove @ " + e.position)
           viewModel.optDragPos = Some(e.position)
 
         case None =>
