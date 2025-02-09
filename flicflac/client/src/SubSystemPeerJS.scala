@@ -242,11 +242,11 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
 
               c.on(
                 "close",
-                (c: DataConnection) => 
+                (c: DataConnection) =>
                   // This can happen when the RESPONDER performs a browser refresh, the connection is lost!
                   // Setting timerT1 allows the INITIATOR to acquire a new connection
                   scribe.trace("@@@-62 ConnectionOpen.on close ")
-                  timerT1 = TickTimer.start(TT_TWO_SECONDS) // 
+                  timerT1 = TickTimer.start(TT_TWO_SECONDS)
               )
               c.on(
                 "error",
@@ -323,7 +323,7 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
 
             val outcome2 =
               conn match
-                case Some(connection) => 
+                case Some(connection) =>
                   latestUpdate match
                     case Some(update) =>
                       latestUpdate = None
@@ -349,16 +349,6 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
           peerJsPanel = (PanelType.P_ERROR, ("Error", errorMsg))
           Outcome(())
   end update
-
-/*--
-  def update(
-        context: SubSystemFrameContext[ReferenceData],
-        message: Unit
-    ): EventType => Outcome[Unit] =
-    e =>
-      Outcome(())
-  end update
---*/
 
   def present(
       context: SubSystemFrameContext[ReferenceData],
