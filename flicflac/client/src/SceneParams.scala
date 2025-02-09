@@ -345,7 +345,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
         scribe.trace("@@@ SceneParams RESPONDER transitions to START_CON4")
 
         // this is the RESPONDER - the ONE AND ONLY time the params marked with ### may be changed
-        val pp = new PlayerParams("","",0,0,0,0,0,0) // dummy PlayerParams to get access to getParams
+        val pp = new PlayerParams("", "", 0, 0, 0, 0, 0, 0) // dummy PlayerParams to get access to getParams
         val originalPlayerParams = pp.getParams(context.frameContext.startUpData)
         val newBoardSize = initiatorModel.boardSize.min(originalPlayerParams.playPams4_BoardSize)
         val newScoreToWin = (initiatorModel.winningScore + originalPlayerParams.playPams5_ScoreToWin) / 2

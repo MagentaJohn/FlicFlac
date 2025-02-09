@@ -101,7 +101,7 @@ case class FlicFlacGame(
 
   def initialModel(flicFlacStartupData: FlicFlacStartupData): Outcome[FlicFlacGameModel] =
     scribe.debug("@@@ FlicFlacMain-initialModel()")
-    val pp = new PlayerParams("","",0,0,0,0,0,0) // dummy PlayerParams to get access to getParams
+    val pp = new PlayerParams("", "", 0, 0, 0, 0, 0, 0) // dummy PlayerParams to get access to getParams
     val cachedParamsOrNew = pp.getParams(flicFlacStartupData)
     scribe.debug(s"@@@ PlayerParams: $cachedParamsOrNew")
     val initialFlicFlacGameModel = FlicFlacGameModel()

@@ -18,6 +18,5 @@ final case class PlayerParams(
       Decoder
 
 object PlayerParams:
-  
 
 end PlayerParams

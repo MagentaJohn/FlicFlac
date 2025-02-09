@@ -347,12 +347,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               val newTurnNumber = model.turnNumber + 1
 
               val newModel =
-                model.copy(
-                  pieces = newPieces, 
-                  possibleMoveSpots = emptySpots, 
-                  gameScore = newScore,
-                  turnNumber = newTurnNumber,
-                  turnTimer = newTT)
+                model.copy(pieces = newPieces, possibleMoveSpots = emptySpots, gameScore = newScore, turnNumber = newTurnNumber, turnTimer = newTT)
 
               if newModel.gameState == GameState.FINISH then
                 val results = constructResults(newModel)

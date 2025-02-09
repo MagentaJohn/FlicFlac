@@ -177,7 +177,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
   end getStartUpStates
 
   def retrieve(startupData: FlicFlacStartupData): FlicFlacGameModel =
-    val pp = new PlayerParams("","",0,0,0,0,0,0) // dummy PlayerParams to get access to getParams
+    val pp = new PlayerParams("", "", 0, 0, 0, 0, 0, 0) // dummy PlayerParams to get access to getParams
     val playerParams = pp.getParams(startupData)
     val ourName = playerParams.playPams1_Name1
     val oppoName = playerParams.playPams2_Name2
