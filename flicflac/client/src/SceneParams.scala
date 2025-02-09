@@ -69,6 +69,18 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
   ): GlobalEvent => Outcome[FlicFlacGameModel] =
     e =>
       e match
+        case DetectParams =>
+          val s1: String = org.scalajs.dom.window.localStorage.getItem("FlicFlac-Game1")
+          val s2: String = org.scalajs.dom.window.localStorage.getItem("FlicFlac-Game2")
+
+          if (s1 ne null) || (s2 ne null) then
+            scribe.trace("@@@ SceneParams.DetectParams RESTORE GAME")
+            Outcome(model).addGlobalEvents(SceneEvent.Next) // sidestep the bootloader
+          else
+            scribe.trace("@@@ SceneParams.DetectParams NEW GAME")
+            Outcome(model)
+          end if
+
         case e: FlicFlacGameUpdate.Info =>
           scribe.trace("@@@ SceneParams FlicFlacGameUpdate.Info")
 
@@ -446,4 +458,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           .addGlobalEvents(Freeze.PanelContent(PanelType.P_ERROR, ("Error", sError)))
 
   end responderStateMachine
+
 end SceneParams
+
+case object DetectParams extends GlobalEvent

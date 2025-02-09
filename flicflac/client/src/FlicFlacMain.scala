@@ -110,7 +110,9 @@ case class FlicFlacGame(
     val newTT = TurnTimer(newTurnTime, newCaptorsTime, false, false, 0, 0)
     val cachedGameOrNew = initialFlicFlacGameModel.retrieve(flicFlacStartupData)
     val updatedGame = cachedGameOrNew.copy(turnTimer = newTT)
-    Outcome(updatedGame).addGlobalEvents(WebRtcEvent.MakePeerEntity)
+    Outcome(updatedGame)
+      .addGlobalEvents(DetectParams)
+      .addGlobalEvents(WebRtcEvent.MakePeerEntity)
   end initialModel
 
   def initialViewModel(
