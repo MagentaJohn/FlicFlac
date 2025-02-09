@@ -142,6 +142,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           if (initiator == true) && (model.initiatorGameState == GameState.START_CON3) && (lastTxGameModel == None) then
             timerP1 = TickTimer.start(RETRANSMIT_TIMEOUT)
             lastTxGameModel = Some(model)
+            scribe.trace("@@@ TimerP1 activated")
             Outcome(model).addGlobalEvents(WebRtcEvent.SendData(model))
           else if TickTimer.expired(timerP1) then
             timerP1 = TickTimer.start(RETRANSMIT_TIMEOUT) // start the tx retransmission timeout (again)

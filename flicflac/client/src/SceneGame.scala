@@ -254,6 +254,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
             end match // hexXYCoordsFromDisplayXY
 
           case ButtonNewGameEvent =>
+            scribe.debug("@@@ ButtonNewGameEvent")
             checkTurnValidAndThrow(model, "Button NEW GAME Event") // throws exception if out of turn
             val newModel = model.reset(model)
             model.modify(newModel, None, None)
@@ -289,9 +290,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
             hexBoard4.calculateXsYs(dSF)
             hexBoard4.calculateGridPaintLayer()
-
-            val newModel = model.copy(gameState = GameState.CYLINDER_TURN)
-            model.modify(newModel, None, None)
+            Outcome(model)
 
           case ButtonTurnEvent.Occurence() =>
             checkTurnValidAndThrow(model, "Button NEW TURN Event") // throws exception if out of turn

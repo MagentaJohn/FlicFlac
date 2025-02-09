@@ -185,7 +185,6 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     val gameCache = getGameName(ourName, oppoName)
     val cacheOrNew = decode[FlicFlacGameModel](org.scalajs.dom.window.localStorage.getItem(gameCache)) match
       case Right(model: FlicFlacGameModel) =>
-        // FIXME we should check for version number here and goto create if mismatch
         scribe.debug("@@@ Restored model")
 
         // create the shared hexboard

@@ -242,7 +242,11 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
 
               c.on(
                 "close",
-                (c: DataConnection) => scribe.trace("@@@-62 ConnectionOpen.on close ")
+                (c: DataConnection) => 
+                  // This can happen when the RESPONDER performs a browser refresh, the connection is lost!
+                  // Setting timerT1 allows the INITIATOR to acquire a new connection
+                  scribe.trace("@@@-62 ConnectionOpen.on close ")
+                  timerT1 = TickTimer.start(TT_TWO_SECONDS) // 
               )
               c.on(
                 "error",
@@ -298,6 +302,7 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
             if TickTimer.expired(timerT1) then
               timerT1 = TickTimer.stop()
               if context.reference.ourName.compare(context.reference.oppoName) < 0 then
+                scribe.debug("@@@ SubSystemPeerJS Transmission Timer Expired")
                 // we are the connection initiator and timerT1 has expired so attempt to make the connection request again
                 eventQueue.enqueue(WebRtcEvent.Connect(context.reference.oppoName))
               end if
@@ -317,14 +322,21 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
             end outcome1
 
             val outcome2 =
-              latestUpdate match
-                case Some(update) =>
-                  latestUpdate = None
-                  outcome1.addGlobalEvents(update) // ... Adding in event generated from a callback
+              conn match
+                case Some(connection) => 
+                  latestUpdate match
+                    case Some(update) =>
+                      latestUpdate = None
+                      outcome1.addGlobalEvents(update) // ... Adding in event generated from a callback
+                    case None =>
+                      outcome1
                 case None =>
+                  // we do not queue an update event if there is no connection (refresh problems)
                   outcome1
+            end outcome2
 
             outcome2
+
       catch
         case e: PeerJsException =>
           val errorMsg = e.getMessage()
@@ -337,6 +349,16 @@ final case class SSPeerJS(initialMessage: String) extends SubSystem[FlicFlacGame
           peerJsPanel = (PanelType.P_ERROR, ("Error", errorMsg))
           Outcome(())
   end update
+
+/*--
+  def update(
+        context: SubSystemFrameContext[ReferenceData],
+        message: Unit
+    ): EventType => Outcome[Unit] =
+    e =>
+      Outcome(())
+  end update
+--*/
 
   def present(
       context: SubSystemFrameContext[ReferenceData],
