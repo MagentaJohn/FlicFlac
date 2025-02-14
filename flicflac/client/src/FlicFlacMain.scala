@@ -36,7 +36,6 @@ val paramsPanel = new ParamsPanel()
 val sharedTurnTimer = TurnTimer(0, 0, false, false, 0, 0)
 var gameStorage = new GameStorage("", PlayerParams("", "", 0, 0, 0, 0, 0, 0), List.empty)
 
-
 case class FlicFlacGame(
     tyrianSubSystem: TyrianSubSystem[IO, Int, FlicFlacGameModel]
 ) extends IndigoGame[FlicFlacBootData, FlicFlacStartupData, FlicFlacGameModel, FlicFlacViewModel]:
@@ -114,7 +113,7 @@ case class FlicFlacGame(
     gameStorage = gameStorage.establishCacheName(gameStorage, cachedParamsOrNew.playPams1_Name1, cachedParamsOrNew.playPams2_Name2)
     gameStorage.establishGameStorage(gameStorage)
     val updatedGame = cachedGameOrNew.copy(turnTimer = newTT, gameName = gameStorage.name)
-    
+
     Outcome(updatedGame)
       .addGlobalEvents(DetectParams)
       .addGlobalEvents(WebRtcEvent.MakePeerEntity)

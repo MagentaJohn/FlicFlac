@@ -116,7 +116,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     val iOurPieceType = previousModel.ourPieceType
     val iWinningScore = previousModel.winningScore
     val iRandEventFreq = previousModel.randEventFreq
-    val score = (0,0)
+    val score = (0, 0)
     val gameName = GAME_PREFIX
     val turnNumber = 0
     val highLighter = new HighLighter(false, PointXY(0, 0))
