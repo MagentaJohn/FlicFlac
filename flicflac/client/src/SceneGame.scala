@@ -51,6 +51,10 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
           case e: FlicFlacGameUpdate.Info =>
             scribe.debug("@@@ FlicFlacGameUpdate.Info")
             model.modify(e.ffgm, None, None)
+            if (e.ffgm.turnNumber > model.turnNumber) then
+              // we only cache chnages when a new turn is indicated
+              gameStorage = gameStorage.appendGameTurn(gameStorage, e.ffgm)
+            end if
             if e.ffgm.gameState == GameState.FINISH then
               val resultsMsg = constructResults(e.ffgm)
               Outcome(e.ffgm).addGlobalEvents(Freeze.PanelContent(PanelType.P_RESULTS, resultsMsg))
@@ -329,6 +333,8 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                 turnTimer = newTT
               )
 
+              gameStorage = gameStorage.appendGameTurn(gameStorage, newModel)
+
               scribe.debug("@@@ " + model.gameState.toString() + " -> " + newModel.gameState.toString())
               if newModel.gameState == GameState.FINISH then
                 val results = constructResults(newModel)
@@ -347,6 +353,8 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
               val newModel =
                 model.copy(pieces = newPieces, possibleMoveSpots = emptySpots, gameScore = newScore, turnNumber = newTurnNumber, turnTimer = newTT)
+
+              gameStorage = gameStorage.appendGameTurn(gameStorage, newModel)              
 
               if newModel.gameState == GameState.FINISH then
                 val results = constructResults(newModel)

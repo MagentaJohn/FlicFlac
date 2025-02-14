@@ -10,27 +10,27 @@ final case class Spots(
       Decoder:
 
   def calculatePossibleMoves(hexBoard: HexBoard, model: FlicFlacGameModel): Spots =
-    scribe.debug("@@@ Spots calculatePossibleMoves")
+    scribe.trace("@@@ Spots calculatePossibleMoves")
 
     val resultingSpots: Spots = Spots(Set.empty)
     model.pieces.findPieceSelected(model) match
       case Some(piece) =>
-        scribe.debug("@@@ Spots finds a selected piece")
+        scribe.trace("@@@ Spots finds a selected piece")
         calculateSpots(hexBoard, model, piece)
 
       case None =>
-        scribe.debug("@@@ Spots does not find a selected piece")
+        scribe.trace("@@@ Spots does not find a selected piece")
         Spots(Set.empty)
     end match
   end calculatePossibleMoves
 
   def calculateSpots(hexBoard: HexBoard, model: FlicFlacGameModel, piece: Piece): Spots =
-    scribe.debug("@@@ Spots calculateSpots start")
+    scribe.trace("@@@ Spots calculateSpots start")
     val bBlocks = ((piece.pieceShape == BLOCK) && (model.gameState == GameState.BLOCK_TURN))
     val bCylinders = ((piece.pieceShape == CYLINDER) && (model.gameState == GameState.CYLINDER_TURN))
     if bBlocks || bCylinders then
       if piece.moved(piece) then
-        scribe.debug("@@@ calculateSpots piece moved")
+        scribe.trace("@@@ calculateSpots piece moved")
         // we know the piece has moved and want to provide the opportunity for it to return back to it's
         // turn starting position (PosA). However, after this piece moved another piece may also have moved and
         // occupied PosA. The next match checks for this ...
@@ -41,11 +41,11 @@ final case class Spots(
             Spots(Set((piece.pTurnStartPos.x, piece.pTurnStartPos.y), (piece.pCurPos.x, piece.pCurPos.y))) // starting & current positions only
         end match
       else
-        scribe.debug("@@@ calculateSpots piece not moved @ " + piece.pCurPos)
+        scribe.trace("@@@ calculateSpots piece not moved @ " + piece.pCurPos)
         spotify(hexBoard: HexBoard, model: FlicFlacGameModel, piece: Piece)
       end if
     else
-      scribe.debug("@@@ calculateSpots out of turn " + model.gameState)
+      scribe.trace("@@@ calculateSpots out of turn " + model.gameState)
       Spots(Set.empty)
     end if
   end calculateSpots
@@ -130,7 +130,7 @@ final case class Spots(
           setInnerRingQRS = setInnerRingQRS + q1r1s1
         end if
       }
-      scribe.debug("@@@ spotify Ring1 free hex count: " + setInnerRingQRS.size)
+      scribe.trace("@@@ spotify Ring1 free hex count: " + setInnerRingQRS.size)
 
       // Middle Ring
 

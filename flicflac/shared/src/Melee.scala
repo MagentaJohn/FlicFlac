@@ -1,6 +1,4 @@
-package game
-
-import shared.*
+package shared
 
 import cats.instances.double
 //import game.PieceAssets.pieceNames

@@ -20,6 +20,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     val iWinningScore = playerParams.playPams5_ScoreToWin
     val iRandEventFreq = playerParams.playPams8_RandEventProb
     val score = (0, 0)
+    val gameName = GAME_PREFIX
     val turnNumber = 0
     // pieces
     val startingSpots: Spots = Spots(Set.empty)
@@ -46,6 +47,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
       GameState.START_CON1,
       GameState.START_CON1,
       score,
+      gameName,
       turnNumber,
       Pieces(Vector.empty), // this will be populated when SceneGame receives the message "StartLiveGame"
       startingSpots,
@@ -114,8 +116,9 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     val iOurPieceType = previousModel.ourPieceType
     val iWinningScore = previousModel.winningScore
     val iRandEventFreq = previousModel.randEventFreq
-    val score = previousModel.gameScore
-    val turnNumber = previousModel.turnNumber
+    val score = (0,0)
+    val gameName = GAME_PREFIX
+    val turnNumber = 0
     val highLighter = new HighLighter(false, PointXY(0, 0))
     val emptySpots: Spots = Spots(Set.empty)
     val turnTime = previousModel.turnTimer.iTotalTurnTime
@@ -140,6 +143,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
       GameState.START_CON1,
       GameState.CYLINDER_TURN,
       score,
+      gameName,
       turnNumber,
       Pieces(Vector.empty), // this will be populated when SceneGame receives the message "StartLiveGame"
       emptySpots,

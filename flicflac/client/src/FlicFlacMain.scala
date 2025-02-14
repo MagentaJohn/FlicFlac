@@ -34,6 +34,8 @@ val hexBoard4 = new HexBoard4()
 val scorePanel = new ScorePanel()
 val paramsPanel = new ParamsPanel()
 val sharedTurnTimer = TurnTimer(0, 0, false, false, 0, 0)
+var gameStorage = new GameStorage("", PlayerParams("", "", 0, 0, 0, 0, 0, 0), List.empty)
+
 
 case class FlicFlacGame(
     tyrianSubSystem: TyrianSubSystem[IO, Int, FlicFlacGameModel]
@@ -44,7 +46,7 @@ case class FlicFlacGame(
   Logger.root
     .clearHandlers()
     .withHandler(formatter = Formatter.simple)
-    .withMinimumLevel(Level.Trace)
+    .withMinimumLevel(Level.Debug)
     .replace()
 
   val magnification = 1
@@ -109,7 +111,10 @@ case class FlicFlacGame(
     val newCaptorsTime = cachedParamsOrNew.playPams7_CaptorsTime
     val newTT = TurnTimer(newTurnTime, newCaptorsTime, false, false, 0, 0)
     val cachedGameOrNew = initialFlicFlacGameModel.retrieve(flicFlacStartupData)
-    val updatedGame = cachedGameOrNew.copy(turnTimer = newTT)
+    gameStorage = gameStorage.establishCacheName(gameStorage, cachedParamsOrNew.playPams1_Name1, cachedParamsOrNew.playPams2_Name2)
+    gameStorage.establishGameStorage(gameStorage)
+    val updatedGame = cachedGameOrNew.copy(turnTimer = newTT, gameName = gameStorage.name)
+    
     Outcome(updatedGame)
       .addGlobalEvents(DetectParams)
       .addGlobalEvents(WebRtcEvent.MakePeerEntity)
