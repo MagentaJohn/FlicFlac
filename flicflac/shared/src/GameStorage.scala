@@ -34,7 +34,7 @@ final case class GameStorage(
 ) derives Encoder.AsObject,
       Decoder:
 
-  def establishCacheName(gs: GameStorage, s1: String, s2: String): GameStorage =
+  def establishGameStorage(s1: String, s2: String): GameStorage = 
     val rootName = GAME_PREFIX + s1 + "-" + s2
     var index = 0
     var uniqueName = rootName + "-" + index.toString()
@@ -51,13 +51,13 @@ final case class GameStorage(
         index = index + 1
       end if
     end while
-    val gs1 = gs.copy(name = uniqueName)
-    gs1
-  end establishCacheName
 
-  def establishGameStorage(gs: GameStorage): Unit =
-    val gsAsJson = gs.asJson.noSpaces
-    org.scalajs.dom.window.localStorage.setItem(name, gsAsJson)
+    // ensure the list of turns is empty - possible reset during game ...
+
+    val gs1 = this.copy(name = uniqueName, turns = List())
+    val gs1AsJson = gs1.asJson.noSpaces
+    org.scalajs.dom.window.localStorage.setItem(uniqueName, gs1AsJson)
+    gs1
   end establishGameStorage
 
   def appendGameTurn(gs: GameStorage, ffgm: FlicFlacGameModel): GameStorage =

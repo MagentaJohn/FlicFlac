@@ -129,6 +129,9 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     // derive the client hexboard
     hexBoard4.derive(hexBoard)
 
+    // establish the new game storage cache
+    gameStorage = gameStorage.establishGameStorage(sOurName, sOppoName)
+
     FlicFlacGameModel(
       sOurName,
       sOppoName,

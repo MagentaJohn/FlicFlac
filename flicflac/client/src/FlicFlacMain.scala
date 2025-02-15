@@ -110,8 +110,8 @@ case class FlicFlacGame(
     val newCaptorsTime = cachedParamsOrNew.playPams7_CaptorsTime
     val newTT = TurnTimer(newTurnTime, newCaptorsTime, false, false, 0, 0)
     val cachedGameOrNew = initialFlicFlacGameModel.retrieve(flicFlacStartupData)
-    gameStorage = gameStorage.establishCacheName(gameStorage, cachedParamsOrNew.playPams1_Name1, cachedParamsOrNew.playPams2_Name2)
-    gameStorage.establishGameStorage(gameStorage)
+    gameStorage = gameStorage.establishGameStorage(cachedParamsOrNew.playPams1_Name1, cachedParamsOrNew.playPams2_Name2)
+
     val updatedGame = cachedGameOrNew.copy(turnTimer = newTT)
 
     Outcome(updatedGame)

@@ -170,8 +170,6 @@ case class HexBoard4(
     end while
   end calculateGridPaintLayer
 
-  // FIXME ... suspect SOME of these routines should be removed to avoid duplication in shared module
-
   def indigoMix(i: Int): RGBA =
     i match
       case CX => RGBA.fromHexString("#00000000") // Zero

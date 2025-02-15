@@ -44,7 +44,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
           case StartLiveGame =>
             scribe.debug("@@@ StartLiveGame with BoardSize:" + model.boardSize)
             hexBoard.forge(model.boardSize)
-            hexBoard4.derive(hexBoard) // ................................ establish new hexboard
+            hexBoard4.derive(hexBoard) // ................................. establish new hexboard
             val startingPieces = model.pieces.summonPieces(hexBoard) // ... establish new starting positions
             model.modifyPieces(model, startingPieces) // .................. update model
 
@@ -52,9 +52,15 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
             scribe.debug("@@@ FlicFlacGameUpdate.Info")
             model.modify(e.ffgm, None, None)
             if e.ffgm.turnNumber > model.turnNumber then
-              // we only cache chnages when a new turn is indicated
+              // we only cache changes when a new turn is indicated
               gameStorage = gameStorage.appendGameTurn(gameStorage, e.ffgm)
             end if
+
+            if e.ffgm.turnNumber == 0 && model.turnNumber > 0 then
+              // the opponent has pressed the new game button so establish new cache
+              gameStorage = gameStorage.establishGameStorage(model.ourName, model.oppoName)
+            end if
+
             if e.ffgm.gameState == GameState.FINISH then
               val resultsMsg = constructResults(e.ffgm)
               Outcome(e.ffgm).addGlobalEvents(Freeze.PanelContent(PanelType.P_RESULTS, resultsMsg))
@@ -261,7 +267,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
             scribe.debug("@@@ ButtonNewGameEvent")
             checkTurnValidAndThrow(model, "Button NEW GAME Event") // throws exception if out of turn
             val newModel = model.reset(model)
-            model.modify(newModel, None, None)
+            model.modify(newModel, None, None).addGlobalEvents(StartLiveGame)
 
           case ButtonPlusEvent =>
             scribe.debug("@@@ ButtonPlusEvent")
