@@ -46,19 +46,18 @@ final case class Pieces(
       Decoder:
 
   def summonPieces(hexBoard: HexBoard): Pieces =
-    val size = hexBoard.boardSize
-    val cy1 = hexBoard.getCylinderHomePos(size, CB)
-    val cy2 = hexBoard.getCylinderHomePos(size, CG)
-    val cy3 = hexBoard.getCylinderHomePos(size, CY)
-    val cy4 = hexBoard.getCylinderHomePos(size, CO)
-    val cy5 = hexBoard.getCylinderHomePos(size, CR)
-    val cy6 = hexBoard.getCylinderHomePos(size, CP)
-    val bk1 = hexBoard.getBlockHomePos(size, CB)
-    val bk2 = hexBoard.getBlockHomePos(size, CG)
-    val bk3 = hexBoard.getBlockHomePos(size, CY)
-    val bk4 = hexBoard.getBlockHomePos(size, CO)
-    val bk5 = hexBoard.getBlockHomePos(size, CR)
-    val bk6 = hexBoard.getBlockHomePos(size, CP)
+    val cy1 = hexBoard.getCylinderHomePos(CB)
+    val cy2 = hexBoard.getCylinderHomePos(CG)
+    val cy3 = hexBoard.getCylinderHomePos(CY)
+    val cy4 = hexBoard.getCylinderHomePos(CO)
+    val cy5 = hexBoard.getCylinderHomePos(CR)
+    val cy6 = hexBoard.getCylinderHomePos(CP)
+    val bk1 = hexBoard.getBlockHomePos(CB)
+    val bk2 = hexBoard.getBlockHomePos(CG)
+    val bk3 = hexBoard.getBlockHomePos(CY)
+    val bk4 = hexBoard.getBlockHomePos(CO)
+    val bk5 = hexBoard.getBlockHomePos(CR)
+    val bk6 = hexBoard.getBlockHomePos(CP)
 
     val startingModelPieces: Vector[Piece] = Vector(
       Piece(CYLINDER, CB, cy1, cy1, cy1, false),

@@ -68,31 +68,30 @@ case class HexBoard(
     boardSize = size
 
     // start with white board, populates q,r,s
-    fillBoard(hexArray, arrayWidth, arrayHeight)
+    fillBoard()
 
     // this is the pattern of the board
-    colorBoardHexes(boardSize, hexArray, 2, arrayWidth, arrayHeight)
+    colorBoardHexes()
 
     // trim off the four corners (uses q,r,s coords)
-    trimBoard(boardSize, hexArray, arrayWidth, arrayHeight, CX)
+    trimBoard()
 
     // establish extra hexes for homepositions of pieces
-    establishHomeHexes(boardSize, hexArray, arrayWidth, arrayHeight)
+    establishHomeHexes()
 
   end forge
 
   /*
   fillBoard populates each hexArray cell
-  the embedded while loops populate x,y,c,q,r,s,xP,yP, but not xP, yP
-  Afterwards, calculateXpyP calcualtes the paint position according to scale
-  for the graphic to paint the hex cell
+  the embedded while loops populate x,y,c,q,r,s
    */
-  def fillBoard(hexArray: Array[Array[HH]], width: Int, height: Int): Unit =
+
+  def fillBoard(): Unit =
     var row = 0
-    while row < height do // array height
+    while row < arrayHeight do
       var col = row & 1
       var n = 0
-      while n < width do // array width
+      while n < arrayWidth do
         val q = col
         val r = (row - col) / 2
         val s = (-row - col) / 2
@@ -108,7 +107,7 @@ case class HexBoard(
   colorBoardHexes generates the pattern colors for each mini hex using the
   color combinations in the row templates
    */
-  def colorBoardHexes(boardSize: Int, hexArray: Array[Array[HH]], startingRow: Int, arrayWidth: Int, arrayHeight: Int): Unit =
+  def colorBoardHexes(): Unit =
 
     val rowTemplate8A: Array[Vector[Int]] = Array(
       Vector (CR, CY, CR, CR, CY, CR, CR, CY, CR),
@@ -158,7 +157,7 @@ case class HexBoard(
       // we use -2 here to allow for top border
       while n < arrayWidth - 1 do
         val hexColor = rowTemplate8A((thisRow + verticalOffset- 2) % rowTemplate8A.length)((n + horizontalOffset) % 9)
-        setHexColor(hexArray, PointXY(n, thisRow), hexColor)
+        setHexColor(PointXY(n, thisRow), hexColor)
         col += 2
         n += 1
       end while
@@ -170,7 +169,7 @@ case class HexBoard(
   sethexColor sets the color of a hex
    */
 
-  def setHexColor(hexArray: Array[Array[HH]], pos: PointXY, col: Int): Unit =
+  def setHexColor(pos: PointXY, col: Int): Unit =
     val hh = hexArray(pos.x)(pos.y)
     hexArray(pos.x)(pos.y) = HH(hh.x, hh.y, col, hh.q, hh.r, hh.s)
   end setHexColor
@@ -180,7 +179,8 @@ case class HexBoard(
   that the remaining hexes that have not been touched, form a large hexagon. This function
   is used help form the inital state of the game board
    */
-  def trimBoard(boardSize: Int, hexArray: Array[Array[HH]], width: Int, height: Int, color: Int): Unit =
+  def trimBoard(): Unit =
+    val color = CX // CX means invalid
     val qrs = boardSize match
       case BOARD_SIZE_SMALL => (5, 13, -2, 6, -15,- 7)
       case BOARD_SIZE_MEDIUM => (3, 13,-2, 8, -16, -6)
@@ -188,12 +188,12 @@ case class HexBoard(
       case _ => (1, 15, -3, 11, -19, -5) // default is XLARGE
 
       var y = 0
-      while y < height do
+      while y < arrayHeight do
         var x = 0
-        while x < width do
+        while x < arrayWidth do
           val hh = hexArray(x)(y)
           if (hh.q < qrs._1) || (hh.q > qrs._2) || (hh.r < qrs._3) || (hh.r > qrs._4) || (hh.s < qrs._5) || (hh.s > qrs._6) then
-            setHexColor(hexArray, PointXY(x, y), color)
+            setHexColor(PointXY(x, y), color)
           end if
           x += 1
         end while
@@ -202,7 +202,7 @@ case class HexBoard(
   end trimBoard
 
 
-  def getCylinderHomePos(boardSize: Int, id: Int): PointXY =
+  def getCylinderHomePos(id: Int): PointXY =
 
     boardSize match
       case BOARD_SIZE_SMALL =>
@@ -247,7 +247,7 @@ case class HexBoard(
       end match
   end getCylinderHomePos
 
-  def getBlockHomePos(boardSize: Int, id: Int): PointXY =
+  def getBlockHomePos(id: Int): PointXY =
     boardSize match
       case BOARD_SIZE_SMALL =>
         id match
@@ -294,19 +294,19 @@ case class HexBoard(
   /*
   establishHomeHexes sets up extra black hex for the starting point for cylinder pieces
    */
-  def establishHomeHexes(boardSize: Int, hexArray: Array[Array[HH]], width: Int, height: Int): Unit =
-    setHexColor(hexArray, getCylinderHomePos(boardSize, CB), CB)
-    setHexColor(hexArray, getCylinderHomePos(boardSize, CG), CG)
-    setHexColor(hexArray, getCylinderHomePos(boardSize, CY), CY)
-    setHexColor(hexArray, getCylinderHomePos(boardSize, CO), CO)
-    setHexColor(hexArray, getCylinderHomePos(boardSize, CR), CR)
-    setHexColor(hexArray, getCylinderHomePos(boardSize, CP), CP)
-    setHexColor(hexArray, getBlockHomePos(boardSize, CB), CB)
-    setHexColor(hexArray, getBlockHomePos(boardSize, CG), CG)
-    setHexColor(hexArray, getBlockHomePos(boardSize, CY), CY)
-    setHexColor(hexArray, getBlockHomePos(boardSize, CO), CO)
-    setHexColor(hexArray, getBlockHomePos(boardSize, CR), CR)
-    setHexColor(hexArray, getBlockHomePos(boardSize, CP), CP)
+  def establishHomeHexes(): Unit =
+    setHexColor(getCylinderHomePos(CB), CB)
+    setHexColor(getCylinderHomePos(CG), CG)
+    setHexColor(getCylinderHomePos(CY), CY)
+    setHexColor(getCylinderHomePos(CO), CO)
+    setHexColor(getCylinderHomePos(CR), CR)
+    setHexColor(getCylinderHomePos(CP), CP)
+    setHexColor(getBlockHomePos(CB), CB)
+    setHexColor(getBlockHomePos(CG), CG)
+    setHexColor(getBlockHomePos(CY), CY)
+    setHexColor(getBlockHomePos(CO), CO)
+    setHexColor(getBlockHomePos(CR), CR)
+    setHexColor(getBlockHomePos(CP), CP)
   end establishHomeHexes
 
   /**********************************
