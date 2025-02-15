@@ -112,7 +112,7 @@ case class FlicFlacGame(
     val cachedGameOrNew = initialFlicFlacGameModel.retrieve(flicFlacStartupData)
     gameStorage = gameStorage.establishCacheName(gameStorage, cachedParamsOrNew.playPams1_Name1, cachedParamsOrNew.playPams2_Name2)
     gameStorage.establishGameStorage(gameStorage)
-    val updatedGame = cachedGameOrNew.copy(turnTimer = newTT, gameName = gameStorage.name)
+    val updatedGame = cachedGameOrNew.copy(turnTimer = newTT)
 
     Outcome(updatedGame)
       .addGlobalEvents(DetectParams)

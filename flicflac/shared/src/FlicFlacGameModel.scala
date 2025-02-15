@@ -42,7 +42,6 @@ final case class FlicFlacGameModel(
     responderGameState: GameState = GameState.START_CON1, // ................ Negotiated at startup
     gameState: GameState = GameState.CYLINDER_TURN, // ...................... Updates
     gameScore: (Int, Int) = (0, 0), // ...................................... Updates
-    gameName: String = GAME_PREFIX, // ...................................... Updates
     turnNumber: Int = 0, // ................................................. Updates
     pieces: Pieces = Pieces(Vector.empty), // ............................... Updates
     possibleMoveSpots: Spots = Spots(Set.empty), // ......................... Updates

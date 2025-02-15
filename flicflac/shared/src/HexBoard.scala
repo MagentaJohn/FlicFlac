@@ -314,28 +314,29 @@ case class HexBoard(
   ***********************************/
 
   // detected a valid hex (ie is it part of the board) using Array Coordinates (as a point)
-  def isThisHexValid(hexArray: Array[Array[HH]], pAxAy: PointXY): Boolean =
-    (hexArray(pAxAy.x)(pAxAy.y).c != CX)
+  def isThisHexValid(pAxAy: PointXY): Boolean =
+    (this.hexArray(pAxAy.x)(pAxAy.y).c != CX)
   end isThisHexValid
 
   // detected a valid hex (ie is it part of the board) using Cubic Coordinates
-  def isThisHexValid(hexArray: Array[Array[HH]], q: Int, r: Int, s: Int): Boolean =
+  def isThisHexValid(q: Int, r: Int, s: Int): Boolean =
     val aXaY = getAxAyfromQRS(q, r, s)
     val pAxAy = PointXY(aXaY._1, aXaY._2)
-    isThisHexValid(hexArray, pAxAy)
+    isThisHexValid(pAxAy)
   end isThisHexValid
 
   // detecting a black hex using Array Coordinates (as a point)
-  def isThisHexBlack(hexArray: Array[Array[HH]], pAxAy: PointXY): Boolean =
-    (hexArray(pAxAy.x)(pAxAy.y).c == CK)
+  def isThisHexBlack(pAxAy: PointXY): Boolean =
+    (this.hexArray(pAxAy.x)(pAxAy.y).c == CK)
   end isThisHexBlack
 
   // detecting a black hex using Cubic Coordinates (q,r,s)
-  def isThisHexBlack(hexArray: Array[Array[HH]], q: Int, r: Int, s: Int): Boolean =
+  def isThisHexBlack(q: Int, r: Int, s: Int): Boolean =
     val aXaY = getAxAyfromQRS(q, r, s)
     val pAxAy = PointXY(aXaY._1, aXaY._2)
-    isThisHexBlack(hexArray, pAxAy)
+    isThisHexBlack(pAxAy)
   end isThisHexBlack
+
 
   // detect an occupied hex using Array Coordinates (as a point)
   def isThisHexFree(pAxAy: PointXY, vPieces: Vector[Piece]): Boolean =
@@ -352,8 +353,8 @@ case class HexBoard(
   end isThisHexFree
 
   // obtain color of this hex
-  def getHexColor(hexArray: Array[Array[HH]], pos: PointXY): Int =
-    hexArray(pos.x)(pos.y).c
+  def getHexColor(pos: PointXY): Int =
+    this.hexArray(pos.x)(pos.y).c
   end getHexColor
 
   /**************************************************

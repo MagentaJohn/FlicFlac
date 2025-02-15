@@ -161,8 +161,8 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                     // Pointer Up, Pos on Grid, Piece Selected
                     if model.possibleMoveSpots.indices((pos.x, pos.y)) then
                       // Pointer Up, Pos on Grid, Piece Selected, Valid Move
-                      val newHL = model.highLighter.shine(model, false)
-                      if hexBoard4.isThisHexBlack(pos) == true && piece.bMoved == false then
+                      val newHL = model.highLighter.shine(model, false)                      
+                      if hexBoard.isThisHexBlack(pos) == true && piece.bMoved == false then
                         // we only flip piece if this is a new move
                         dMsg = "##H##"
                         scribe.debug("@@@ PointerEvent " + dMsg)

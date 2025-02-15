@@ -123,7 +123,7 @@ final case class Spots(
       setInnerRing.foreach { case (q1, r1, s1) =>
         val aX1aY1 = hexBoard.getAxAyfromQRS(q1, r1, s1)
         val q1r1s1 = (q1, r1, s1)
-        if hexBoard.isThisHexValid(hexBoard.hexArray, q1, r1, s1)
+        if hexBoard.isThisHexValid(q1, r1, s1)
           && hexBoard.isThisHexFree(q1, r1, s1, vPieces)
         then
           setInnerRingAxAy = setInnerRingAxAy + aX1aY1
@@ -137,12 +137,12 @@ final case class Spots(
       var setMiddleRingAxAy = Set.empty[(Int, Int)]
       var setMiddleRingQRS = Set.empty[(Int, Int, Int)]
       val setInnerRingNotBlackQRS =
-        setInnerRingQRS.filter((q2f, r2f, s2f) => hexBoard.isThisHexBlack(hexBoard.hexArray, q2f, r2f, s2f) == false)
+        setInnerRingQRS.filter((q2f, r2f, s2f) => hexBoard.isThisHexBlack(q2f, r2f, s2f) == false)
       setInnerRingNotBlackQRS.foreach { case (q2, r2, s2) =>
         val set2M = spotRingQRS(q2, r2, s2)
         set2M.foreach { case (q2m, r2m, s2m) =>
-          if hexBoard.isThisHexValid(hexBoard.hexArray, q2m, r2m, s2m)
-            && hexBoard.isThisHexBlack(hexBoard.hexArray, q2m, r2m, s2m) == false
+          if hexBoard.isThisHexValid(q2m, r2m, s2m)
+            && hexBoard.isThisHexBlack(q2m, r2m, s2m) == false
             && hexBoard.isThisHexFree(q2m, r2m, s2m, vPieces)
           then
             val aX2aY2 = hexBoard.getAxAyfromQRS(q2m, r2m, s2m)
@@ -157,12 +157,12 @@ final case class Spots(
       var setOuterRingAxAy = Set.empty[(Int, Int)]
       var setOuterRingQRS = Set.empty[(Int, Int, Int)]
       val setMiddleRingNotBlackQRS =
-        setMiddleRingQRS.filter((q3f, r3f, s3f) => hexBoard.isThisHexBlack(hexBoard.hexArray, q3f, r3f, s3f) == false)
+        setMiddleRingQRS.filter((q3f, r3f, s3f) => hexBoard.isThisHexBlack(q3f, r3f, s3f) == false)
       setMiddleRingNotBlackQRS.foreach { case (q3, r3, s3) =>
         val set3M = spotRingQRS(q3, r3, s3)
         set3M.foreach { case (q3m, r3m, s3m) =>
-          if hexBoard.isThisHexValid(hexBoard.hexArray, q3m, r3m, s3m)
-            && hexBoard.isThisHexBlack(hexBoard.hexArray, q3m, r3m, s3m) == false
+          if hexBoard.isThisHexValid(q3m, r3m, s3m)
+            && hexBoard.isThisHexBlack(q3m, r3m, s3m) == false
             && hexBoard.isThisHexFree(q3m, r3m, s3m, vPieces)
           then
             val aX3aY3 = hexBoard.getAxAyfromQRS(q3m, r3m, s3m)

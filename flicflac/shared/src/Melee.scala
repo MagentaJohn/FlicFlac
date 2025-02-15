@@ -19,7 +19,7 @@ final case class Melee(model: FlicFlacGameModel):
     allPieces.foreach { piece =>
       val qrs = hexBoard.getQRSfromAxAy(piece.pCurPos.x, piece.pCurPos.y)
       allPiecesQRS = allPiecesQRS :+ qrs
-      if hexBoard.getHexColor(hexBoard.hexArray, piece.pCurPos) == piece.pieceIdentity then
+      if hexBoard.getHexColor(piece.pCurPos) == piece.pieceIdentity then
         // body color same as hex color detected
         allPiecesEmpowered = allPiecesEmpowered :+ true
       else
