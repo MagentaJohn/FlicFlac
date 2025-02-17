@@ -167,7 +167,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                     // Pointer Up, Pos on Grid, Piece Selected
                     if model.possibleMoveSpots.indices((pos.x, pos.y)) then
                       // Pointer Up, Pos on Grid, Piece Selected, Valid Move
-                      val newHL = model.highLighter.shine(model, false)                      
+                      val newHL = model.highLighter.shine(model, false)
                       if hexBoard.isThisHexBlack(pos) == true && piece.bMoved == false then
                         // we only flip piece if this is a new move
                         dMsg = "##H##"
@@ -266,8 +266,13 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
           case ButtonNewGameEvent =>
             scribe.debug("@@@ ButtonNewGameEvent")
             checkTurnValidAndThrow(model, "Button NEW GAME Event") // throws exception if out of turn
-            val newModel = model.reset(model)
-            model.modify(newModel, None, None).addGlobalEvents(StartLiveGame)
+            if model.turnNumber == 0 then
+              // avoid invalid storage and inhibit "new game" with reset if the game has not even started
+              Outcome(model).addGlobalEvents(Freeze.PanelContent(PanelType.P_HINT, ("*** FlicFlac Hint ***", "Game not started yet!")))
+            else
+              val newModel = model.reset(model)
+              model.modify(newModel, None, None).addGlobalEvents(StartLiveGame)
+            end if
 
           case ButtonPlusEvent =>
             scribe.debug("@@@ ButtonPlusEvent")
@@ -521,6 +526,8 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
     val y10 = (1033 * dSF).toInt
     val x11 = (70 * dSF).toInt
     val y11 = (1066 * dSF).toInt
+    val x12 = (90 * dSF).toInt
+    val y12 = (53 * dSF).toInt
 
     val zoomLabel =
       TextBox("Zoom", 100, 70).alignCenter
@@ -535,6 +542,12 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         .withFontSize(Pixels(30))
         .scaleBy(dSF, dSF)
         .moveTo(x11, y11)
+
+    val turnLabel = TextBox("Turn:" + (model.turnNumber + 1).toString(), 200, 40).alignLeft
+      .withColor(RGBA.Black)
+      .withFontSize(Pixels(30))
+      .scaleBy(dSF, dSF)
+      .moveTo(x12, y12)
 
     val pB = hexBoard4.pBase // ................... for HighLighter
 
@@ -558,6 +571,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         .bold.alignCenter
         .withColor(colorOurNameTitle)
         .withFontSize(Pixels(40))
+        .scaleBy(dSF, dSF)
         .moveTo(iLeftWidth, 2)
 
     val diag =
@@ -579,6 +593,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
 
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(viewModel.turnButton.draw))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(youAre))
+        |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(turnLabel))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> scorePanel.paint(model, bBlinkOn, dSF))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> paramsPanel.paint(model, dSF))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(viewModel.plusButton.draw))

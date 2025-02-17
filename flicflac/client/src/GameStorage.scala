@@ -5,13 +5,20 @@ import io.circe.Decoder
 import io.circe.syntax.*
 import io.circe.parser.decode
 
+val GAME_INDEX_FILE = "FlicFlac-Index"
 val GAME_PREFIX = "###-"
+
+// StorageIndex is cached key containing the names of currewnt and previous games
+final case class StorageIndex(
+    cachedEntries: List[String] // ........... List of names of the GameStorage files in cache
+) derives Encoder.AsObject,
+      Decoder
 
 // MiniPiece is the reduced structure for each game piece (we don't need all the pieces details to display orientation and position)
 final case class MiniPiece(
     qrPos: PointXY, // ..................... current position, QRS coords
     bFlipped: Boolean = false, // .......... piece normal is false, piece flipped is true
-    bCaptured: Boolean = false // ......... piece is captured (or not)
+    bCaptured: Boolean = false // .......... piece is captured (or not)
 ) derives Encoder.AsObject,
       Decoder
 end MiniPiece
@@ -34,7 +41,7 @@ final case class GameStorage(
 ) derives Encoder.AsObject,
       Decoder:
 
-  def establishGameStorage(s1: String, s2: String): GameStorage = 
+  def establishGameStorage(s1: String, s2: String): GameStorage =
     val rootName = GAME_PREFIX + s1 + "-" + s2
     var index = 0
     var uniqueName = rootName + "-" + index.toString()
@@ -51,12 +58,26 @@ final case class GameStorage(
         index = index + 1
       end if
     end while
+    // create/append the game name to game index file
+
+    val possibleStorageIndex = decode[StorageIndex](org.scalajs.dom.window.localStorage.getItem(GAME_INDEX_FILE)) match
+      case Right(si) =>
+        val previousEntries = si.cachedEntries
+        val updatedEntries = previousEntries :+ uniqueName
+        val asJson2 = (StorageIndex(updatedEntries)).asJson.noSpaces
+        org.scalajs.dom.window.localStorage.setItem(GAME_INDEX_FILE, asJson2)
+
+      case Left(_) =>
+        val firstEntryAsList = List(uniqueName)
+        val asJson1 = (StorageIndex(firstEntryAsList)).asJson.noSpaces
+        org.scalajs.dom.window.localStorage.setItem(GAME_INDEX_FILE, asJson1)
 
     // ensure the list of turns is empty - possible reset during game ...
 
     val gs1 = this.copy(name = uniqueName, turns = List())
     val gs1AsJson = gs1.asJson.noSpaces
     org.scalajs.dom.window.localStorage.setItem(uniqueName, gs1AsJson)
+
     gs1
   end establishGameStorage
 
