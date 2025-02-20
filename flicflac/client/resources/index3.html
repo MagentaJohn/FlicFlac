@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FlicFlac 2</title>
+    <style>
+      body {
+        padding: 0px;
+        margin: 20px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        background-image: url("rules/FlicFlacV4.png");
+        background-size: 100vw 100vh;
+        background-color: black;
+        background-repeat: no-repeat;
+        font-family: arial;
+        font-size: 30px;
+      }
+    </style>
+
+    <link rel="stylesheet" href="./Rules.css" />
+  </head>
+  <body onload="PopulateAll()">
+    <div class="configParams">
+      <i>Choose game</i>
+      <br>
+      <select style="font-size: 1em; font-family: Arial; padding: 1em; background-color: lavender;" id="storageItems" list="games" size="10">
+      </select>
+      <br>
+      <br>
+      <button class="myButton" id="cancelButton" style="margin-right: 2em; width: 5em;">
+        Cancel
+      </button>
+
+      <button class="myButton" id="deleteButton" style="margin-right: 2em; width: 6em;">
+        Delete
+      </button>
+      <br>
+      <br>
+
+      <button class="myButton" id="reviewButton" style="margin-right: 2em; width: 5em;">
+        Review
+      </button>
+
+      <button class="myButton" id="deleteAllButton" style="margin-right: 2em; width: 6em;">
+        Delete All
+      </button>
+      <br>
+      <br>
+
+    </div>
+
+  </body>
+  <script>
+
+    var gameList = []
+    var updatedGameList = []
+    var chosenGame = ""
+
+    function PopulateAll() {
+      gameList = ReadStorageItems()
+      PopulateChooseGameSelectionBox()
+    }
+
+    function PopulateChooseGameSelectionBox() {
+      console.log("PopulateChooseGameSelectionBox")
+      var container1 = document.getElementById('storageItems')
+
+      var i=0
+      for (var name in gameList) {
+        var option = document.createElement("option");
+        option.setAttribute('value', name);
+
+        var optionText = document.createTextNode(gameList[name]);
+        option.appendChild(optionText);
+
+        console.log(">>>" + gameList[name])
+
+        container1.appendChild(option);
+      } 
+    }
+
+
+    function ReadStorageItems() {
+      console.log("ReadStorageitems")
+      var allGamesAsJson = window.localStorage.getItem("FlicFlac-Index")
+      console.log("---")
+      console.log(allGamesAsJson)
+      console.log("---")
+      var strip1 = allGamesAsJson.replace('{"cachedEntries":[', '')
+      var strip2 = strip1.replace(']}', '') // 
+      var strip3 = strip2.replace(/["']/g, "")
+      var arr4 = strip3.split(',')
+      return arr4
+    }
+
+    document.getElementById("cancelButton").addEventListener("click", function () {
+      console.log("CANCEL")
+      window.location.href = "./index.html"
+    });
+
+    document.getElementById("reviewButton").addEventListener("click", function () {
+      var index = document.getElementById("storageItems").value
+      if (typeof gameList[index] === 'undefined') {
+        console.log("REVIEW with no game identified")
+      } else {
+        chosenGame = gameList[index]
+        console.log("REVIEW:" + chosenGame)
+      }
+
+
+    });
+
+    document.getElementById("deleteButton").addEventListener("click", function () {
+
+      // attempt to delete the cached game ...
+      var index = document.getElementById("storageItems").value
+      if (typeof gameList[index] === 'undefined') {
+        alert("No game selected to delete!")
+        console.log("DELETE with no game identified")
+      } else {
+        chosenGame = gameList[index]
+        if (confirm("Are you sure you want to delete " + chosenGame)) {
+          console.log("DELETE:" + chosenGame)
+          window.localStorage.removeItem(chosenGame);
+
+          // copy the list of games, filtering out the chosen game that has been deleted
+          
+          updatedGameList=[] // ensure the destination for copy is empty first
+          gameList.forEach(filterDeletedGame) // this updates updatedGameList
+
+          // create the json string using the new updated game list
+          var asJson='{"cachedEntries":['
+          for (i in updatedGameList) {
+            var e = (i < updatedGameList.length-1) ? '",' : '"'
+            asJson = asJson + '"' + updatedGameList[i] + e
+          }
+          asJson = asJson + ']}'
+
+          // overwrite the cache
+          window.localStorage.setItem("FlicFlac-Index", asJson)
+          window.location.href = "./index3.html" // delate completed so reload this page
+        } else {
+          console.log("DELETE:" + chosenGame + " CANCELLED")          
+        }
+      }
+    });
+    
+    document.getElementById("deleteAllButton").addEventListener("click", function () {
+      console.log("DELETE ALL:")
+      if (confirm("Are you sure you want to delete all the previous games?")) {
+        for (i in gameList) {
+          window.localStorage.removeItem(gameList[i]);
+        }
+        window.localStorage.removeItem("FlicFlac-Index");
+        gameList = []
+        updatedGameList = []
+        chosenGame = ""
+        window.location.href = "./index.html" // delate all complete so jump back to starting menu
+      } else {
+        window.location.href = "./index3.html" // delate all aborted so reload this page
+      }
+    });
+
+    function filterDeletedGame(item, index, arr) {
+      if (item.localeCompare(chosenGame) != 0) {
+        updatedGameList.push(item)
+      }
+    }
+
+  </script>
+</html>
+<!--
+Things left to do for storage ...
+1) Delete Single Item
+2) Delete All
+3) Review to jump to INDIGO with parameters to SceneReview
+4) Push feature to server
+5) email to Simon on how to improve ReadStorageItems()
+-->
