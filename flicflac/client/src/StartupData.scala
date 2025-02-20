@@ -40,19 +40,20 @@ final case class StaticAssets(
     buttonResultsAsset: ButtonAssets
 )
 
-final case class FlicFlacBootData(pixelWidth: Int, pixelHeight: Int, n1: String, n2: String, viewport: GameViewport):
+final case class FlicFlacBootData(pixelWidth: Int, pixelHeight: Int, n1: String, n2: String, g3: String, viewport: GameViewport):
   val width = pixelWidth
   val height = pixelHeight
   val name1 = n1
   val name2 = n2
+  val game3 = g3
   val gameViewPort = viewport
 end FlicFlacBootData
 
 object FlicFlacBootData:
   scribe.debug("@@@ Object FlicFlacBootData START")
 
-  def create(w: Int, h: Int, n1: String, n2: String): FlicFlacBootData =
-    FlicFlacBootData(w, h, n1, n2, GameViewport(w, h))
+  def create(w: Int, h: Int, n1: String, n2: String, g3: String): FlicFlacBootData =
+    FlicFlacBootData(w, h, n1, n2, g3, GameViewport(w, h))
 
   scribe.debug("@@@ Object FlicFlacBootData FINISH")
 end FlicFlacBootData

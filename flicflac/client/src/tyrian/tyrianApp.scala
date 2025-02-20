@@ -53,19 +53,26 @@ object TyrianApp extends TyrianIOApp[Msg, TyrianModel]:
         if dom.document.getElementById("indigo-container") == null then
           Msg.RetryIndigo
         else
+          // "localhost:3000/index2.html?N1=Player1&N2=Player2&N3=###-Player1-Player2-0&runGame=true"
           val i1 = dom.window.location.href.indexOf("?N1=")
           val i2 = dom.window.location.href.indexOf("&N2=")
+          val i3 = dom.window.location.href.indexOf("&N3=")
 
           val sName1A = dom.window.location.href.substring(i1+4)
-          val i3 = sName1A.indexOf("&")
-          val sName1 = sName1A.substring(0,i3)
+          val i4 = sName1A.indexOf("&")
+          val sName1 = sName1A.substring(0,i4)
 
           val sName2A = dom.window.location.href.substring(i2+4)
-          val i4 = sName2A.indexOf("&")
-          val sName2 = sName2A.substring(0,i4)
+          val i5 = sName2A.indexOf("&")
+          val sName2 = sName2A.substring(0,i5)
 
-          scribe.info("@@@ NAME1:" +sName1)
-          scribe.info("@@@ NAME2:" +sName2)
+          val sGame3A = dom.window.location.href.substring(i3+4)
+          val i6 = sGame3A.indexOf("&")
+          val sGame3 = sGame3A.substring(0,i6)
+
+          scribe.info("@@@ NAME1:" + sName1)
+          scribe.info("@@@ NAME2:" + sName2)
+          scribe.info("@@@ GAME3:" + sGame3)
 
           FlicFlacGame(model.bridge.subSystem(IndigoGameId("indigo-container"))).launch(
             "indigo-container",
@@ -73,7 +80,8 @@ object TyrianApp extends TyrianIOApp[Msg, TyrianModel]:
               "width" -> dom.window.innerWidth.toString,
               "height" -> dom.window.innerHeight.toString,
               "name1" -> sName1,
-              "name2" -> sName2
+              "name2" -> sName2,
+              "game3" -> sGame3
             )
           )
           Msg.DoNothing

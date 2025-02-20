@@ -35,7 +35,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
   type SceneModel = FlicFlacGameModel
   type SceneViewModel = GameSceneViewModel
 
-  def name: SceneName = SceneName("SceneParams")
+  def name: SceneName = SceneName("Params")
 
   def modelLens: Lens[FlicFlacGameModel, FlicFlacGameModel] =
     Lens.keepLatest
@@ -72,14 +72,22 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
         case DetectParams =>
           val s1: String = org.scalajs.dom.window.localStorage.getItem("FlicFlac-Game1")
           val s2: String = org.scalajs.dom.window.localStorage.getItem("FlicFlac-Game2")
+          val s3: String = context.frameContext.startUpData._1.g3
 
-          if (s1 ne null) || (s2 ne null) then
-            scribe.trace("@@@ SceneParams.DetectParams RESTORE GAME")
-            Outcome(model).addGlobalEvents(SceneEvent.Next) // sidestep the bootloader
+          if s3.isEmpty() then 
+            if (s1 ne null) || (s2 ne null) then
+              scribe.trace("@@@ SceneParams.DetectParams RESTORE GAME")
+              Outcome(model).addGlobalEvents(SceneEvent.JumpTo(SceneGame.name)) // sidestep the bootloader and return to current game
+            else
+              scribe.trace("@@@ SceneParams.DetectParams NEW GAME")
+              Outcome(model) // this is the boot loader for a new game
+            end if
           else
-            scribe.trace("@@@ SceneParams.DetectParams NEW GAME")
+            scribe.trace("@@@ SceneParams.DetectParams REVIEW GAME")
             Outcome(model)
+            .addGlobalEvents(SceneEvent.JumpTo(SceneReview.name)) // sidestep the bootloader and review an old game
           end if
+
 
         case e: FlicFlacGameUpdate.Info =>
           scribe.trace("@@@ SceneParams FlicFlacGameUpdate.Info")

@@ -105,9 +105,9 @@
       } else {
         chosenGame = gameList[index]
         console.log("REVIEW:" + chosenGame)
+        window.location.href =
+        "./index2.html?N1=" + "&N2=" + "&N3=" + chosenGame;
       }
-
-
     });
 
     document.getElementById("deleteButton").addEventListener("click", function () {

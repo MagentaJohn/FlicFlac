@@ -69,7 +69,7 @@ case class FlicFlacGame(
       flicFlacBootData: FlicFlacBootData
   ): NonEmptyList[Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacViewModel]] =
     scribe.debug("@@@ FlicFlacMain-scenes()")
-    NonEmptyList(SceneParams, SceneGame)
+    NonEmptyList(SceneParams, SceneGame, SceneReview)
   end scenes
 
   val eventFilters: EventFilters =
@@ -82,9 +82,10 @@ case class FlicFlacGame(
     val height = flags("height").toInt
     val name1: String = flags("name1")
     val name2: String = flags("name2")
+    val game3: String = flags("game3")
     Outcome {
       val flicFlacBootData: FlicFlacBootData =
-        FlicFlacBootData.create(width, height, name1, name2)
+        FlicFlacBootData.create(width, height, name1, name2, game3)
       // ViewConfig.default
 
       val config =
