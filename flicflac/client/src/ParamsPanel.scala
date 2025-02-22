@@ -6,10 +6,10 @@ import indigo.*
 
 final case class ParamsPanel():
   val p0 = Point(0, 590) // ......... coords of params panel on the game scene when zoom at 100%
-  val p1 = Point(140, 670) // ....... coords of winning score
-  val p2 = Point(140, 755) // ....... coords of total turn time
-  val p3 = Point(140, 840) // ....... coords of captors turn time
-  val p4 = Point(140, 925) // ....... coords of random event probability
+  val p1 = Point(130, 670) // ....... coords of winning score
+  val p2 = Point(130, 755) // ....... coords of total turn time
+  val p3 = Point(130, 840) // ....... coords of captors turn time
+  val p4 = Point(130, 925) // ....... coords of random event probability
 
   def paint(model: FlicFlacGameModel, dSF: Double): Layer =
 
@@ -22,27 +22,28 @@ final case class ParamsPanel():
     val paramsPanel = GameAssets.gParamsPanel(dSF).moveTo(p0Scaled)
 
     val param1 =
-      TextBox((model.winningScore).toString(), 100, 70).bold
+      TextBox((model.winningScore).toString(), 110, 70).bold
         .withColor(RGBA.Black)
         .withFontSize(Pixels(60))
         .scaleBy(dSF, dSF)
         .moveTo(p1Scaled)
 
-    val param2 =
-      TextBox((model.turnTimer.iTotalTurnTime).toString(), 100, 70).bold
+    val param2 = 
+      TextBox((model.turnTimer.iTotalTurnTime).toString(), 110, 70).bold
         .withColor(RGBA.Black)
         .withFontSize(Pixels(60))
         .scaleBy(dSF, dSF)
         .moveTo(p2Scaled)
 
     val param3 =
-      TextBox((model.turnTimer.iCaptorsTurnTime).toString(), 100, 70).bold
+      TextBox((model.turnTimer.iCaptorsTurnTime).toString(), 110, 70).bold
         .withColor(RGBA.Black)
         .withFontSize(Pixels(60))
         .scaleBy(dSF, dSF)
         .moveTo(p3Scaled)
+
     val param4 =
-      TextBox((model.randEventFreq).toString(), 100, 70).bold
+      TextBox((model.randEventFreq).toString(), 110, 70).bold
         .withColor(RGBA.Black)
         .withFontSize(Pixels(60))
         .scaleBy(dSF, dSF)

@@ -86,6 +86,7 @@ object SceneParams extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
             scribe.trace("@@@ SceneParams.DetectParams REVIEW GAME")
             Outcome(model)
             .addGlobalEvents(SceneEvent.JumpTo(SceneReview.name)) // sidestep the bootloader and review an old game
+            .addGlobalEvents(StartReviewGame)
           end if
 
 

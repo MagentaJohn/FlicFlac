@@ -20,11 +20,7 @@ object FlicFlacStartupData:
     FlicFlacStartupData(
       flicFlacBootData = flicFlacBootData,
       staticAssets = StaticAssets(
-        hexGraphic = GameAssets.gHex(1.0),
-        buttonSplashAsset = GameAssets.buttonSplashAssets(1.0),
-        buttonRulesAsset = GameAssets.buttonRulesAssets(1.0),
-        buttonPlayAsset = GameAssets.buttonPlayAssets(1.0),
-        buttonResultsAsset = GameAssets.buttonResultsAssets(1.0)
+        hexGraphic = GameAssets.gHex(1.0)
       )
     )
   scribe.debug("@@@ Object FlicFlacStartupData FINISH")
@@ -33,11 +29,7 @@ end FlicFlacStartupData
 final case class FlicFlacStartupData(flicFlacBootData: FlicFlacBootData, staticAssets: StaticAssets)
 
 final case class StaticAssets(
-    hexGraphic: Graphic[Material.ImageEffects],
-    buttonSplashAsset: ButtonAssets,
-    buttonRulesAsset: ButtonAssets,
-    buttonPlayAsset: ButtonAssets,
-    buttonResultsAsset: ButtonAssets
+    hexGraphic: Graphic[Material.ImageEffects]
 )
 
 final case class FlicFlacBootData(pixelWidth: Int, pixelHeight: Int, n1: String, n2: String, g3: String, viewport: GameViewport):

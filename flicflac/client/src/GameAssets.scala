@@ -127,92 +127,79 @@ object GameAssets:
 
   // Check FlacFont.txt for details
 
-  def buttonSplashAssets(sf: Double): ButtonAssets =
-    val up = Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(0, 0, 240, 80).scaleBy(sf, sf)
+  def buttonNewGameAssets(sf: Double): ButtonAssets =
+    val up =
+      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(0, 0, 240, 80).scaleBy(sf, sf)
     val over =
       Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(0, 80, 240, 80).scaleBy(sf, sf)
     val down =
       Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(0, 160, 240, 80).scaleBy(sf, sf)
     ButtonAssets(up, over, down)
-  end buttonSplashAssets
-
-  def buttonParamsAssets(sf: Double): ButtonAssets =
-    val up =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(240, 0, 240, 80).scaleBy(sf, sf)
-    val over =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(240, 80, 240, 80).scaleBy(sf, sf)
-    val down =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(240, 160, 240, 80).scaleBy(sf, sf)
-    ButtonAssets(up, over, down)
-  end buttonParamsAssets
-
-  def buttonPlayAssets(sf: Double): ButtonAssets =
-    val up =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(480, 0, 240, 80).scaleBy(sf, sf)
-    val over =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(480, 80, 240, 80).scaleBy(sf, sf)
-    val down =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(480, 160, 240, 80).scaleBy(sf, sf)
-    ButtonAssets(up, over, down)
-  end buttonPlayAssets
-
-  def buttonResultsAssets(sf: Double): ButtonAssets =
-    val up =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(720, 0, 240, 80).scaleBy(sf, sf)
-    val over =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(720, 80, 240, 80).scaleBy(sf, sf)
-    val down =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(720, 160, 240, 80).scaleBy(sf, sf)
-    ButtonAssets(up, over, down)
-  end buttonResultsAssets
-
-  def buttonRulesAssets(sf: Double): ButtonAssets =
-    val up =
-      Graphic(0, 0, 240, 80, 6, Material.ImageEffects(AssetName(bnAssetName))).withCrop(0, 240, 240, 80).scaleBy(sf, sf)
-    val over =
-      Graphic(0, 0, 240, 80, 6, Material.ImageEffects(AssetName(bnAssetName))).withCrop(0, 320, 240, 80).scaleBy(sf, sf)
-    val down =
-      Graphic(0, 0, 240, 80, 6, Material.ImageEffects(AssetName(bnAssetName))).withCrop(0, 400, 240, 80).scaleBy(sf, sf)
-    ButtonAssets(up, over, down)
-  end buttonRulesAssets
-
-  def buttonNewGameAssets(sf: Double): ButtonAssets =
-    val up =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(240, 240, 240, 80).scaleBy(sf, sf)
-    val over =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(240, 320, 240, 80).scaleBy(sf, sf)
-    val down =
-      Graphic(0, 0, 240, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(240, 400, 240, 80).scaleBy(sf, sf)
-    ButtonAssets(up, over, down)
   end buttonNewGameAssets
 
   def buttonPlusAssets(sf: Double): ButtonAssets =
-    val up = Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(960, 0, 90, 80).scaleBy(sf, sf)
+    val up = Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(300, 0, 90, 80).scaleBy(sf, sf)
     val over =
-      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(960, 80, 90, 80).scaleBy(sf, sf)
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(300, 80, 90, 80).scaleBy(sf, sf)
     val down =
-      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(960, 160, 90, 80).scaleBy(sf, sf)
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(300, 160, 90, 80).scaleBy(sf, sf)
     ButtonAssets(up, over, down)
   end buttonPlusAssets
 
   def buttonMinusAssets(sf: Double): ButtonAssets =
     val up =
-      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(960, 240, 90, 80).scaleBy(sf, sf)
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(400, 0, 90, 80).scaleBy(sf, sf)
     val over =
-      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(960, 320, 90, 80).scaleBy(sf, sf)
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(400, 80, 90, 80).scaleBy(sf, sf)
     val down =
-      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(960, 400, 90, 80).scaleBy(sf, sf)
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(400, 160, 90, 80).scaleBy(sf, sf)
     ButtonAssets(up, over, down)
   end buttonMinusAssets
 
   def buttonTurnAssets(sf: Double): ButtonAssets =
-    val up = Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(1050, 0, 90, 80).scaleBy(sf, sf)
+    val up = Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(500, 0, 90, 80).scaleBy(sf, sf)
     val over =
-      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(1050, 80, 90, 80).scaleBy(sf, sf)
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(500, 80, 90, 80).scaleBy(sf, sf)
     val down =
-      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(1050, 160, 90, 80).scaleBy(sf, sf)
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(500, 160, 90, 80).scaleBy(sf, sf)
     ButtonAssets(up, over, down)
   end buttonTurnAssets
+
+  def buttonReviewStartAssets(sf: Double): ButtonAssets =
+    val up = Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(0, 240, 90, 80).scaleBy(sf, sf)
+    val over =
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(0, 320, 90, 80).scaleBy(sf, sf)
+    val down =
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(0, 400, 90, 80).scaleBy(sf, sf)
+    ButtonAssets(up, over, down)
+  end buttonReviewStartAssets
+
+  def buttonReviewBackwardAssets(sf: Double): ButtonAssets =
+    val up = Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(100, 240, 90, 80).scaleBy(sf, sf)
+    val over =
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(100, 320, 90, 80).scaleBy(sf, sf)
+    val down =
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(100, 400, 90, 80).scaleBy(sf, sf)
+    ButtonAssets(up, over, down)
+  end buttonReviewBackwardAssets
+
+  def buttonReviewForwardAssets(sf: Double): ButtonAssets =
+    val up = Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(200, 240, 90, 80).scaleBy(sf, sf)
+    val over =
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(200, 320, 90, 80).scaleBy(sf, sf)
+    val down =
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(200, 400, 90, 80).scaleBy(sf, sf)
+    ButtonAssets(up, over, down)
+  end buttonReviewForwardAssets
+
+  def buttonReviewFinishAssets(sf: Double): ButtonAssets =
+    val up = Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(300, 240, 90, 80).scaleBy(sf, sf)
+    val over =
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(300, 320, 90, 80).scaleBy(sf, sf)
+    val down =
+      Graphic(0, 0, 90, 80, 6, Material.Bitmap(AssetName(bnAssetName))).withCrop(300, 400, 90, 80).scaleBy(sf, sf)
+    ButtonAssets(up, over, down)
+  end buttonReviewFinishAssets
 
   def cornerTopLeft: Graphic[Material.ImageEffects] =
     Graphic(Rectangle(0, 0, 20, 20), 2, Material.ImageEffects(AssetName(cnAssetName)))

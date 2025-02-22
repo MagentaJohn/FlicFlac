@@ -34,7 +34,7 @@ val hexBoard4 = new HexBoard4()
 val scorePanel = new ScorePanel()
 val paramsPanel = new ParamsPanel()
 val sharedTurnTimer = TurnTimer(0, 0, false, false, 0, 0)
-var gameStorage = new GameStorage("", PlayerParams("", "", 0, 0, 0, 0, 0, 0), List.empty)
+var gameStorage = new GameStorage("", PlayerParams("", "", 0, 0, 0, 0, 0, 0), 1, List.empty)
 
 case class FlicFlacGame(
     tyrianSubSystem: TyrianSubSystem[IO, Int, FlicFlacGameModel]
@@ -133,6 +133,7 @@ case class FlicFlacGame(
       FlicFlacViewModel(
         staticAssets,
         GameSceneViewModel.initial,
+        ReviewSceneViewModel.initial,
         flicFlacStartupData.flicFlacBootData.gameViewPort
       )
     )
@@ -221,6 +222,7 @@ end GetScaleFactor
 final case class FlicFlacViewModel(
     staticAssets: StaticAssets,
     gameScene: GameSceneViewModel,
+    reviewScene: ReviewSceneViewModel,
     theGameViewPort: GameViewport
 )
 
@@ -232,6 +234,11 @@ case object ButtonResultsEvent extends GlobalEvent
 case object ButtonParamsEvent extends GlobalEvent
 case object ButtonPlusEvent extends GlobalEvent
 case object ButtonMinusEvent extends GlobalEvent
+case object ButtonReviewStartEvent extends GlobalEvent
+case object ButtonReviewBackwardEvent extends GlobalEvent
+case object ButtonReviewForwardEvent extends GlobalEvent
+case object ButtonReviewFinishEvent extends GlobalEvent
+
 
 //ButtonTurnEvent needs to be an object so that it can be filtered and processed in the subsystem(s)
 //case object ButtonTurnEvent extends GlobalEvent
@@ -240,6 +247,7 @@ object ButtonTurnEvent:
 end ButtonTurnEvent
 
 case object StartLiveGame extends GlobalEvent
+case object StartReviewGame extends GlobalEvent
 
 object Freeze:
   case class PanelContent(panelType: PanelType, content: (String, String)) extends GlobalEvent
