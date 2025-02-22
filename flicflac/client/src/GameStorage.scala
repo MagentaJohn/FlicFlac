@@ -54,7 +54,12 @@ final case class GameStorage(
 ) derives Encoder.AsObject,
       Decoder:
 
-  def establishGameStorage(s1: String, s2: String): GameStorage =
+  def establishGameStorage(playerParams: PlayerParams): GameStorage =
+    scribe.debug("@@@ establishGameStorage")
+
+    val s1 = playerParams.playPams1_Name1
+    val s2 = playerParams.playPams2_Name2
+    
     val rootName = GAME_PREFIX + s1 + "-" + s2
     var index = 0
     var uniqueName = rootName + "-" + index.toString()
@@ -71,6 +76,7 @@ final case class GameStorage(
         index = index + 1
       end if
     end while
+    
     // create/append the game name to game index file
 
     val possibleStorageIndex = decode[StorageIndex](org.scalajs.dom.window.localStorage.getItem(GAME_INDEX_FILE)) match
@@ -87,7 +93,7 @@ final case class GameStorage(
 
     // ensure the list of turns is empty - possible reset during game ...
 
-    val gs1 = this.copy(name = uniqueName, turns = List())
+    val gs1 = this.copy(name = uniqueName, params = playerParams, turns = List())
     val gs1AsJson = gs1.asJson.noSpaces
     org.scalajs.dom.window.localStorage.setItem(uniqueName, gs1AsJson)
 

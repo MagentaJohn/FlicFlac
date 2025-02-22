@@ -60,10 +60,20 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               // we only cache changes when a new turn is indicated
               gameStorage = gameStorage.appendGameTurn(gameStorage, e.ffgm)
             end if
-
             if e.ffgm.turnNumber == 0 && model.turnNumber > 0 then
-              // the opponent has pressed the new game button so establish new cache
-              gameStorage = gameStorage.establishGameStorage(model.ourName, model.oppoName)
+              // the opponent has pressed the NEW GAME button so estyablish new cache
+              val playerParams = new PlayerParams(
+                model.ourName,
+                model.oppoName,
+                model.ourPieceType,
+                model.boardSize,
+                model.winningScore,
+                model.turnTimer.iTotalTurnTime,
+                model.turnTimer.iCaptorsTurnTime,
+                model.randEventFreq
+              )              
+              gameStorage = gameStorage.establishGameStorage(playerParams)
+              scribe.debug("FIXME calling establish TP1")
             end if
 
             if e.ffgm.gameState == GameState.FINISH then

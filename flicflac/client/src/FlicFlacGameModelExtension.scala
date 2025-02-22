@@ -110,16 +110,16 @@ extension (flicFlacGameModel: FlicFlacGameModel)
 
     val sOurName = previousModel.ourName
     val sOppoName = previousModel.oppoName
-    val iBoardSize = previousModel.boardSize
     val iOurPieceType = previousModel.ourPieceType
+    val iBoardSize = previousModel.boardSize
     val iWinningScore = previousModel.winningScore
-    val iRandEventFreq = previousModel.randEventFreq
     val score = (0, 0)
     val turnNumber = 0
     val highLighter = new HighLighter(false, PointXY(0, 0))
     val emptySpots: Spots = Spots(Set.empty)
     val turnTime = previousModel.turnTimer.iTotalTurnTime
     val captorsTime = previousModel.turnTimer.iCaptorsTurnTime
+    val iRandEventFreq = previousModel.randEventFreq
     val turnTimer1 = TurnTimer(turnTime, captorsTime)
     val turnTimer2 = sharedTurnTimer.restartForTurn(turnTimer1)
 
@@ -129,8 +129,22 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     // derive the client hexboard
     hexBoard4.derive(hexBoard)
 
+    // reconstruct the previous player params
+
+    val playerParams = new PlayerParams (
+      sOurName,
+      sOppoName,
+      iOurPieceType,
+      iBoardSize,
+      iWinningScore,
+      turnTime,
+      captorsTime,
+      iRandEventFreq
+    )
+
     // establish the new game storage cache
-    gameStorage = gameStorage.establishGameStorage(sOurName, sOppoName)
+
+    gameStorage = gameStorage.establishGameStorage(playerParams)
 
     FlicFlacGameModel(
       sOurName,

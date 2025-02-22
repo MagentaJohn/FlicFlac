@@ -111,7 +111,18 @@ case class FlicFlacGame(
     val newCaptorsTime = cachedParamsOrNew.playPams7_CaptorsTime
     val newTT = TurnTimer(newTurnTime, newCaptorsTime, false, false, 0, 0)
     val cachedGameOrNew = initialFlicFlacGameModel.retrieve(flicFlacStartupData)
-    gameStorage = gameStorage.establishGameStorage(cachedParamsOrNew.playPams1_Name1, cachedParamsOrNew.playPams2_Name2)
+    val reviewGameName = flicFlacStartupData.flicFlacBootData.g3
+    if reviewGameName.length == 0 then
+      // we are playing a live game
+      gameStorage = gameStorage.establishGameStorage(cachedParamsOrNew)      
+    else
+      // we are reviewing a previous game
+      gameStorage = gameStorage.readGameStorage(reviewGameName) match
+        case Some(gs) => gs
+        case None => 
+          scribe.error("@@@ GameStorage Database FlicFlac-Index corrupted")
+          new GameStorage(reviewGameName, cachedParamsOrNew, 0, List.empty)      
+    end if
 
     val updatedGame = cachedGameOrNew.copy(turnTimer = newTT)
 

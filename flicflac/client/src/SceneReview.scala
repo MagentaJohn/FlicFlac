@@ -82,91 +82,94 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
       model: FlicFlacGameModel
   ): GlobalEvent => Outcome[FlicFlacGameModel] =
     e =>
-      e match
+      try
+        e match
 
-        case StartReviewGame =>
-          scribe.debug("@@@ StartReviewGame")
-          val storageName = context.frameContext.startUpData.flicFlacBootData.g3
-          gameStorage.readGameStorage(storageName) match
-            case Some(gs: GameStorage) =>
-              scribe.debug("@@@ readGameStorage:" + storageName + " has " + gs.turns.length + " turns")
-              gameStorage = gs.traverseGameStorage(StepType.ST_Start)
-              val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
-              Outcome(newModel)
+          case StartReviewGame =>
+            scribe.debug("@@@ StartReviewGame")
+            val storageName = context.frameContext.startUpData.flicFlacBootData.g3
+            gameStorage = gameStorage.readGameStorage(storageName) match
+              case Some(gs: GameStorage) =>
+                scribe.debug("@@@ readGameStorage:" + storageName + " has " + gs.turns.length + " turns")
+                gs
+              case None =>
+                scribe.error("@@@ readGameStorage:" + storageName + " not found")
+                throw new Exception("Invalid Entry in database for Game Storage ... FlicFlac-Index")
 
-            case None =>
-              scribe.debug("@@@ readGameStorage:" + storageName + " not found")
-              None
-          end match
-          Outcome(model)
+            val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
+            Outcome(newModel).addGlobalEvents(ButtonReviewStartEvent)
 
-        case k: KeyboardEvent.KeyDown =>
-          if k.keyCode == Key.UP_ARROW then Outcome(model).addGlobalEvents(ButtonReviewStartEvent)
-          else if k.keyCode == Key.LEFT_ARROW then Outcome(model).addGlobalEvents(ButtonReviewBackwardEvent)
-          else if k.keyCode == Key.RIGHT_ARROW then Outcome(model).addGlobalEvents(ButtonReviewForwardEvent)
-          else if k.keyCode == Key.DOWN_ARROW then Outcome(model).addGlobalEvents(ButtonReviewFinishEvent)
-          else Outcome(model)
-          end if
+          case k: KeyboardEvent.KeyDown =>
+            if k.keyCode == Key.UP_ARROW then Outcome(model).addGlobalEvents(ButtonReviewStartEvent)
+            else if k.keyCode == Key.LEFT_ARROW then Outcome(model).addGlobalEvents(ButtonReviewBackwardEvent)
+            else if k.keyCode == Key.RIGHT_ARROW then Outcome(model).addGlobalEvents(ButtonReviewForwardEvent)
+            else if k.keyCode == Key.DOWN_ARROW then Outcome(model).addGlobalEvents(ButtonReviewFinishEvent)
+            else Outcome(model)
+            end if
 
-        case ButtonPlusEvent =>
-          scribe.debug("@@@ ButtonPlusEvent")
-          val oldSF = hexBoard4.scalingFactor
-          val newSF = increaseScaleFactor(oldSF)
-          hexBoard4.calculateXsYs(newSF)
-          hexBoard4.calculateGridPaintLayer()
-          Outcome(model)
+          case ButtonPlusEvent =>
+            scribe.debug("@@@ ButtonPlusEvent")
+            val oldSF = hexBoard4.scalingFactor
+            val newSF = increaseScaleFactor(oldSF)
+            hexBoard4.calculateXsYs(newSF)
+            hexBoard4.calculateGridPaintLayer()
+            Outcome(model)
 
-        case ButtonMinusEvent =>
-          scribe.debug("@@@ ButtonMinusEvent")
-          val oldSF = hexBoard4.scalingFactor
-          val newSF = decreaseScaleFactor(oldSF)
-          hexBoard4.calculateXsYs(newSF)
-          hexBoard4.calculateGridPaintLayer()
-          Outcome(model)
+          case ButtonMinusEvent =>
+            scribe.debug("@@@ ButtonMinusEvent")
+            val oldSF = hexBoard4.scalingFactor
+            val newSF = decreaseScaleFactor(oldSF)
+            hexBoard4.calculateXsYs(newSF)
+            hexBoard4.calculateGridPaintLayer()
+            Outcome(model)
 
-        case ViewportResize(gameViewPort) =>
-          var dSF = 1.0
-          if model.getStartUpStates().contains(model.gameState) then
-            scribe.debug("@@@ ViewPortResize from scratch")
-            val w = gameViewPort.width - hexBoard4.pBase.x
-            val h = gameViewPort.height - hexBoard4.pBase.y
-            dSF = GetScaleFactor(w, h, GameAssets.GetGameSceneDimensions(model.boardSize))
-            scribe.debug("@@@ updateModel ViewportResize w:h->s " + w + ":" + h + "->" + dSF)
-          else
-            dSF = hexBoard4.scalingFactor
-            scribe.debug("@@@ ViewPortResize from previous model sf=" + dSF)
-          end if
+          case ViewportResize(gameViewPort) =>
+            var dSF = 1.0
+            if model.getStartUpStates().contains(model.gameState) then
+              scribe.debug("@@@ ViewPortResize from scratch")
+              val w = gameViewPort.width - hexBoard4.pBase.x
+              val h = gameViewPort.height - hexBoard4.pBase.y
+              dSF = GetScaleFactor(w, h, GameAssets.GetGameSceneDimensions(model.boardSize))
+              scribe.debug("@@@ updateModel ViewportResize w:h->s " + w + ":" + h + "->" + dSF)
+            else
+              dSF = hexBoard4.scalingFactor
+              scribe.debug("@@@ ViewPortResize from previous model sf=" + dSF)
+            end if
 
-          hexBoard4.calculateXsYs(dSF)
-          hexBoard4.calculateGridPaintLayer()
-          Outcome(model)
+            hexBoard4.calculateXsYs(dSF)
+            hexBoard4.calculateGridPaintLayer()
+            Outcome(model)
 
-        case ButtonReviewStartEvent =>
-          scribe.debug("@@@ ButtonReviewStartEvent")
-          gameStorage = gameStorage.traverseGameStorage(StepType.ST_Start)
-          val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
-          Outcome(newModel)
+          case ButtonReviewStartEvent =>
+            scribe.debug("@@@ ButtonReviewStartEvent")
+            gameStorage = gameStorage.traverseGameStorage(StepType.ST_Start)
+            val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
+            Outcome(newModel)
 
-        case ButtonReviewBackwardEvent =>
-          scribe.debug("@@@ ButtonReviewBackwardEvent")
-          gameStorage = gameStorage.traverseGameStorage(StepType.ST_Backward)
-          val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
-          Outcome(newModel)
+          case ButtonReviewBackwardEvent =>
+            scribe.debug("@@@ ButtonReviewBackwardEvent")
+            gameStorage = gameStorage.traverseGameStorage(StepType.ST_Backward)
+            val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
+            Outcome(newModel)
 
-        case ButtonReviewForwardEvent =>
-          scribe.debug("@@@ ButtonReviewForwardEvent")
-          gameStorage = gameStorage.traverseGameStorage(StepType.ST_Forward)
-          val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
-          Outcome(newModel)
+          case ButtonReviewForwardEvent =>
+            scribe.debug("@@@ ButtonReviewForwardEvent")
+            gameStorage = gameStorage.traverseGameStorage(StepType.ST_Forward)
+            val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
+            Outcome(newModel)
 
-        case ButtonReviewFinishEvent =>
-          scribe.debug("@@@ ButtonReviewFinishEvent")
-          gameStorage = gameStorage.traverseGameStorage(StepType.ST_Finish)
-          val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
-          Outcome(newModel)
+          case ButtonReviewFinishEvent =>
+            scribe.debug("@@@ ButtonReviewFinishEvent")
+            gameStorage = gameStorage.traverseGameStorage(StepType.ST_Finish)
+            val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
+            Outcome(newModel)
 
-        case _ =>
-          Outcome(model)
+          case _ =>
+            Outcome(model)
+      catch         
+        case t: Throwable =>
+          scribe.error("SceneReview updateModel " + t.getMessage())
+          Outcome(model).addGlobalEvents(Freeze.PanelContent(PanelType.P_ERROR, ("Error", t.getMessage())))
 
   def present(
       context: SceneContext[FlicFlacStartupData],
@@ -207,7 +210,7 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
     val rRight = Rectangle(Point(iLeftWidth, 0), Size(iRightWidth, iHeight))
     val rCorners = Rectangle(Point(iLeftWidth, 0), Size(iRightWidth + hexBoard4.pBase.x, iHeight))
 
-    val g3Text = context.frameContext.startUpData._1.g3
+    val g3Text = context.frameContext.startUpData._1.g3.drop(4) // remove the prefix "###-"
     val gameName =
       TextBox(g3Text + "    ", iRightWidth, 50) // adding 4 spaces to get a simple central alignment
         .bold.alignCenter
@@ -216,16 +219,12 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
         .scaleBy(dSF, dSF)
         .moveTo(iLeftWidth, 2)
 
-    // FIXME for this view make the Turn:1 of N
-
     val turnLabel = TextBox("Turn:" + (model.turnNumber).toString() + "/" + (gameStorage.turns.length - 1).toString(), 250, 40).alignLeft
       .withColor(RGBA.Black)
       .bold
       .withFontSize(Pixels(40))
       .scaleBy(dSF, dSF)
       .moveTo(x12, y12)
-
-
 
 // format: off
 
