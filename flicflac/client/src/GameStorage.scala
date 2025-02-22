@@ -128,7 +128,7 @@ final case class GameStorage(
     possibleGameStorage
   end readGameStorage
 
-  def traverseGameStorage(step: StepType) : GameStorage =
+  def traverseGameStorage(step: StepType): GameStorage =
     step match
       case StepType.ST_Start =>
         this.copy(turnNo = 1)
@@ -145,7 +145,7 @@ final case class GameStorage(
         this.copy(turnNo = turns.length)
   end traverseGameStorage
 
-  def meldStorageToModel( startUpData: FlicFlacStartupData, model: FlicFlacGameModel) : FlicFlacGameModel =
+  def meldStorageToModel(startUpData: FlicFlacStartupData, model: FlicFlacGameModel): FlicFlacGameModel =
 
     scribe.debug("@@@ meldStorageToModel:" + this.params.playPams8_RandEventProb)
     val newBoardSize = this.params.playPams4_BoardSize
@@ -156,7 +156,7 @@ final case class GameStorage(
 
     // lets ensure i1 which is internal turn number satisifes 0 <= i1 <= (turns.length -1)
     val i0 = (this.turnNo - 1).max(0)
-    val i1 = (i0).min(this.turns.length -1)
+    val i1 = (i0).min(this.turns.length - 1)
 
     val newGameState = this.turns(i1).moveType
     val newPieceType = // match the piece type to the game state in order to get the Score Panel to track the players
@@ -167,7 +167,8 @@ final case class GameStorage(
         // cylinder
         CYLINDER
       end if
-        
+    end newPieceType
+
     val newGameScore = this.turns(i1).score
     val newTurnNo = this.turns(i1).moveNumber
 
@@ -181,11 +182,11 @@ final case class GameStorage(
 
       val q = p1.qrPos._1
       val r = p1.qrPos._2
-      val s = -q -r
-      val aXaY = hexBoard.getAxAyfromQRS(q,r,s)
-      val xy = hexBoard.getAxAyfromQRS(q,r,s)
+      val s = -q - r
+      val aXaY = hexBoard.getAxAyfromQRS(q, r, s)
+      val xy = hexBoard.getAxAyfromQRS(q, r, s)
       val xy1 = PointXY(xy._1, xy._2)
-      val xy0 = PointXY(0,0)
+      val xy0 = PointXY(0, 0)
       val bf = p1.bFlipped
       val bc = p1.bCaptured
 
@@ -209,6 +210,5 @@ final case class GameStorage(
       turnTimer = TurnTimer(newTurnTime, newCaptorsTime)
     )
   end meldStorageToModel
-
 
 end GameStorage

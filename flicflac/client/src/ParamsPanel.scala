@@ -28,7 +28,7 @@ final case class ParamsPanel():
         .scaleBy(dSF, dSF)
         .moveTo(p1Scaled)
 
-    val param2 = 
+    val param2 =
       TextBox((model.turnTimer.iTotalTurnTime).toString(), 110, 70).bold
         .withColor(RGBA.Black)
         .withFontSize(Pixels(60))

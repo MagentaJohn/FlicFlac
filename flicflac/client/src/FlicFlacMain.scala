@@ -239,7 +239,6 @@ case object ButtonReviewBackwardEvent extends GlobalEvent
 case object ButtonReviewForwardEvent extends GlobalEvent
 case object ButtonReviewFinishEvent extends GlobalEvent
 
-
 //ButtonTurnEvent needs to be an object so that it can be filtered and processed in the subsystem(s)
 //case object ButtonTurnEvent extends GlobalEvent
 object ButtonTurnEvent:

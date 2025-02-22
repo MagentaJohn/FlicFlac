@@ -53,8 +53,6 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
     newSF
   end decreaseScaleFactor
 
-
-
   def updateViewModel(
       context: SceneContext[FlicFlacStartupData],
       model: FlicFlacGameModel,
@@ -77,6 +75,7 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
 
     case _ =>
       Outcome(viewModel)
+  end updateViewModel
 
   def updateModel(
       context: SceneContext[FlicFlacStartupData],
@@ -85,32 +84,28 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
     e =>
       e match
 
-        case StartReviewGame => 
+        case StartReviewGame =>
           scribe.debug("@@@ StartReviewGame")
           val storageName = context.frameContext.startUpData.flicFlacBootData.g3
           gameStorage.readGameStorage(storageName) match
-          case Some(gs: GameStorage) =>
-            scribe.debug("@@@ readGameStorage:" + storageName + " has " + gs.turns.length + " turns")
-            gameStorage = gs.traverseGameStorage(StepType.ST_Start)
-            val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
-            Outcome(newModel)
-            
-          case None =>
-            scribe.debug("@@@ readGameStorage:" + storageName + " not found")
-            None
+            case Some(gs: GameStorage) =>
+              scribe.debug("@@@ readGameStorage:" + storageName + " has " + gs.turns.length + " turns")
+              gameStorage = gs.traverseGameStorage(StepType.ST_Start)
+              val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
+              Outcome(newModel)
+
+            case None =>
+              scribe.debug("@@@ readGameStorage:" + storageName + " not found")
+              None
+          end match
           Outcome(model)
 
         case k: KeyboardEvent.KeyDown =>
-          if k.keyCode == Key.UP_ARROW then 
-            Outcome(model).addGlobalEvents(ButtonReviewStartEvent)
-          else if k.keyCode == Key.LEFT_ARROW then 
-            Outcome(model).addGlobalEvents(ButtonReviewBackwardEvent)
-          else if k.keyCode == Key.RIGHT_ARROW then 
-            Outcome(model).addGlobalEvents(ButtonReviewForwardEvent)
-          else if k.keyCode == Key.DOWN_ARROW then 
-            Outcome(model).addGlobalEvents(ButtonReviewFinishEvent)
-          else 
-            Outcome(model)
+          if k.keyCode == Key.UP_ARROW then Outcome(model).addGlobalEvents(ButtonReviewStartEvent)
+          else if k.keyCode == Key.LEFT_ARROW then Outcome(model).addGlobalEvents(ButtonReviewBackwardEvent)
+          else if k.keyCode == Key.RIGHT_ARROW then Outcome(model).addGlobalEvents(ButtonReviewForwardEvent)
+          else if k.keyCode == Key.DOWN_ARROW then Outcome(model).addGlobalEvents(ButtonReviewFinishEvent)
+          else Outcome(model)
           end if
 
         case ButtonPlusEvent =>
@@ -146,25 +141,25 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
           hexBoard4.calculateGridPaintLayer()
           Outcome(model)
 
-        case ButtonReviewStartEvent => 
+        case ButtonReviewStartEvent =>
           scribe.debug("@@@ ButtonReviewStartEvent")
           gameStorage = gameStorage.traverseGameStorage(StepType.ST_Start)
           val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
           Outcome(newModel)
 
-        case ButtonReviewBackwardEvent => 
+        case ButtonReviewBackwardEvent =>
           scribe.debug("@@@ ButtonReviewBackwardEvent")
           gameStorage = gameStorage.traverseGameStorage(StepType.ST_Backward)
           val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
           Outcome(newModel)
 
-        case ButtonReviewForwardEvent => 
+        case ButtonReviewForwardEvent =>
           scribe.debug("@@@ ButtonReviewForwardEvent")
           gameStorage = gameStorage.traverseGameStorage(StepType.ST_Forward)
           val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
           Outcome(newModel)
 
-        case ButtonReviewFinishEvent => 
+        case ButtonReviewFinishEvent =>
           scribe.debug("@@@ ButtonReviewFinishEvent")
           gameStorage = gameStorage.traverseGameStorage(StepType.ST_Finish)
           val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
@@ -202,7 +197,6 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
         .scaleBy(dSF, dSF)
         .moveTo(x11, y11)
 
-
     val width = GameAssets.GetGameSceneDimensions(8).width // default size 8
     val height = GameAssets.GetGameSceneDimensions(8).height // default size 8
 
@@ -215,7 +209,7 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
 
     val g3Text = context.frameContext.startUpData._1.g3
     val gameName =
-      TextBox( g3Text + "    ", iRightWidth, 50) // adding 4 spaces to get a simple central alignment
+      TextBox(g3Text + "    ", iRightWidth, 50) // adding 4 spaces to get a simple central alignment
         .bold.alignCenter
         .withColor(RGBA.Black)
         .withFontSize(Pixels(40))
@@ -224,12 +218,12 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
 
     // FIXME for this view make the Turn:1 of N
 
-    val turnLabel = TextBox("Turn:" + (model.turnNumber).toString() + "/" + (gameStorage.turns.length -1).toString(), 250, 40).alignLeft
+    val turnLabel = TextBox("Turn:" + (model.turnNumber).toString() + "/" + (gameStorage.turns.length - 1).toString(), 250, 40).alignLeft
       .withColor(RGBA.Black)
       .bold
       .withFontSize(Pixels(40))
       .scaleBy(dSF, dSF)
-      .moveTo(x12, y12)        
+      .moveTo(x12, y12)
 
 
 
@@ -258,7 +252,6 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
 // format: on
   end present
 
-
 end SceneReview
 
 final case class ReviewSceneViewModel(
@@ -269,7 +262,7 @@ final case class ReviewSceneViewModel(
     startButton: Button,
     backwardButton: Button,
     forwardButton: Button,
-    finishButton: Button,
+    finishButton: Button
 ):
   def update(mouse: Mouse, pointers: Pointers): Outcome[ReviewSceneViewModel] =
     for

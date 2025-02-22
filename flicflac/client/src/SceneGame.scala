@@ -47,8 +47,9 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
             hexBoard4.derive(hexBoard) // ........................................ establish new hexboard
             val startingPieces = model.pieces.summonPieces(hexBoard) // .......... establish new starting positions
             val newModel = model.copy( // ........................................ create new model as first turn to be stored
-                  pieces = startingPieces,
-                  gameState = GameState.CYLINDER_TURN)
+              pieces = startingPieces,
+              gameState = GameState.CYLINDER_TURN
+            )
             gameStorage = gameStorage.appendGameTurn(gameStorage, newModel) // ... write starting positions as first turn stored
             model.modifyPieces(newModel, startingPieces) // ...................... update model and send to remote
 
