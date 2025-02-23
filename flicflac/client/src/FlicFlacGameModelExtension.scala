@@ -131,7 +131,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
 
     // reconstruct the previous player params
 
-    val playerParams = new PlayerParams (
+    val playerParams = new PlayerParams(
       sOurName,
       sOppoName,
       iOurPieceType,
@@ -199,7 +199,7 @@ extension (flicFlacGameModel: FlicFlacGameModel)
     val ourName = playerParams.playPams1_Name1
     val oppoName = playerParams.playPams2_Name2
 
-    val gameCache = getGameName(ourName, oppoName)
+    val gameCache = getGameName(ourName, oppoName) // this generates "FlicFlac-Game1" or "FlicFlac-Game2"
     val cacheOrNew = decode[FlicFlacGameModel](org.scalajs.dom.window.localStorage.getItem(gameCache)) match
       case Right(model: FlicFlacGameModel) =>
         scribe.debug("@@@ Restored model")

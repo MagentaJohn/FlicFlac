@@ -71,7 +71,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
                 model.turnTimer.iTotalTurnTime,
                 model.turnTimer.iCaptorsTurnTime,
                 model.randEventFreq
-              )              
+              )
               gameStorage = gameStorage.establishGameStorage(playerParams)
               scribe.debug("FIXME calling establish TP1")
             end if
@@ -322,13 +322,13 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
             hexBoard4.calculateGridPaintLayer()
             Outcome(model)
 
-          case ButtonTurnEvent.Occurence() =>
+          case ButtonTurnEvent =>
             checkTurnValidAndThrow(model, "Button NEW TURN Event") // throws exception if out of turn
             scribe.debug("@@@ ButtonTurnEvent")
-            val emptySpots = Spots(Set.empty)
-            val newScore = model.pieces.extraTurnScoring(model)
             val captors = Melee(model).detectCaptors(model, hexBoard)
             if captors.isEmpty then
+              val emptySpots = Spots(Set.empty)
+              val newScore = model.pieces.extraTurnScoring(model)
               val newTT = sharedTurnTimer.restartForTurn(model.turnTimer)
               val newPieces = model.pieces.newTurn(model)
               val cylinderScore = newScore._1
@@ -376,32 +376,37 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               val interimTurnNumber = model.turnNumber + 1
               val newModel1 = model.copy(turnNumber = interimTurnNumber)
               gameStorage = gameStorage.appendGameTurn(gameStorage, newModel1)
+              model.modify(newModel1, None, None).addGlobalEvents(CaptorsEvent)
+            end if
 
-              val newTT = sharedTurnTimer.restartForCaptors(newModel1.turnTimer)
-              val newPieces = Melee(model).rewardCaptors(newModel1, captors)
-              val newTurnNumber = newModel1.turnNumber + 1
+          case CaptorsEvent =>
+            val emptySpots = Spots(Set.empty)
+            val captors = Melee(model).detectCaptors(model, hexBoard)
+            val newScore = model.pieces.extraTurnScoring(model)
+            val newTT = sharedTurnTimer.restartForCaptors(model.turnTimer)
+            val newPieces = Melee(model).rewardCaptors(model, captors)
+            val newTurnNumber = model.turnNumber + 1
 
-              val newModel2 =
-                newModel1.copy(pieces = newPieces, possibleMoveSpots = emptySpots, gameScore = newScore, turnNumber = newTurnNumber, turnTimer = newTT)
+            val newModel2 =
+              model.copy(pieces = newPieces, possibleMoveSpots = emptySpots, gameScore = newScore, turnNumber = newTurnNumber, turnTimer = newTT)
 
-              gameStorage = gameStorage.appendGameTurn(gameStorage, newModel2)
+            gameStorage = gameStorage.appendGameTurn(gameStorage, newModel2)
 
-              if newModel2.gameState == GameState.FINISH then
-                val results = constructResults(newModel2)
-                model
-                  .modify(newModel2, None, None)
-                  .addGlobalEvents(Freeze.PanelContent(PanelType.P_RESULTS, results))
-              else
-                // model ongoing
-                model.modify(newModel2, None, None)
-              end if
+            if newModel2.gameState == GameState.FINISH then
+              val results = constructResults(newModel2)
+              model
+                .modify(newModel2, None, None)
+                .addGlobalEvents(Freeze.PanelContent(PanelType.P_RESULTS, results))
+            else
+              // model ongoing
+              model.modify(newModel2, None, None)
             end if
 
           // FIXME ... Keyboard Interface for testing purposes only ...
           case k: KeyboardEvent.KeyDown =>
             if k.keyCode == Key.ADD then Outcome(model).addGlobalEvents(ButtonPlusEvent)
             else if k.keyCode == Key.SUBTRACT then Outcome(model).addGlobalEvents(ButtonMinusEvent)
-            else if k.keyCode == Key.ENTER then Outcome(model).addGlobalEvents(ButtonTurnEvent.Occurence())
+            else if k.keyCode == Key.ENTER then Outcome(model).addGlobalEvents(ButtonTurnEvent)
             else if k.keyCode == Key.F3 then Outcome(model).addGlobalEvents(SceneEvent.Previous)
             else if k.keyCode == Key.F4 then
               // ...
@@ -424,7 +429,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               val bBlock = (model.gameState == GameState.BLOCK_TURN) && (model.ourPieceType == BLOCK)
               if (bCylinder == true) || (bBlock == true) then
                 // signal a button turn event to switch players
-                Outcome(model).addGlobalEvents(ButtonTurnEvent.Occurence())
+                Outcome(model).addGlobalEvents(ButtonTurnEvent)
               else
                 // timer still running
                 Outcome(model)
@@ -683,7 +688,7 @@ final case class GameSceneViewModel(
         buttonAssets = GameAssets.buttonTurnAssets(dSF),
         bounds = GameAssets.scaleButtonBounds(GameSceneViewModel.turnBounds, dSF),
         depth = Depth(6)
-      ).withUpActions(ButtonTurnEvent.Occurence())
+      ).withUpActions(ButtonTurnEvent)
 
     this.copy(
       // scalingFactor
@@ -731,7 +736,7 @@ object GameSceneViewModel:
         buttonAssets = GameAssets.buttonTurnAssets(1.0),
         bounds = turnBounds,
         depth = Depth(6)
-      ).withUpActions(ButtonTurnEvent.Occurence())
+      ).withUpActions(ButtonTurnEvent)
     )
 end GameSceneViewModel
 

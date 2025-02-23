@@ -59,7 +59,7 @@ final case class GameStorage(
 
     val s1 = playerParams.playPams1_Name1
     val s2 = playerParams.playPams2_Name2
-    
+
     val rootName = GAME_PREFIX + s1 + "-" + s2
     var index = 0
     var uniqueName = rootName + "-" + index.toString()
@@ -76,7 +76,6 @@ final case class GameStorage(
         index = index + 1
       end if
     end while
-    
     // create/append the game name to game index file
 
     val possibleStorageIndex = decode[StorageIndex](org.scalajs.dom.window.localStorage.getItem(GAME_INDEX_FILE)) match
@@ -153,7 +152,7 @@ final case class GameStorage(
 
   def meldStorageToModel(startUpData: FlicFlacStartupData, model: FlicFlacGameModel): FlicFlacGameModel =
 
-    scribe.debug("@@@ meldStorageToModel:" + this.params.playPams8_RandEventProb)
+    scribe.debug("@@@ meldStorageToModel")
     val newBoardSize = this.params.playPams4_BoardSize
     val newWinningScore = this.params.playPams5_ScoreToWin
     val newTurnTime = this.params.playPams6_TurnTime
@@ -183,6 +182,7 @@ final case class GameStorage(
     for p1 <- this.turns(i1).deployment do // p1 is a "miniPiece"
 
       val p2 = model.pieces.modelPieces(pieceIndex)
+
       val sh = p2.pieceShape
       val id = p2.pieceIdentity
 
@@ -201,7 +201,6 @@ final case class GameStorage(
       newPieces = newPieces :+ p3
 
       pieceIndex = pieceIndex + 1
-
     end for
 
     model.copy(

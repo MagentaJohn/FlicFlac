@@ -102,33 +102,43 @@ case class FlicFlacGame(
   end boot
 
   def initialModel(flicFlacStartupData: FlicFlacStartupData): Outcome[FlicFlacGameModel] =
-    scribe.debug("@@@ FlicFlacMain-initialModel()")
     val pp = new PlayerParams("", "", 0, 0, 0, 0, 0, 0) // dummy PlayerParams to get access to getParams
     val cachedParamsOrNew = pp.getParams(flicFlacStartupData)
-    scribe.debug(s"@@@ PlayerParams: $cachedParamsOrNew")
-    val initialFlicFlacGameModel = FlicFlacGameModel()
-    val newTurnTime = cachedParamsOrNew.playPams6_TurnTime
-    val newCaptorsTime = cachedParamsOrNew.playPams7_CaptorsTime
-    val newTT = TurnTimer(newTurnTime, newCaptorsTime, false, false, 0, 0)
-    val cachedGameOrNew = initialFlicFlacGameModel.retrieve(flicFlacStartupData)
+
     val reviewGameName = flicFlacStartupData.flicFlacBootData.g3
     if reviewGameName.length == 0 then
-      // we are playing a live game
-      gameStorage = gameStorage.establishGameStorage(cachedParamsOrNew)      
+      scribe.debug("@@@ FlicFlacMain-initialModel() for live game")
+      scribe.debug(s"@@@ PlayerParams: $cachedParamsOrNew")
+      val initialFlicFlacGameModel = FlicFlacGameModel()
+      val newTurnTime = cachedParamsOrNew.playPams6_TurnTime
+      val newCaptorsTime = cachedParamsOrNew.playPams7_CaptorsTime
+      val newTT = TurnTimer(newTurnTime, newCaptorsTime, false, false, 0, 0)
+      val cachedGameOrNew = initialFlicFlacGameModel.retrieve(flicFlacStartupData)
+      gameStorage = gameStorage.establishGameStorage(cachedParamsOrNew)
+      val updatedGame = cachedGameOrNew.copy(turnTimer = newTT)
+
+      Outcome(updatedGame)
+        .addGlobalEvents(DetectParams)
+        .addGlobalEvents(WebRtcEvent.MakePeerEntity)
     else
-      // we are reviewing a previous game
+      scribe.debug("@@@ FlicFlacMain-initialModel() for review game")
       gameStorage = gameStorage.readGameStorage(reviewGameName) match
         case Some(gs) => gs
-        case None => 
+        case None =>
           scribe.error("@@@ GameStorage Database FlicFlac-Index corrupted")
-          new GameStorage(reviewGameName, cachedParamsOrNew, 0, List.empty)      
+          new GameStorage(reviewGameName, cachedParamsOrNew, 0, List.empty)
+
+      // create the shared hexboard
+      hexBoard.forge(gameStorage.params.playPams4_BoardSize)
+
+      // derive the client hexboard, hexboard4
+      hexBoard4.derive(hexBoard)
+
+      val model1 = FlicFlacGameModel()
+      val model2 = model1.creation(gameStorage.params)
+      Outcome(model2)
+        .addGlobalEvents(DetectParams)
     end if
-
-    val updatedGame = cachedGameOrNew.copy(turnTimer = newTT)
-
-    Outcome(updatedGame)
-      .addGlobalEvents(DetectParams)
-      .addGlobalEvents(WebRtcEvent.MakePeerEntity)
   end initialModel
 
   def initialViewModel(
@@ -249,13 +259,8 @@ case object ButtonReviewStartEvent extends GlobalEvent
 case object ButtonReviewBackwardEvent extends GlobalEvent
 case object ButtonReviewForwardEvent extends GlobalEvent
 case object ButtonReviewFinishEvent extends GlobalEvent
-
-//ButtonTurnEvent needs to be an object so that it can be filtered and processed in the subsystem(s)
-//case object ButtonTurnEvent extends GlobalEvent
-object ButtonTurnEvent:
-  case class Occurence() extends GlobalEvent
-end ButtonTurnEvent
-
+case object ButtonTurnEvent extends GlobalEvent
+case object CaptorsEvent extends GlobalEvent
 case object StartLiveGame extends GlobalEvent
 case object StartReviewGame extends GlobalEvent
 

@@ -96,8 +96,14 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
                 scribe.error("@@@ readGameStorage:" + storageName + " not found")
                 throw new Exception("FlicFlac-Index internal fault")
 
-            val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
-            Outcome(newModel).addGlobalEvents(ButtonReviewStartEvent)
+            val startingPieces = model.pieces.summonPieces(hexBoard) // .......... establish new starting positions
+            val newModel1 = model.copy( // ........................................ create new model as first turn to be stored
+              pieces = startingPieces,
+              gameState = GameState.CYLINDER_TURN
+            )
+
+            val newModel2 = gameStorage.meldStorageToModel(context.frameContext.startUpData, newModel1)
+            Outcome(newModel2).addGlobalEvents(ButtonReviewStartEvent)
 
           case k: KeyboardEvent.KeyDown =>
             if k.keyCode == Key.UP_ARROW then Outcome(model).addGlobalEvents(ButtonReviewStartEvent)
@@ -166,7 +172,7 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
 
           case _ =>
             Outcome(model)
-      catch         
+      catch
         case t: Throwable =>
           scribe.error("SceneReview updateModel " + t.getMessage())
           Outcome(model).addGlobalEvents(Freeze.PanelContent(PanelType.P_ERROR, ("Error", t.getMessage())))
