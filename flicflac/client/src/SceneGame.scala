@@ -373,23 +373,27 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
               end if
             else
               scribe.debug("@@@ CAPTORS @@@")
-              val newTT = sharedTurnTimer.restartForCaptors(model.turnTimer)
-              val newPieces = Melee(model).rewardCaptors(model, captors)
-              val newTurnNumber = model.turnNumber + 1
+              val interimTurnNumber = model.turnNumber + 1
+              val newModel1 = model.copy(turnNumber = interimTurnNumber)
+              gameStorage = gameStorage.appendGameTurn(gameStorage, newModel1)
 
-              val newModel =
-                model.copy(pieces = newPieces, possibleMoveSpots = emptySpots, gameScore = newScore, turnNumber = newTurnNumber, turnTimer = newTT)
+              val newTT = sharedTurnTimer.restartForCaptors(newModel1.turnTimer)
+              val newPieces = Melee(model).rewardCaptors(newModel1, captors)
+              val newTurnNumber = newModel1.turnNumber + 1
 
-              gameStorage = gameStorage.appendGameTurn(gameStorage, newModel)
+              val newModel2 =
+                newModel1.copy(pieces = newPieces, possibleMoveSpots = emptySpots, gameScore = newScore, turnNumber = newTurnNumber, turnTimer = newTT)
 
-              if newModel.gameState == GameState.FINISH then
-                val results = constructResults(newModel)
+              gameStorage = gameStorage.appendGameTurn(gameStorage, newModel2)
+
+              if newModel2.gameState == GameState.FINISH then
+                val results = constructResults(newModel2)
                 model
-                  .modify(newModel, None, None)
+                  .modify(newModel2, None, None)
                   .addGlobalEvents(Freeze.PanelContent(PanelType.P_RESULTS, results))
               else
                 // model ongoing
-                model.modify(newModel, None, None)
+                model.modify(newModel2, None, None)
               end if
             end if
 
@@ -595,6 +599,8 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         .withFontSize(Pixels(20))
         .moveTo(0, 0)
 
+    val ourPieceShape = model.ourPieceType
+
 // format: off
 
     Outcome(
@@ -609,7 +615,7 @@ object SceneGame extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFlacV
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(viewModel.turnButton.draw))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(youAre))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(turnLabel))
-        |+| SceneUpdateFragment(LayerKeys.Middleground -> scorePanel.paint(model, bBlinkOn, dSF))
+        |+| SceneUpdateFragment(LayerKeys.Middleground -> scorePanel.paint(model, ourPieceShape, bBlinkOn, dSF))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> paramsPanel.paint(model, dSF))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(viewModel.plusButton.draw))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(zoomLabel))

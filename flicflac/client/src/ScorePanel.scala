@@ -15,7 +15,7 @@ final case class ScorePanel():
   val p5 = Point(20, 230) // ...... coords of cylinder icon
   val p6 = Point(20, 410) // ...... coords of block icon
 
-  def paint(model: FlicFlacGameModel, bBlinkOn: Boolean, dSF: Double): Layer =
+  def paint(model: FlicFlacGameModel, ourPieceShape: Int, bBlinkOn: Boolean, dSF: Double): Layer =
 
     val p0Scaled = p0 * dSF
     val p1Scaled = p1 * dSF
@@ -26,13 +26,13 @@ final case class ScorePanel():
     val p6Scaled = p6 * dSF
 
     val cylinderName =
-      if model.ourPieceType == CYLINDER then model.ourName
+      if ourPieceShape == CYLINDER then model.ourName
       else model.oppoName
       end if
     end cylinderName
 
     val blockName =
-      if model.ourPieceType == CYLINDER then model.oppoName
+      if ourPieceShape == CYLINDER then model.oppoName
       else model.ourName
       end if
     end blockName

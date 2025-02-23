@@ -94,7 +94,7 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
                 gs
               case None =>
                 scribe.error("@@@ readGameStorage:" + storageName + " not found")
-                throw new Exception("Invalid Entry in database for Game Storage ... FlicFlac-Index")
+                throw new Exception("FlicFlac-Index internal fault")
 
             val newModel = gameStorage.meldStorageToModel(context.frameContext.startUpData, model)
             Outcome(newModel).addGlobalEvents(ButtonReviewStartEvent)
@@ -226,6 +226,8 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
       .scaleBy(dSF, dSF)
       .moveTo(x12, y12)
 
+    val ourPieceShape = gameStorage.params.playPams3_PieceShape
+
 // format: off
 
     Outcome(
@@ -235,7 +237,7 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(GameAssets.cornerLayers(rCorners, 1.0, RGBA.Magenta)))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(gameName))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(turnLabel))
-        |+| SceneUpdateFragment(LayerKeys.Middleground -> scorePanel.paint(model, true, dSF))
+        |+| SceneUpdateFragment(LayerKeys.Middleground -> scorePanel.paint(model, ourPieceShape, true, dSF))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> paramsPanel.paint(model, dSF))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(viewModel.plusButton.draw))
         |+| SceneUpdateFragment(LayerKeys.Middleground -> Layer.Content(zoomLabel))
