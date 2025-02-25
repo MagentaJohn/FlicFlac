@@ -79,18 +79,12 @@
       } 
     }
 
-
     function ReadStorageItems() {
-      console.log("ReadStorageitems")
+      console.log("ReadStorageItems")
       var allGamesAsJson = window.localStorage.getItem("FlicFlac-Index")
-      console.log("---")
-      console.log(allGamesAsJson)
-      console.log("---")
-      var strip1 = allGamesAsJson.replace('{"cachedEntries":[', '')
-      var strip2 = strip1.replace(']}', '') // 
-      var strip3 = strip2.replace(/["']/g, "")
-      var arr4 = strip3.split(',')
-      return arr4
+      var allGamesObj = JSON.parse(allGamesAsJson)
+      var gameStringArr = allGamesObj.cachedEntries
+      return gameStringArr
     }
 
     document.getElementById("cancelButton").addEventListener("click", function () {
@@ -116,7 +110,7 @@
       var index = document.getElementById("storageItems").value
       if (typeof gameList[index] === 'undefined') {
         alert("No game selected to delete!")
-        console.log("DELETE with no game identified")
+        console.log("DELETE with no game selected")
       } else {
         chosenGame = gameList[index]
         if (confirm("Are you sure you want to delete " + chosenGame)) {
@@ -124,21 +118,17 @@
           window.localStorage.removeItem(chosenGame);
 
           // copy the list of games, filtering out the chosen game that has been deleted
-          
           updatedGameList=[] // ensure the destination for copy is empty first
           gameList.forEach(filterDeletedGame) // this updates updatedGameList
 
-          // create the json string using the new updated game list
-          var asJson='{"cachedEntries":['
-          for (i in updatedGameList) {
-            var e = (i < updatedGameList.length-1) ? '",' : '"'
-            asJson = asJson + '"' + updatedGameList[i] + e
-          }
-          asJson = asJson + ']}'
+          const updatedGameListObj = { cachedEntries : updatedGameList }
+          const asJson = JSON.stringify(updatedGameListObj)
 
           // overwrite the cache
           window.localStorage.setItem("FlicFlac-Index", asJson)
-          window.location.href = "./index3.html" // delate completed so reload this page
+          
+          // delete completed so reload this page
+          window.location.href = "./index3.html" 
         } else {
           console.log("DELETE:" + chosenGame + " CANCELLED")          
         }
