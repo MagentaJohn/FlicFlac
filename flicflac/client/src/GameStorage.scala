@@ -9,6 +9,9 @@ import io.circe.parser.decode
 import game.FlicFlacStartupData
 import cats.instances.double
 import game.hexBoard4
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 
 val GAME_INDEX_FILE = "FlicFlac-Index"
 val GAME_PREFIX = "###-"
@@ -126,12 +129,24 @@ final case class GameStorage(
     val possibleGameStorage = decode[GameStorage](org.scalajs.dom.window.localStorage.getItem(storageName)) match
       case Right(gs: GameStorage) =>
         scribe.debug("@@@ readGameStorage:" + storageName + " has " + gs.turns.length + " turns")
+
+        // FIXME
+        //val testString = dateForGameStorage()
+        //scribe.debug("@@@ testString:" + testString)
+        
         Some(gs)
       case Left(_) =>
         scribe.debug("@@@ readGameStorage:" + storageName + " not found")
         None
     possibleGameStorage
   end readGameStorage
+
+  def dateForGameStorage() : String =
+    val current = java.time.LocalDateTime.now()
+    val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val dString = current.format(fmt)
+    dString
+  end dateForGameStorage
 
   def traverseGameStorage(step: StepType): GameStorage =
     step match

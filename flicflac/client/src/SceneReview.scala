@@ -87,15 +87,6 @@ object SceneReview extends Scene[FlicFlacStartupData, FlicFlacGameModel, FlicFla
 
           case StartReviewGame =>
             scribe.debug("@@@ StartReviewGame")
-            val storageName = context.frameContext.startUpData.flicFlacBootData.g3
-            gameStorage = gameStorage.readGameStorage(storageName) match
-              case Some(gs: GameStorage) =>
-                scribe.debug("@@@ readGameStorage:" + storageName + " has " + gs.turns.length + " turns")
-                gs
-              case None =>
-                scribe.error("@@@ readGameStorage:" + storageName + " not found")
-                throw new Exception("FlicFlac-Index internal fault")
-
             val startingPieces = model.pieces.summonPieces(hexBoard) // .......... establish new starting positions
             val newModel1 = model.copy( // ........................................ create new model as first turn to be stored
               pieces = startingPieces,
