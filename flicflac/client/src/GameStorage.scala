@@ -141,7 +141,7 @@ final case class GameStorage(
   end readGameStorage
 
   def dateForGameStorage(): String =
-    val current = java.time.LocalDateTime.now()
+    val current = java.time.LocalDateTime.now(java.time.Clock.systemUTC())
     val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val dString = current.format(fmt)
     dString
