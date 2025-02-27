@@ -71,6 +71,7 @@ object flicflac extends AppScalaModule {
     def moduleDeps = Seq(shared.js)
     def ivyDeps = super.ivyDeps() ++ Agg(
       ivy"io.github.cquiroz::scala-java-time::2.5.0",
+      ivy"io.github.cquiroz::scala-java-time-tzdb::2.6.0",
       ivy"org.scala-js::scalajs-dom::2.8.0",
       ivy"io.indigoengine::indigo::0.17.0",
       ivy"io.indigoengine::indigo-extras::0.17.0",

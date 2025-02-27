@@ -12,7 +12,6 @@ import game.hexBoard4
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
 val GAME_INDEX_FILE = "FlicFlac-Index"
 val GAME_PREFIX = "###-"
 
@@ -131,9 +130,9 @@ final case class GameStorage(
         scribe.debug("@@@ readGameStorage:" + storageName + " has " + gs.turns.length + " turns")
 
         // FIXME
-        //val testString = dateForGameStorage()
-        //scribe.debug("@@@ testString:" + testString)
-        
+        val testString = dateForGameStorage()
+        scribe.debug("@@@ testString:" + testString)
+
         Some(gs)
       case Left(_) =>
         scribe.debug("@@@ readGameStorage:" + storageName + " not found")
@@ -141,8 +140,8 @@ final case class GameStorage(
     possibleGameStorage
   end readGameStorage
 
-  def dateForGameStorage() : String =
-    val current = java.time.LocalDateTime.now()
+  def dateForGameStorage(): String =
+    val current = java.time.LocalDateTime.now(java.time.Clock.systemUTC())
     val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val dString = current.format(fmt)
     dString
