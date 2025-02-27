@@ -59,10 +59,11 @@ final case class GameStorage(
   def establishGameStorage(playerParams: PlayerParams): GameStorage =
     scribe.debug("@@@ establishGameStorage")
 
+    val s0 = dateForGameStorage()
     val s1 = playerParams.playPams1_Name1
     val s2 = playerParams.playPams2_Name2
 
-    val rootName = GAME_PREFIX + s1 + "-" + s2
+    val rootName = GAME_PREFIX + s0 + "-" + s1 + "-" + s2
     var index = 0
     var uniqueName = rootName + "-" + index.toString()
     var bSearching = true
@@ -128,11 +129,6 @@ final case class GameStorage(
     val possibleGameStorage = decode[GameStorage](org.scalajs.dom.window.localStorage.getItem(storageName)) match
       case Right(gs: GameStorage) =>
         scribe.debug("@@@ readGameStorage:" + storageName + " has " + gs.turns.length + " turns")
-
-        // FIXME
-        val testString = dateForGameStorage()
-        scribe.debug("@@@ testString:" + testString)
-
         Some(gs)
       case Left(_) =>
         scribe.debug("@@@ readGameStorage:" + storageName + " not found")

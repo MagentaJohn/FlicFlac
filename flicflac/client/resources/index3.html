@@ -70,7 +70,10 @@
         var option = document.createElement("option");
         option.setAttribute('value', name);
 
-        var optionText = document.createTextNode(gameList[name]);
+        var displayName = gameList[name].slice(4) // removing GAME-PREFIX
+
+
+        var optionText = document.createTextNode(displayName);
         option.appendChild(optionText);
 
         console.log(">>>" + gameList[name])
